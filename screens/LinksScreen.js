@@ -4,12 +4,14 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
 import { UserName } from '../components/TopBar/UserName';
+import { ActivityIndicator, Colors } from 'react-native-paper';
 
 export default function LinksScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
       <UserName>Michael Xie</UserName>
       <UserName status="super">Michael Xie</UserName>
+      <ActivityIndicator animating={true} color={Colors.red800} />
       <OptionButton
         icon="md-school"
         label="Read the Expo documentation"
