@@ -3,10 +3,13 @@ import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { RectButton, ScrollView } from 'react-native-gesture-handler';
+import { UserName } from '../components/TopBar/UserName';
 
 export default function LinksScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
+      <UserName>Michael Xie</UserName>
+      <UserName status="super">Michael Xie</UserName>
       <OptionButton
         icon="md-school"
         label="Read the Expo documentation"
