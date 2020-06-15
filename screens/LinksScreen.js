@@ -1,17 +1,17 @@
-import { Ionicons } from "@expo/vector-icons";
-import * as WebBrowser from "expo-web-browser";
-import * as React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { RectButton, ScrollView } from "react-native-gesture-handler";
-import { UserName } from "../components/TopBar/UserName";
-import { ActivityIndicator, Colors, Drawer } from "react-native-paper";
-import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
-import ProductMainCard from "../components/ProductMainCard";
+import { Ionicons } from '@expo/vector-icons';
+// import * as WebBrowser from "expo-web-browser";
+import * as React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { RectButton, ScrollView } from 'react-native-gesture-handler';
+// import { UserName } from "../components/TopBar/UserName";
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import ProductMainCard from '../components/ProductMainCard';
+
 export default function LinksScreen() {
   const [active, setActive] = React.useState(false);
   const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
   return (
-    <ProductMainCard price={{regular: 2.99, discounted: 0.99}} totalVotes={10} />
+    <ProductMainCard price={{ regular: 2.99, discounted: 0.99 }} totalVotes={10} />
     // <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
     //   <UserName>Michael Xie</UserName>
     //   <UserName status="super">Michael Xie</UserName>
@@ -53,11 +53,8 @@ export default function LinksScreen() {
 
 function OptionButton({ icon, label, onPress, isLastOption }) {
   return (
-    <RectButton
-      style={[styles.option, isLastOption && styles.lastOption]}
-      onPress={onPress}
-    >
-      <View style={{ flexDirection: "row" }}>
+    <RectButton style={[styles.option, isLastOption && styles.lastOption]} onPress={onPress}>
+      <View style={{ flexDirection: 'row' }}>
         <View style={styles.optionIconContainer}>
           <Ionicons name={icon} size={22} color="rgba(0,0,0,0.35)" />
         </View>
@@ -72,7 +69,7 @@ function OptionButton({ icon, label, onPress, isLastOption }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fafafa",
+    backgroundColor: '#fafafa',
   },
   contentContainer: {
     paddingTop: 15,
@@ -81,19 +78,19 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   option: {
-    backgroundColor: "#fdfdfd",
+    backgroundColor: '#fdfdfd',
     paddingHorizontal: 15,
     paddingVertical: 15,
     borderWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: 0,
-    borderColor: "#ededed",
+    borderColor: '#ededed',
   },
   lastOption: {
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   optionText: {
     fontSize: 15,
-    alignSelf: "flex-start",
+    alignSelf: 'flex-start',
     marginTop: 1,
   },
 });
