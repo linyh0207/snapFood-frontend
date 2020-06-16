@@ -41,3 +41,18 @@ const StyledButton = ({
 };
 
 export default StyledButton;
+
+// IMPORT STYLEFBUTTON (EX: APP.JS)
+// import StyledButton from '../components/StyledButton';
+
+// LOGIN AND SIGNUP BUTTONS (WIDE, ROUND, FILLED)
+// <StyledButton title="Login" mode="contained" bordered onPress={handleButtonPress} />
+// <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
+
+// BASIC BUTTON (NARROW, SQUARE, OUTLINED)
+// <StyledButton title="Sort" mode="outlined" size="small" icon="sort" onPress={openMenu} />
+
+// ONPRESS FUNCTION
+// function handleButtonPress() {
+//   Alert.alert('clicked');
+// }
