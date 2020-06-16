@@ -12,6 +12,7 @@ import { ScrollView } from "react-native-gesture-handler";
 
 import { MonoText } from "../components/StyledText";
 import StyledButton from "../components/StyledButton";
+import DropDownMenu from "../components/DropDownMenu";
 import { t } from "react-native-tailwindcss";
 
 export default function HomeScreen() {
@@ -21,7 +22,7 @@ export default function HomeScreen() {
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <View style={styles.welcomeContainer}>
+        {/* <View style={styles.welcomeContainer}>
           <Image
             source={
               __DEV__
@@ -30,7 +31,7 @@ export default function HomeScreen() {
             }
             style={styles.welcomeImage}
           />
-        </View>
+        </View> */}
 
         {/*Login & SignUp Onboarding page  */}
         <View style={[t.p2]}>
@@ -50,7 +51,7 @@ export default function HomeScreen() {
           />
         </View>
         {/*Basic buttons  */}
-        <View style={[t.p2, t.w3_12, t.selfCenter]}>
+        <View style={[t.p2, t.w3_8, t.selfCenter]}>
           <StyledButton
             title="Sign Up"
             mode="outlined"
@@ -58,7 +59,7 @@ export default function HomeScreen() {
           />
         </View>
 
-        <View style={[t.p2, t.w3_12, t.selfCenter]}>
+        <View style={[t.p2, t.w3_8, t.selfCenter]}>
           <StyledButton
             title="Login"
             mode="outlined"
@@ -66,6 +67,8 @@ export default function HomeScreen() {
           />
         </View>
 
+        <DropDownMenu />
+        {/* 
         <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
 
@@ -91,7 +94,7 @@ export default function HomeScreen() {
               Help, it didn’t automatically reload!
             </Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
