@@ -4,7 +4,6 @@ import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { MaterialIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { t } from 'react-native-tailwindcss';
 import { Headline } from 'react-native-paper';
-import StyledButton from '../StyledButton';
 
 export default function WelcomeSwiper() {
   const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -59,14 +58,6 @@ export default function WelcomeSwiper() {
         inactiveDotScale={0.6}
         activeDotIndex={activeTab}
       />
-
-      <StyledButton title="Login" mode="contained" bordered onPress={handleButtonPress} />
-      <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
     </View>
   );
-  // }
-}
-
-function handleButtonPress() {
-  Alert.alert('clicked');
 }
