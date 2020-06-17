@@ -22,23 +22,7 @@ export default function HomeScreen() {
           />
         </View>
 
-        {/* Login & SignUp Onboarding page  */}
-        <View style={[t.p2]}>
-          <StyledButton title="Login" mode="contained" bordered onPress={handleButtonPress} />
-        </View>
-        <View style={[t.p2]}>
-          <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
-        </View>
-        {/* Basic buttons  */}
-        <View style={[t.p2, t.w3_12, t.selfCenter]}>
-          <StyledButton title="Sign Up" mode="outlined" onPress={handleButtonPress} />
-        </View>
-
-        <View style={[t.p2, t.w3_12, t.selfCenter]}>
-          <StyledButton title="Login" mode="outlined" onPress={handleButtonPress} />
-        </View>
-
-        <View style={styles.getStartedContainer}>
+        {/* <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
 
           <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
@@ -56,7 +40,7 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
             <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
