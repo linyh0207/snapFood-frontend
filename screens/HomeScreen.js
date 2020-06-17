@@ -6,12 +6,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { MonoText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
+import DropDownMenu from '../components/DropDownMenu';
 
 export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        <View style={styles.welcomeContainer}>
+        {/* <View style={styles.welcomeContainer}>
           <Image
             source={
               __DEV__
@@ -20,24 +21,16 @@ export default function HomeScreen() {
             }
             style={styles.welcomeImage}
           />
-        </View>
-
+        </View> */}
         {/* Login & SignUp Onboarding page  */}
-        <View style={[t.p2]}>
-          <StyledButton title="Login" mode="contained" bordered onPress={handleButtonPress} />
-        </View>
-        <View style={[t.p2]}>
-          <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
-        </View>
+        <StyledButton title="Login" mode="contained" bordered onPress={handleButtonPress} />
+        <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
+
         {/* Basic buttons  */}
-        <View style={[t.p2, t.w3_12, t.selfCenter]}>
-          <StyledButton title="Sign Up" mode="outlined" onPress={handleButtonPress} />
-        </View>
-
-        <View style={[t.p2, t.w3_12, t.selfCenter]}>
-          <StyledButton title="Login" mode="outlined" onPress={handleButtonPress} />
-        </View>
-
+        <StyledButton title="Sign Up" mode="outlined" size="small" onPress={handleButtonPress} />
+        <StyledButton title="Login" mode="outlined" size="small" onPress={handleButtonPress} />
+        <DropDownMenu />
+        {/* 
         <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
 
@@ -56,7 +49,7 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
             <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
