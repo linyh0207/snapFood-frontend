@@ -11,7 +11,12 @@ export default function LinksScreen() {
   const [active, setActive] = React.useState(false);
   const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
   return (
-    <ProductMainCard price={{ regular: 2.99, discounted: 0.99 }} totalVotes={10} />
+    <ProductMainCard
+      price={{ regular: 2.99, discounted: 0.99 }}
+      totalVotes={10}
+      storeName="T&T Supermarket"
+      distance="500m"
+    />
     // <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
     //   <UserName>Michael Xie</UserName>
     //   <UserName status="super">Michael Xie</UserName>
