@@ -21,6 +21,8 @@ const StyledButton = ({
     switch (iconType) {
       case 'sort':
         return 'sort-variant';
+      case 'account':
+        return 'account-circle-outline';
       default:
         return '';
     }

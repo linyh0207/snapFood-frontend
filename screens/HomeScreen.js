@@ -1,27 +1,19 @@
 import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { Platform, StyleSheet, Text, View, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-
-import { t } from 'react-native-tailwindcss';
+import { useNavigation } from '@react-navigation/native';
 import { MonoText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import DropDownMenu from '../components/DropDownMenu';
 
 export default function HomeScreen() {
+  // For account button to open drawer navigator
+  const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-        {/* <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View> */}
         {/* Login & SignUp Onboarding page  */}
         <StyledButton title="Login" mode="contained" bordered onPress={handleButtonPress} />
         <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
@@ -31,34 +23,14 @@ export default function HomeScreen() {
         <StyledButton title="Login" mode="outlined" size="small" onPress={handleButtonPress} />
         <DropDownMenu />
 
-        <View style={styles.getStartedContainer}>
-          <DevelopmentModeNotice />
-
-          <Text style={styles.getStartedText}>Open up the code for this screen:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-            <MonoText>screens/HomeScreen.js</MonoText>
-          </View>
-
-          <Text style={styles.getStartedText}>
-            Change any of the text, save the file, and your app will automatically reload.
-          </Text>
-        </View>
-
-        <View style={styles.helpContainer}>
-          <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
-            <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Account Button to open drawer navigator */}
+        <StyledButton
+          icon="account"
+          title="Account"
+          size="small"
+          onPress={() => navigation.openDrawer()}
+        />
       </ScrollView>
-
-      <View style={styles.tabBarInfoContainer}>
-        <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-        <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-          <MonoText style={styles.codeHighlightText}>navigation/BottomTabNavigator.js</MonoText>
-        </View>
-      </View>
     </View>
   );
 }
