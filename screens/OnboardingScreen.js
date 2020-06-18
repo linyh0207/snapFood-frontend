@@ -48,6 +48,7 @@ export default function OnboardingScreen() {
           <TextInput
             label="Password"
             value={loginPassword}
+            secureTextEntry
             onChangeText={(text) => setLoginPassword(text)}
           />
           <Text style={[t.textRight, t.pT1, t.pB1]} onPress={handleForgotPasswordPress}>
@@ -74,6 +75,7 @@ export default function OnboardingScreen() {
           <TextInput
             label="Password"
             value={signUpPassword}
+            secureTextEntry
             onChangeText={(text) => setSignUpPassword(text)}
           />
           <TextInput
