@@ -5,6 +5,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import AchievementScreen from '../screens/AchievementScreen';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
@@ -38,6 +39,14 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={OnboardingScreen}
         options={{
           title: 'Onboarding',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="Achievement"
+        component={AchievementScreen}
+        options={{
+          title: 'Achievement',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="md-book" />,
         }}
       />
