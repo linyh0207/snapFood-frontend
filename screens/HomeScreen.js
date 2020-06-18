@@ -30,7 +30,7 @@ export default function HomeScreen() {
         <StyledButton title="Sign Up" mode="outlined" size="small" onPress={handleButtonPress} />
         <StyledButton title="Login" mode="outlined" size="small" onPress={handleButtonPress} />
         <DropDownMenu />
-        {/* 
+
         <View style={styles.getStartedContainer}>
           <DevelopmentModeNotice />
 
@@ -49,7 +49,7 @@ export default function HomeScreen() {
           <TouchableOpacity onPress={handleHelpPress} style={styles.helpLink}>
             <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
       </ScrollView>
 
       <View style={styles.tabBarInfoContainer}>
