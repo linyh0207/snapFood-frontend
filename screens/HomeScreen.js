@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { MonoText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import DropDownMenu from '../components/DropDownMenu';
+import SnackBar from '../components/SnackBar';
 
 export default function HomeScreen() {
   // For account button to open drawer navigator
@@ -31,6 +32,7 @@ export default function HomeScreen() {
           onPress={() => navigation.openDrawer()}
         />
       </ScrollView>
+      <SnackBar />
     </View>
   );
 }
