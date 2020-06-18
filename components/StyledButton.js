@@ -29,10 +29,11 @@ const StyledButton = ({
   return (
     <Button
       icon={btnIcon(icon)}
-      style={[btnSize, t.selfCenter, t.h10]}
+      style={[btnSize, t.selfCenter, t.h10, t.border2, t.m2]}
       mode={mode}
       onPress={onPress}
       uppercase={uppercase}
+      color="#22543d"
       theme={theme}
     >
       {title}
