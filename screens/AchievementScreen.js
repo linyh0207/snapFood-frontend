@@ -4,6 +4,7 @@ import { View, StyleSheet } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText, Avatar, Button } from 'react-native-paper';
 import UserName from '../components/TopBar/UserName';
+import AchievementStatement from '../components/AchievementStatement';
 
 export default function AchievementScreen() {
   return (
@@ -17,6 +18,9 @@ export default function AchievementScreen() {
       <Text style={[t.border, t.p3, t.m3, t.textCenter, t.textLg, t.fontBold, t.roundedLg]}>
         This is a test
       </Text>
+      <AchievementStatement>
+        This a second <Text style={[t.textRed400]}>test</Text>{' '}
+      </AchievementStatement>
     </View>
   );
 }
