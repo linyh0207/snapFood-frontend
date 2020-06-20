@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
-import { Modal, Portal, Text, TextInput, HelperText, Avatar, Button } from 'react-native-paper';
+import { Text } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
+import StyledButton from '../components/StyledButton';
 
 export default function AchievementScreen() {
+  // For account button to open drawer navigator
+  const navigation = useNavigation();
+
   return (
     <View>
       <View style={[t.flex, t.flexRow, t.itemsCenter, t.p2]}>
-        <Avatar.Icon icon="account" size={36} style={[t.p0]} />
+        <StyledButton icon="account" size="small" onPress={() => navigation.openDrawer()} />
         <UserName styles={[t.pX1]} textStyles={[t.textLg]} status="super">
           UserName
         </UserName>

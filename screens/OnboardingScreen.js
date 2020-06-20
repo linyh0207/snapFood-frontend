@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
-import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
+import { Modal, Portal, Text, TextInput, HelperText, Drawer } from 'react-native-paper';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
 
-export default function OnboardingScreen() {
+export default function OnboardingScreen({ navigation }) {
   // Manage login states
   const [loginModalVisible, setloginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
@@ -27,6 +27,25 @@ export default function OnboardingScreen() {
   };
   const hasErrors = (email) => {
     return !email.includes('@');
+  };
+
+  // Trigger Authentication
+  const handleLoginPress = () => {
+    // After Authenticattion
+    // Direct to Drawer Navigator
+    hideLoginModal();
+    navigation.navigate('Home');
+  };
+
+  // Pending
+  const handleForgotPasswordPress = () => {};
+
+  // Trigger Registration
+  const handleSignUpPress = () => {
+    // Once the register done
+    // Direct to Drawer Navigator
+    hideSignUpModal();
+    navigation.navigate('Home');
   };
 
   return (
@@ -51,7 +70,7 @@ export default function OnboardingScreen() {
             secureTextEntry
             onChangeText={(text) => setLoginPassword(text)}
           />
-          <Text style={[t.textRight, t.pT1, t.pB1]} onPress={handleForgotPasswordPress}>
+          <Text style={[t.textRight, t.pT1, t.pB1]} onPress={() => handleForgotPasswordPress}>
             Forgot Password?
           </Text>
           <StyledButton title="Login" mode="outlined" size="small" onPress={handleLoginPress} />
@@ -100,16 +119,3 @@ export default function OnboardingScreen() {
     </View>
   );
 }
-
-OnboardingScreen.navigationOptions = {
-  header: null,
-};
-
-// Pending
-function handleForgotPasswordPress() {}
-
-// Trigger Authentication
-function handleLoginPress() {}
-
-// Trigger Registration
-function handleSignUpPress() {}
