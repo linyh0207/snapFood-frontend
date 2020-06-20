@@ -1,4 +1,3 @@
-import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { View } from 'react-native';
 import { Headline, Avatar } from 'react-native-paper';
@@ -9,7 +8,8 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
-import MyAchievements from '../screens/AchievementScreen';
+import AchievementScreen from '../screens/AchievementScreen';
+import MyPostsScreen from '../screens/MyPostsScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -30,15 +30,22 @@ export default function DrawerNavigator() {
   return (
     <Drawer.Navigator drawerContent={(items) => <CustomDrawerContent {...items} />}>
       <Drawer.Screen
-        name="My Posts"
+        name="Home"
         component={BottomTabNavigator}
+        options={{
+          drawerIcon: () => <Avatar.Icon size={24} icon="home" />,
+        }}
+      />
+      <Drawer.Screen
+        name="My Posts"
+        component={MyPostsScreen}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="folder-multiple-image" />,
         }}
       />
       <Drawer.Screen
         name="My Achievements"
-        component={MyAchievements}
+        component={AchievementScreen}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="trophy" />,
         }}

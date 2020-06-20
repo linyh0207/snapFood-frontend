@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText, Drawer } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
 

@@ -5,7 +5,7 @@ import { Platform, StatusBar, View } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import useCachedResources from './hooks/useCachedResources';
-import Onboarding from './screens/OnboardingScreen';
+import OnboardingScreen from './screens/OnboardingScreen';
 import DrawerNavigator from './navigation/DrawerNavigator';
 
 const Stack = createStackNavigator();
@@ -27,7 +27,7 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
         <NavigationContainer>
           <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Onboarding'} headerMode="none">
-            <Stack.Screen name="Onboarding" component={Onboarding} />
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="Home" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
