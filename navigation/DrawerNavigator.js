@@ -10,6 +10,7 @@ import {
 import BottomTabNavigator from './BottomTabNavigator';
 import AchievementScreen from '../screens/AchievementScreen';
 import MyPostsScreen from '../screens/MyPostsScreen';
+import OnboardingScreen from '../screens/OnboardingScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -52,7 +53,7 @@ export default function DrawerNavigator() {
       />
       <Drawer.Screen
         name="Logout"
-        component={BottomTabNavigator}
+        component={OnboardingScreen}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="logout" />,
         }}
