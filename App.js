@@ -26,7 +26,7 @@ export default function App(props) {
       <View style={[t.flex1, t.bgWhite]}>
         {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
         <NavigationContainer>
-          <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Onboarding'} headerMode="none">
+          <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Onboarding'}>
             <Stack.Screen name="Onboarding" component={OnboardingScreen} />
             <Stack.Screen name="Home" component={DrawerNavigator} />
           </Stack.Navigator>
