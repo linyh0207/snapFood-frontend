@@ -17,20 +17,9 @@ const StyledButton = ({
     roundness: btnBorderRadius,
   };
 
-  const btnIcon = (iconType) => {
-    switch (iconType) {
-      case 'sort':
-        return 'sort-variant';
-      case 'account':
-        return 'account-circle-outline';
-      default:
-        return '';
-    }
-  };
-
   return (
     <Button
-      icon={btnIcon(icon)}
+      icon={icon}
       style={[btnSize, t.selfCenter, t.h10, t.border2, t.m2]}
       mode={mode}
       onPress={onPress}
@@ -53,7 +42,7 @@ export default StyledButton;
 // <StyledButton title="Sign Up" mode="outlined" bordered onPress={handleButtonPress} />
 
 // BASIC BUTTON (NARROW, SQUARE, OUTLINED)
-// <StyledButton title="Sort" mode="outlined" size="small" icon="sort" onPress={openMenu} />
+// <StyledButton title="Sort" mode="outlined" size="small" icon="sort-variant" onPress={openMenu} />
 
 // ONPRESS FUNCTION
 // function handleButtonPress() {

@@ -2,17 +2,17 @@ import * as React from 'react';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
-import { Modal, Portal, Text, TextInput, HelperText, Drawer } from 'react-native-paper';
+import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
 
 export default function OnboardingScreen({ navigation }) {
   // Manage login states
-  const [loginModalVisible, setloginModalVisibility] = useState(false);
+  const [loginModalVisible, setLoginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const showLoginModal = () => setloginModalVisibility(true);
-  const hideLoginModal = () => setloginModalVisibility(false);
+  const showLoginModal = () => setLoginModalVisibility(true);
+  const hideLoginModal = () => setLoginModalVisibility(false);
 
   // Manage signup states
   const [signUpModalVisible, setSignUpModalVisibility] = useState(false);
