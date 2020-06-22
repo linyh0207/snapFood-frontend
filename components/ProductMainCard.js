@@ -24,18 +24,30 @@ const styles = StyleSheet.create({
     ...t.flex1,
   },
 });
-export default function ProductMainCard({ price, totalVotes, storeName, distance }) {
+export default function ProductMainCard({
+  price,
+  totalVotes,
+  storeName,
+  distance,
+  cardStyle = [],
+  coverStyle = [],
+}) {
   const [bookmarked, setBookmarked] = React.useState(false);
   return (
     <View>
       {/* <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" /> */}
 
-      <Card style={[t.flex, t.flexCol, t.alignCenter]}>
+      <Card style={[t.flex, t.flexCol, t.alignCenter, ...cardStyle]}>
         {/* <ImageBackground style={styles.image} source={{ uri: 'https://picsum.photos/700' }}>
           <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" />
         </ImageBackground> */}
         <View style={[]}>
-          <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+          <Card.Cover
+            source={{ uri: 'https://picsum.photos/700' }}
+            style={[...coverStyle]}
+            resizeMethod="resize"
+            resizeMode="center"
+          />
           <ToggleButton
             selected={bookmarked}
             selectedIcon="bookmark"
