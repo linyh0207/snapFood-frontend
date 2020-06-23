@@ -11,6 +11,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import AchievementScreen from '../screens/AchievementScreen';
 import MyPostsScreen from '../screens/MyPostsScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import MapScreen from '../screens/MapScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -49,6 +50,13 @@ export default function DrawerNavigator() {
         component={AchievementScreen}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="trophy" />,
+        }}
+      />
+      <Drawer.Screen
+        name="Map"
+        component={MapScreen}
+        options={{
+          drawerIcon: () => <Avatar.Icon size={24} icon="map" />,
         }}
       />
       <Drawer.Screen
