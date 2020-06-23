@@ -14,7 +14,7 @@ export default function App(props) {
   const isLoadingComplete = useCachedResources();
 
   // Authentication flow set up pending
-  const isAuth = true;
+  const isAuth = false;
   // true: home screen ; false: login/signup onboarding screen
   // need to manually RELOAD the app to update initialRoute
 
@@ -26,8 +26,13 @@ export default function App(props) {
       <View style={[t.flex1, t.bgWhite]}>
         {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
         <NavigationContainer>
-          <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Onboarding'}>
-            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <Stack.Navigator initialRouteName={isAuth ? 'Home' : 'Onboarding'} headerMode="none">
+            {/* Onboarding screen do not need the header */}
+            <Stack.Screen
+              name="Onboarding"
+              component={OnboardingScreen}
+              options={{ gesturesEnabled: false }}
+            />
             <Stack.Screen name="Home" component={DrawerNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
