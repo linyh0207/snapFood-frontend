@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Searchbar, List, Card } from 'react-native-paper';
+import { Searchbar, List, Card, Chip } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 
-function SearchBar({ searcher, latitude, longitude, radius }) {
+function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiveTags }) {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
   const onChangeSearch = (query) => {
     setSearchTerm(query);
   };
@@ -29,7 +30,8 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
   };
 
   const handleItemPress = (text) => {
-    setSearchTerm(text);
+    setSearchTerm('');
+    setActiveTags((prev) => [...prev, text]);
     console.log(text);
   };
 
@@ -37,16 +39,19 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
     console.log('searched');
   };
 
+  const showSearchSuggestions =
+    searchTerm.length > 0 && searchSuggestions.filter(matchTags).length > 0;
+
   return (
     <>
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
         value={searchTerm}
-        style={searchTerm.length > 0 ? t.roundedBNone : ''}
+        style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '']}
         onIconPress={handleSearchPress}
       />
-      {searchTerm.length > 0 && (
+      {showSearchSuggestions && (
         <View style={[t.h0, t.overflowVisible, t.z10]}>
           <Card style={[t.roundedTNone, t.z10]}>
             <List.Section>
@@ -57,6 +62,21 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
           </Card>
         </View>
       )}
+      <Card style={t.z10}>
+        <View style={t.flexRow}>
+          {activeTags.length > 0 &&
+            activeTags.map((tag) => (
+              <Chip
+                onClose={() =>
+                  setActiveTags((prev) => prev.filter((activeTag) => activeTag !== tag))
+                }
+                style={[t.flexGrow0, t.flexWrap, t.m1]}
+              >
+                {tag}
+              </Chip>
+            ))}
+        </View>
+      </Card>
     </>
   );
 }

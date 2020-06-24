@@ -5,7 +5,7 @@ import { Menu, Divider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import StyledButton from './StyledButton';
 
-export default function DropDownMenu() {
+export default function DropDownMenu({ setSort }) {
   const [visible, setVisibility] = useState(false);
   const [title, setTitle] = useState('Sort');
 
@@ -14,6 +14,7 @@ export default function DropDownMenu() {
   const handleSelection = (e, selection) => {
     closeMenu();
     setTitle(selection);
+    setSort(selection);
   };
 
   return (

@@ -7,28 +7,64 @@ import StyledButton from '../components/StyledButton';
 import DropDownMenu from '../components/DropDownMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
+import SearchBar from '../components/SearchBar';
 
 export default function ProductMainScreen() {
   // For account button to open drawer navigator
   const navigation = useNavigation();
   const [posts, setPosts] = React.useState([]);
+  const [activeTags, setActiveTags] = React.useState([]);
+  const [sort, setSort] = React.useState('Sort: Rating');
 
   const loadData = async () => {
-    const apiData = await fetch(
-      `http://localhost:8000/posts?latitude=5.2&longitude=4.3&&tag=free-run&tag=eggs&tag=cereal&radius=10000000`
-    );
+    const searchUri = `http://localhost:8000/posts?latitude=5.2&longitude=4.3&radius=3000000${activeTags.map(
+      (tag) => `&tag=${tag}`
+    )}`;
+    const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
-    setPosts(loadedPosts || []);
+    setPosts(sortPosts(loadedPosts) || []);
+  };
+
+  React.useEffect(() => {
+    setPosts(sortPosts(posts) || []);
+    console.log(posts);
+  }, [sort]);
+
+  const sortPosts = (currentPosts) => {
+    if (!currentPosts) return null;
+    switch (sort) {
+      case 'Sort: Rating':
+        return currentPosts.slice(0).sort((a, b) => b.likes - a.likes);
+      case 'Sort: Distance':
+        return currentPosts.slice(0).sort((a, b) => a.distance - b.distance);
+      case 'Sort: Best Deal':
+        return currentPosts
+          .slice(0)
+          .sort((a, b) => a.price - a.discountPrice - (b.price - b.discountPrice));
+      case 'Sort: Most Recent':
+        return currentPosts
+          .slice(0)
+          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      default:
+        return currentPosts;
+    }
   };
 
   React.useEffect(() => {
     loadData();
-  }, []);
+  }, [activeTags]);
 
   return (
     <View style={[t.flex1, t.bgWhite]}>
-      <Button onPress={() => console.log(posts)}>PRESS ME</Button>
+      <SearchBar
+        searcher={1}
+        latitude="20"
+        longitude="10"
+        radius="10000000"
+        setActiveTags={setActiveTags}
+        activeTags={activeTags}
+      />
       <ScrollView contentContainerStyle={[t.p6]}>
         {/* Product card for product main page */}
         {posts.map((post) => (
@@ -48,7 +84,7 @@ export default function ProductMainScreen() {
           />
         ))}
         {/* This is the drop down menu component - for ex: sortFilterMenu modal */}
-        <DropDownMenu />
+        <DropDownMenu setSort={setSort} />
 
         {/* Account Button to open drawer navigator */}
         <StyledButton

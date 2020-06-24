@@ -50,16 +50,16 @@ export default function ProductMainCard({
     return `${Math.round(rawDistance / 1000)}km`;
   };
 
-  const toggleSavePost = async () => {
+  const toggleSavePost = () => {
     setUserSavedPost((prev) => !prev);
-    const res = await fetch(`http://localhost:8000/users/${userId}`, {
+    fetch(`http://localhost:8000/users/${userId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         postId,
-        saving: userSavedPost,
+        saving: !userSavedPost,
       }),
     });
   };
@@ -67,7 +67,6 @@ export default function ProductMainCard({
   return (
     <View>
       {/* <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" /> */}
-      <Text>{postId}</Text>
       <Card style={[t.flex, t.flexCol, t.mT2, t.alignCenter, ...cardStyle]}>
         {/* <ImageBackground style={styles.image} source={{ uri: 'https://picsum.photos/700' }}>
           <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" />
