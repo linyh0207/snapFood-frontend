@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
 import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
@@ -43,7 +44,7 @@ export default function ProductMainScreen({ navigation }) {
   };
 
   return (
-    <View style={[t.flex1, t.bgWhite]}>
+    <SafeAreaView style={[t.flex1, t.bgWhite]}>
       <View style={[t.flexRow, t.itemsCenter]}>
         {/* Account Button to open drawer navigator */}
         <StyledButton
@@ -97,6 +98,6 @@ export default function ProductMainScreen({ navigation }) {
         />
       </ScrollView>
       <SnackBar />
-    </View>
+    </SafeAreaView>
   );
 }
