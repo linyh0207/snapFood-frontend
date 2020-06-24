@@ -5,8 +5,10 @@ import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
+import { AuthContext } from '../state/auth/authContext';
 
 export default function OnboardingScreen({ navigation }) {
+  const auth = React.useContext(AuthContext);
   // Manage login states
   const [loginModalVisible, setLoginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
@@ -30,7 +32,8 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   // Trigger Authentication
-  const handleLoginPress = () => {
+  const handleLoginPress = (email, password) => {
+    auth.login(email, password);
     // After Authenticattion
     // Direct to Drawer Navigator
     hideLoginModal();
@@ -41,7 +44,8 @@ export default function OnboardingScreen({ navigation }) {
   const handleForgotPasswordPress = () => {};
 
   // Trigger Registration
-  const handleSignUpPress = () => {
+  const handleSignUpPress = (name, email, password) => {
+    auth.register(name, email, password);
     // Once the register done
     // Direct to Drawer Navigator
     hideSignUpModal();
@@ -73,7 +77,12 @@ export default function OnboardingScreen({ navigation }) {
           <Text style={[t.textRight, t.pT1, t.pB1]} onPress={() => handleForgotPasswordPress}>
             Forgot Password?
           </Text>
-          <StyledButton title="Login" mode="outlined" size="small" onPress={handleLoginPress} />
+          <StyledButton
+            title="Login"
+            mode="outlined"
+            size="small"
+            onPress={handleLoginPress(loginUsername, loginPassword)}
+          />
           <Text style={[t.textCenter, t.pTPx]} onPress={handleCreateAnAccount}>
             Create An Account
           </Text>
@@ -109,7 +118,7 @@ export default function OnboardingScreen({ navigation }) {
             title="Sign Up Now"
             mode="outlined"
             size="small"
-            onPress={handleSignUpPress}
+            onPress={handleSignUpPress(signUpUsername, signUpEmail, signUpPassword)}
           />
         </Modal>
       </Portal>
