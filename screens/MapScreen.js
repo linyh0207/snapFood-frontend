@@ -36,12 +36,12 @@ export default function MapScreen() {
   const markers = [
     {
       id: '1',
-      latlng: { latitude: location.latitude + 0.05, longitude: location.longitude + 0.05 },
+      latlng: { latitude: location?.latitude + 0.05, longitude: location?.longitude + 0.05 },
       title: 'T&T Supermarket',
     },
     {
       id: '2',
-      latlng: { latitude: location.latitude - 0.5, longitude: location.longitude - 0.5 },
+      latlng: { latitude: location?.latitude - 0.5, longitude: location?.longitude - 0.5 },
       title: 'T&T Supermarket',
     },
   ];
@@ -64,7 +64,7 @@ export default function MapScreen() {
   } else if (location) {
     text = JSON.stringify({ longitude: location.longitude, latitude: location.latitude });
   }
-  if (location?.latitude) {
+  if (location && location?.latitude) {
     return (
       <View style={styles.container}>
         <Text>{text}</Text>
