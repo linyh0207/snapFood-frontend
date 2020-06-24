@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import * as Permissions from 'expo-permissions';
+// import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 
 const styles = StyleSheet.create({
@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const markers = [{ latlng: { latitude: 37.7883, longitude: -122.432 }, title: 'T&T Supermarket' }];
 export default function MapScreen() {
   //   const [location, setLocation] = useState({ latitude: null, longitude: null });
 
@@ -34,6 +33,18 @@ export default function MapScreen() {
   //   }, []);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const markers = [
+    {
+      id: '1',
+      latlng: { latitude: location.latitude + 0.05, longitude: location.longitude + 0.05 },
+      title: 'T&T Supermarket',
+    },
+    {
+      id: '2',
+      latlng: { latitude: location.latitude - 0.5, longitude: location.longitude - 0.5 },
+      title: 'T&T Supermarket',
+    },
+  ];
 
   useEffect(() => {
     (async () => {
@@ -64,15 +75,14 @@ export default function MapScreen() {
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
-            // latitude: 37.78825,
-            // longitude: -122.4324,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
         >
-          {/* {markers.map((marker) => {
-            return <Marker coordinate={marker.latlng} title={marker.title} />;
-          })} */}
+          {markers.map((marker) => {
+            // console.log('marker', marker);
+            return <Marker key={marker.id} coordinate={marker.latlng} title={marker.title} />;
+          })}
         </MapView>
       </View>
     );
