@@ -3,9 +3,9 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { Menu, Divider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
-import StyledButton from './StyledButton';
+import StyledButton from '../StyledButton';
 
-export default function DropDownMenu({ setSort }) {
+export default function SortByMenu({ setSort }) {
   const [visible, setVisibility] = useState(false);
   const [title, setTitle] = useState('Sort');
 
@@ -21,11 +21,17 @@ export default function DropDownMenu({ setSort }) {
     <View style={[t.pT10, t.flexRow, t.justifyCenter]}>
       <Menu
         visible={visible}
-        statusBarHeight={65}
+        statusBarHeight={75}
         style={[t.justifyCenter]}
         onDismiss={closeMenu}
         anchor={
-          <StyledButton title={title} mode="outlined" size="small" icon="sort" onPress={openMenu} />
+          <StyledButton
+            title={title}
+            mode="outlined"
+            size="small"
+            icon="sort-variant"
+            onPress={openMenu}
+          />
         }
       >
         <Menu.Item
@@ -34,18 +40,21 @@ export default function DropDownMenu({ setSort }) {
           }}
           title="Rating"
         />
+        <Divider />
         <Menu.Item
           onPress={(e) => {
             handleSelection(e, 'Sort: Distance');
           }}
           title="Distance"
         />
+        <Divider />
         <Menu.Item
           onPress={(e) => {
             handleSelection(e, 'Sort: Best Deal');
           }}
           title="Best Deal"
         />
+        <Divider />
         <Menu.Item
           onPress={(e) => {
             handleSelection(e, 'Sort: Most Recent');

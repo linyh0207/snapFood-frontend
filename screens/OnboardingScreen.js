@@ -2,17 +2,18 @@ import * as React from 'react';
 import { useState } from 'react';
 import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
-import { Modal, Portal, Text, TextInput, HelperText, Drawer } from 'react-native-paper';
+import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
 
 export default function OnboardingScreen({ navigation }) {
   // Manage login states
-  const [loginModalVisible, setloginModalVisibility] = useState(false);
+  const [loginModalVisible, setLoginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const showLoginModal = () => setloginModalVisibility(true);
-  const hideLoginModal = () => setloginModalVisibility(false);
+  const showLoginModal = () => setLoginModalVisibility(true);
+  const hideLoginModal = () => setLoginModalVisibility(false);
 
   // Manage signup states
   const [signUpModalVisible, setSignUpModalVisibility] = useState(false);
@@ -49,7 +50,7 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   return (
-    <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
+    <SafeAreaView style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
       {/* Onboarding swiper slider */}
       <WelcomeSwiper />
       {/* Login Modal */}
@@ -116,6 +117,6 @@ export default function OnboardingScreen({ navigation }) {
       {/* Login and Sign Up Buttons */}
       <StyledButton title="Login" mode="contained" bordered onPress={showLoginModal} />
       <StyledButton title="Sign Up" mode="outlined" bordered onPress={showSignUpModal} />
-    </View>
+    </SafeAreaView>
   );
 }

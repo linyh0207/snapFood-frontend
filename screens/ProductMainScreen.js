@@ -1,23 +1,33 @@
 import * as React from 'react';
-import { View, Button } from 'react-native';
+import { useState } from 'react';
+import { View } from 'react-native';
+import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
 import { t } from 'react-native-tailwindcss';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
-import DropDownMenu from '../components/DropDownMenu';
+import SortByMenu from '../components/DropDownMenu/SortByMenu';
+import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 
-export default function ProductMainScreen() {
+export default function ProductMainScreen({ navigation }) {
   // For account button to open drawer navigator
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
+  const [searchRadius, setSearchRadius] = useState('499');
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('Sort: Rating');
+  const [refineModalVisible, setRefineModalVisibility] = useState(false);
+  const showRefineModal = () => setRefineModalVisibility(true);
+  const hideRefineModal = () => setRefineModalVisibility(false);
+  const handleRefineModalPress = () => {
+    showRefineModal();
+  };
 
   const loadData = async () => {
-    const searchUri = `http://localhost:8000/posts?latitude=5.2&longitude=4.3&radius=3000000${activeTags.map(
+    const searchUri = `http://localhost:8000/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
@@ -25,6 +35,10 @@ export default function ProductMainScreen() {
     const loadedPosts = JSON.parse(responseText).posts;
     setPosts(sortPosts(loadedPosts) || []);
   };
+
+  React.useEffect(() => {
+    loadData();
+  }, [activeTags, searchRadius]);
 
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
@@ -51,12 +65,71 @@ export default function ProductMainScreen() {
     }
   };
 
-  React.useEffect(() => {
-    loadData();
-  }, [activeTags]);
+  const DistanceEntryError = () => {
+    function isNormalInteger(str) {
+      if (!str) return true;
+      const trimStr = str.trim();
+      if (!trimStr) {
+        return false;
+      }
+      const input = trimStr.replace(/^0+/, '') || '0';
+      const n = Math.floor(Number(input));
+      return n !== Infinity && String(n) === input && n >= 0 && n < 500;
+    }
+
+    const errorVisibility = !isNormalInteger(searchRadius);
+
+    return (
+      <HelperText type="error" visible={errorVisibility}>
+        Invalid Entry. Please enter an integer between 0 and 200.
+      </HelperText>
+    );
+  };
 
   return (
-    <View style={[t.flex1, t.bgWhite]}>
+    <SafeAreaView style={[t.flex1, t.bgWhite]}>
+      <View style={[t.flexRow, t.itemsCenter]}>
+        {/* Account Button to open drawer navigator */}
+        <StyledButton
+          icon="account-circle-outline"
+          title="Account"
+          size="small"
+          onPress={() => navigation.openDrawer()}
+        />
+        {/* Searchbar Placeholder */}
+        {/* Refine Modal */}
+        <Portal>
+          <Modal
+            contentContainerStyle={[t.bgWhite]}
+            visible={refineModalVisible}
+            onDismiss={hideRefineModal}
+          >
+            <Title style={[t.textCenter]}>SORT BY</Title>
+            <SortByMenu setSort={setSort} />
+            <Title style={[t.textCenter]}>FILTER BY</Title>
+            <View style={[t.flexRow, t.itemsCenter]}>
+              <TextInput
+                label="Distance"
+                value={searchRadius}
+                mode="outline"
+                placeholder="5"
+                onChangeText={(text) => setSearchRadius(text)}
+                style={[t.w3_4, t.m2]}
+              />
+              <Text>km</Text>
+            </View>
+            <DistanceEntryError />
+            <StoresMenu />
+          </Modal>
+        </Portal>
+        <StyledButton
+          icon="playlist-edit"
+          title="Refine"
+          size="small"
+          onPress={handleRefineModalPress}
+        />
+        {/* MapView / ListView Toggle Button Placeholder */}
+      </View>
       <SearchBar
         searcher={1}
         latitude="20"
@@ -83,20 +156,8 @@ export default function ProductMainScreen() {
             key={post.id}
           />
         ))}
-        {/* This is the drop down menu component - for ex: sortFilterMenu modal */}
-        <DropDownMenu setSort={setSort} />
-
-        {/* Account Button to open drawer navigator */}
-        <StyledButton
-          icon="account"
-          title="Account"
-          size="small"
-          onPress={() => navigation.openDrawer()}
-        />
       </ScrollView>
-
-      {/* Sample Snackbar */}
       <SnackBar />
-    </View>
+    </SafeAreaView>
   );
 }
