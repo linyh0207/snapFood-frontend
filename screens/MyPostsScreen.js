@@ -4,6 +4,7 @@ import { Text } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
 import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
@@ -81,7 +82,7 @@ export default function MyPostsScreen() {
     );
   };
   return (
-    <View style={[t.flex, t.flexCol]}>
+    <SafeAreaView style={[t.flex, t.flexCol]}>
       <View style={[t.flex, t.flexRow, t.itemsCenter, t.p2]}>
         <StyledButton icon="account" size="small" onPress={() => navigation.openDrawer()} />
         <UserName styles={[t.pX1]} textStyles={[t.textLg]} status="super">
@@ -92,7 +93,7 @@ export default function MyPostsScreen() {
       <View>
         <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
