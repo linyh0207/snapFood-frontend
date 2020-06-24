@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from 'react-native';
+import { Text, View, TouchableOpacity, Image } from 'react-native';
 import { Camera } from 'expo-camera';
 import { t } from 'react-native-tailwindcss';
 import { Headline, TextInput } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
 
 export default function AddPostScreen() {
@@ -53,7 +45,7 @@ export default function AddPostScreen() {
   }
 
   return (
-    <View style={[t.flex1]}>
+    <SafeAreaView style={[t.flex1]}>
       {!imageUri ? (
         // Camera Screen
         <Camera
@@ -115,76 +107,70 @@ export default function AddPostScreen() {
         </Camera>
       ) : (
         // Add Post Screen
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={[t.flex1]}
-        >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={[t.flex1]}>
-              {!searchBarVisible ? (
-                // User current location
-                <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap]}>
-                  <Headline>T&T Supermarket</Headline>
-                  <StyledButton
-                    title="edit"
-                    icon="square-edit-outline"
-                    size="small"
-                    onPress={() => setSearchBarVisibility(true)}
-                  />
-                  <Text style={[t.textCenter]}>{'\n'}123 Happy Street, Vancouver, BC VS5 3D6</Text>
-                </View>
-              ) : (
-                // User edit store location
-                <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap]}>
-                  {/* Search store location bar placeholder */}
-                  <Text>SEARCH BAR</Text>
-                  <StyledButton
-                    title="cancel"
-                    icon="square-edit-outline"
-                    size="small"
-                    onPress={() => setSearchBarVisibility(false)}
-                  />
-                </View>
-              )}
-              <View style={[t.justifyCenter, t.itemsCenter, t.pT5]}>
-                <Image source={{ uri: imageUri }} style={{ height: '75%', width: '75%' }} />
-              </View>
 
-              <View style={[t.flex1, t.flexRow, t.justifyBetween, t.mR4, t.mL4, t.mB5]}>
-                <View>
-                  <Text>Discount Price</Text>
-                  <TextInput
-                    value={discountPrice}
-                    onChangeText={(text) => setDiscountPrice(text)}
-                    style={[t.h10, t.pX20]}
-                  />
-                </View>
-
-                <View>
-                  <Text>Regular Price</Text>
-                  <TextInput
-                    value={regularPrice}
-                    onChangeText={(text) => setRegularPrice(text)}
-                    style={[t.h10, t.pX20]}
-                  />
-                </View>
-              </View>
-              <View style={[t.flex1, t.mPx]}>
-                {/* Tag entry bar placeholder  */}
-                <Text style={[t.textCenter]}>TAG ENTRY BAR</Text>
-                <TouchableOpacity
-                  style={[t.justifyEnd]}
-                  onPress={() => {
-                    cancelPhoto();
-                  }}
-                >
-                  <Text style={[t.textLg]}> Cancel </Text>
-                </TouchableOpacity>
-              </View>
+        <View style={[t.flex1]}>
+          {!searchBarVisible ? (
+            // User current location
+            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap]}>
+              <Headline>T&T Supermarket</Headline>
+              <StyledButton
+                title="edit"
+                icon="square-edit-outline"
+                size="small"
+                onPress={() => setSearchBarVisibility(true)}
+              />
+              <Text style={[t.textCenter]}>{'\n'}123 Happy Street, Vancouver, BC VS5 3D6</Text>
             </View>
-          </TouchableWithoutFeedback>
-        </KeyboardAvoidingView>
+          ) : (
+            // User edit store location
+            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap]}>
+              {/* Search store location bar placeholder */}
+              <Text>SEARCH BAR</Text>
+              <StyledButton
+                title="cancel"
+                icon="square-edit-outline"
+                size="small"
+                onPress={() => setSearchBarVisibility(false)}
+              />
+            </View>
+          )}
+          <View style={[t.justifyCenter, t.itemsCenter, t.pT5]}>
+            <Image source={{ uri: imageUri }} style={{ height: '75%', width: '75%' }} />
+          </View>
+
+          <View style={[t.flex1, t.flexRow, t.justifyBetween, t.mR4, t.mL4, t.mB5]}>
+            <View>
+              <Text>Discount Price</Text>
+              <TextInput
+                value={discountPrice}
+                onChangeText={(text) => setDiscountPrice(text)}
+                style={[t.h10, t.pX20]}
+              />
+            </View>
+
+            <View>
+              <Text>Regular Price</Text>
+              <TextInput
+                value={regularPrice}
+                onChangeText={(text) => setRegularPrice(text)}
+                style={[t.h10, t.pX20]}
+              />
+            </View>
+          </View>
+          <View style={[t.flex1, t.pT6]}>
+            {/* Tag entry bar placeholder  */}
+            <Text style={[t.textCenter]}>TAG ENTRY BAR</Text>
+            <TouchableOpacity
+              style={[t.justifyEnd]}
+              onPress={() => {
+                cancelPhoto();
+              }}
+            >
+              <Text style={[t.textLg]}> Cancel </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       )}
-    </View>
+    </SafeAreaView>
   );
 }

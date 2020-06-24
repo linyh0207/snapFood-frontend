@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
 
@@ -49,7 +50,7 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   return (
-    <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
+    <SafeAreaView style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
       {/* Onboarding swiper slider */}
       <WelcomeSwiper />
       {/* Login Modal */}
@@ -116,6 +117,6 @@ export default function OnboardingScreen({ navigation }) {
       {/* Login and Sign Up Buttons */}
       <StyledButton title="Login" mode="contained" bordered onPress={showLoginModal} />
       <StyledButton title="Sign Up" mode="outlined" bordered onPress={showSignUpModal} />
-    </View>
+    </SafeAreaView>
   );
 }
