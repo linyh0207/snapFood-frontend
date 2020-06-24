@@ -134,9 +134,12 @@ export default function AddPostScreen() {
               />
             </View>
           )}
-          <View style={[t.justifyCenter, t.itemsCenter, t.pT5]}>
-            <Image source={{ uri: imageUri }} style={{ height: '75%', width: '75%' }} />
-          </View>
+
+          <Image
+            source={{ uri: imageUri }}
+            style={{ flex: 3, height: undefined, width: undefined }}
+            resizeMode="contain"
+          />
 
           <View style={[t.flex1, t.flexRow, t.justifyBetween, t.mR4, t.mL4, t.mB5]}>
             <View>
