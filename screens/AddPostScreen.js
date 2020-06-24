@@ -6,7 +6,7 @@ import { Headline, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
 
-export default function AddPostScreen() {
+export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -42,6 +42,12 @@ export default function AddPostScreen() {
   function cancelPhoto() {
     setImageUri('');
     setSearchBarVisibility(false);
+  }
+
+  function post() {
+    // Backend - Need to save the post uri to db
+    setImageUri('');
+    navigation.navigate('ProductMain');
   }
 
   return (
@@ -111,7 +117,7 @@ export default function AddPostScreen() {
         <View style={[t.flex1]}>
           {!searchBarVisible ? (
             // User current location
-            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap]}>
+            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap, t.pB10]}>
               <Headline>T&T Supermarket</Headline>
               <StyledButton
                 title="edit"
@@ -123,7 +129,7 @@ export default function AddPostScreen() {
             </View>
           ) : (
             // User edit store location
-            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap]}>
+            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap, t.pB10]}>
               {/* Search store location bar placeholder */}
               <Text>SEARCH BAR</Text>
               <StyledButton
@@ -171,6 +177,7 @@ export default function AddPostScreen() {
             >
               <Text style={[t.textLg]}> Cancel </Text>
             </TouchableOpacity>
+            <StyledButton title="Post" mode="outlined" size="small" onPress={post} />
           </View>
         </View>
       )}
