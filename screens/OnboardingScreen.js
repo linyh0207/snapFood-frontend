@@ -8,7 +8,7 @@ import StyledButton from '../components/StyledButton';
 import { AuthContext } from '../state/auth/authContext';
 
 export default function OnboardingScreen({ navigation }) {
-  const auth = React.useContext(AuthContext);
+  const { login, register } = React.useContext(AuthContext);
   // Manage login states
   const [loginModalVisible, setLoginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
@@ -32,24 +32,32 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   // Trigger Authentication
-  const handleLoginPress = (email, password) => {
-    auth.login(email, password);
+  const handleLoginPress = () => {
+    login(loginUsername, loginPassword)
+      .then(() => {
+        hideLoginModal();
+        navigation.navigate('Home');
+      })
+      .catch((err) => console.log(err));
     // After Authenticattion
     // Direct to Drawer Navigator
-    hideLoginModal();
-    navigation.navigate('Home');
   };
 
   // Pending
   const handleForgotPasswordPress = () => {};
 
   // Trigger Registration
-  const handleSignUpPress = (name, email, password) => {
-    auth.register(name, email, password);
+  const handleSignUpPress = () => {
+    register(signUpUsername, signUpEmail, signUpPassword)
+      .then(() => {
+        hideSignUpModal();
+        navigation.navigate('Home');
+      })
+      .catch((err) => console.log(err));
     // Once the register done
     // Direct to Drawer Navigator
-    hideSignUpModal();
-    navigation.navigate('Home');
+    // hideSignUpModal();
+    // navigation.navigate('Home');
   };
 
   return (
@@ -77,12 +85,7 @@ export default function OnboardingScreen({ navigation }) {
           <Text style={[t.textRight, t.pT1, t.pB1]} onPress={() => handleForgotPasswordPress}>
             Forgot Password?
           </Text>
-          <StyledButton
-            title="Login"
-            mode="outlined"
-            size="small"
-            onPress={handleLoginPress(loginUsername, loginPassword)}
-          />
+          <StyledButton title="Login" mode="outlined" size="small" onPress={handleLoginPress} />
           <Text style={[t.textCenter, t.pTPx]} onPress={handleCreateAnAccount}>
             Create An Account
           </Text>
@@ -118,7 +121,7 @@ export default function OnboardingScreen({ navigation }) {
             title="Sign Up Now"
             mode="outlined"
             size="small"
-            onPress={handleSignUpPress(signUpUsername, signUpEmail, signUpPassword)}
+            onPress={handleSignUpPress}
           />
         </Modal>
       </Portal>
