@@ -80,7 +80,10 @@ export default function AddPostScreen() {
               <View
                 style={{
                   borderWidth: 2,
-                  borderRadius: '50%',
+                  borderTopLeftRadius: 50,
+                  borderTopRightRadius: 50,
+                  borderBottomLeftRadius: 50,
+                  borderBottomRightRadius: 50,
                   borderColor: 'white',
                   height: 50,
                   width: 50,
@@ -93,7 +96,10 @@ export default function AddPostScreen() {
                 <View
                   style={{
                     borderWidth: 2,
-                    borderRadius: '50%',
+                    borderTopLeftRadius: 50,
+                    borderTopRightRadius: 50,
+                    borderBottomLeftRadius: 50,
+                    borderBottomRightRadius: 50,
                     borderColor: 'white',
                     height: 40,
                     width: 40,
