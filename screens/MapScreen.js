@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 // import * as Permissions from 'expo-permissions';
@@ -33,6 +33,8 @@ export default function MapScreen() {
   //   }, []);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const markers = [
     {
       id: '1',
@@ -44,6 +46,16 @@ export default function MapScreen() {
       latlng: { latitude: location?.latitude - 0.5, longitude: location?.longitude - 0.5 },
       title: 'T&T Supermarket',
     },
+    {
+      id: '3',
+      latlng: { latitude: location?.latitude + 0.8, longitude: location?.longitude + 0.05 },
+      title: 'T&T Supermarket',
+    },
+    {
+      id: '4',
+      latlng: { latitude: location?.latitude - 0.8, longitude: location?.longitude - 0.8 },
+      title: 'T&T Supermarket',
+    },
   ];
 
   useEffect(() => {
@@ -51,6 +63,7 @@ export default function MapScreen() {
       const { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
+        setIsLoading(false);
       }
       // contains object of timestamp: sec, mocked: boolean, coords: {altitude: int, heading: int, longitude: float, speed: float, latitude: float, accuracy: float}
       const locationRaw = await Location.getCurrentPositionAsync({});
@@ -65,6 +78,15 @@ export default function MapScreen() {
     text = JSON.stringify({ longitude: location.longitude, latitude: location.latitude });
   }
   if (location && location?.latitude) {
+    const maxLatDiff = markers
+      .map((marker) => marker.latlng.latitude)
+      .reduce((acc, curr) => Math.max(Math.abs(curr - location.latitude), acc), 0);
+    const maxLongDiff = markers
+      .map((marker) => marker.latlng.longitude)
+      .reduce((acc, curr) => Math.max(Math.abs(curr - location.longitude), acc), 0);
+
+    console.log('delta lat and long', maxLatDiff, maxLongDiff);
+
     return (
       <View style={styles.container}>
         <Text>{text}</Text>
@@ -75,8 +97,11 @@ export default function MapScreen() {
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
+            latitudeDelta: maxLatDiff * 2 + 0.3,
+            longitudeDelta: maxLongDiff * 2 + 0.3,
+
+            // latitudeDelta: 0.922,
+            // longitudeDelta: 0.421,
           }}
         >
           {markers.map((marker) => {
@@ -84,6 +109,13 @@ export default function MapScreen() {
             return <Marker key={marker.id} coordinate={marker.latlng} title={marker.title} />;
           })}
         </MapView>
+      </View>
+    );
+  }
+  if (isLoading) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading</Text>
       </View>
     );
   }
