@@ -10,6 +10,7 @@ import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
+import LikedCounter from '../components/LikedCounter';
 
 export default function ProductMainScreen({ navigation }) {
   const [refineModalVisible, setRefineModalVisibility] = useState(false);
@@ -19,6 +20,9 @@ export default function ProductMainScreen({ navigation }) {
     showRefineModal();
   };
 
+  const toMapView = () => {
+    navigation.navigate('Map');
+  };
   // Default 5km for the placeholder
   const [distance, setDistance] = useState('');
 
@@ -54,6 +58,8 @@ export default function ProductMainScreen({ navigation }) {
           onPress={() => navigation.openDrawer()}
         />
         {/* Searchbar Placeholder */}
+        <StyledButton size="small" icon="map-outline" onPress={toMapView} />
+
         {/* Refine Modal */}
         <Portal>
           <Modal

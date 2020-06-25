@@ -8,6 +8,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import OnboardingScreen from './screens/OnboardingScreen';
 import DrawerNavigator from './navigation/DrawerNavigator';
+import MapScreen from './screens/MapScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ export default function App(props) {
                 options={{ gesturesEnabled: false }}
               />
               <Stack.Screen name="Home" component={DrawerNavigator} />
+              <Stack.Screen name="Map" component={MapScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </View>
