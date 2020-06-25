@@ -4,7 +4,7 @@ import actionTypes from './actionTypes';
 export const AuthContext = React.createContext();
 
 export const initialState = {
-  userId: null,
+  user: null,
   isLoading: true,
   userToken: null,
 };
@@ -15,27 +15,27 @@ export const reducer = (prevState, action) => {
       return {
         ...prevState,
         isLoading: false,
-        userId: action.id,
+        user: action.user,
         userToken: action.token,
       };
     case actionTypes.LOGIN:
       return {
         ...prevState,
-        userId: action.id,
+        user: action.user,
         userToken: action.token,
         isLoading: false,
       };
     case actionTypes.REGISTER:
       return {
         ...prevState,
-        userId: action.id,
+        user: action.user,
         userToken: action.token,
         isLoading: false,
       };
     case actionTypes.LOGOUT:
       return {
         ...prevState,
-        userId: null,
+        user: null,
         userToken: null,
         isLoading: false,
       };

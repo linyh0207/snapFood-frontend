@@ -1,4 +1,5 @@
-export const API_URL = 'http://localhost:8000';
-
-export const REGISTER = `${API_URL}/users/register`;
-export const LOGIN = `${API_URL}/users/login`;
+export default {
+  API_URL: 'http://localhost:8000',
+  REGISTER: `http://localhost:8000/users/register`,
+  LOGIN: `http://localhost:8000/users/login`,
+};

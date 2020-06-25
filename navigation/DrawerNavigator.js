@@ -11,23 +11,26 @@ import BottomTabNavigator from './BottomTabNavigator';
 import AchievementScreen from '../screens/AchievementScreen';
 import MyPostsScreen from '../screens/MyPostsScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import { AuthContext } from '../state/auth/authContext';
 
 const Drawer = createDrawerNavigator();
 
-// Add drawer navigator header
-function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <View style={[t.flex1, t.flexRow, t.p8, t.itemsCenter, t.bgGreen600]}>
-        <Headline style={[t.pR2]}>Username</Headline>
-        <Avatar.Icon size={24} icon="crown" />
-      </View>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-}
-
 export default function DrawerNavigator() {
+  const { authMemo, authState } = React.useContext(AuthContext);
+  console.log(authState);
+  // Add drawer navigator header
+  function CustomDrawerContent(props) {
+    return (
+      <DrawerContentScrollView {...props}>
+        <View style={[t.flex1, t.flexRow, t.p8, t.itemsCenter, t.bgGreen600]}>
+          <Headline style={[t.pR2]}>{authState.user}</Headline>
+          <Avatar.Icon size={24} icon="crown" />
+        </View>
+        <DrawerItemList {...props} />
+      </DrawerContentScrollView>
+    );
+  }
+
   return (
     <Drawer.Navigator drawerContent={(items) => <CustomDrawerContent {...items} />}>
       <Drawer.Screen

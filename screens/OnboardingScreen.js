@@ -8,7 +8,7 @@ import StyledButton from '../components/StyledButton';
 import { AuthContext } from '../state/auth/authContext';
 
 export default function OnboardingScreen({ navigation }) {
-  const { login, register } = React.useContext(AuthContext);
+  const { authMemo } = React.useContext(AuthContext);
   // Manage login states
   const [loginModalVisible, setLoginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
@@ -33,12 +33,9 @@ export default function OnboardingScreen({ navigation }) {
 
   // Trigger Authentication
   const handleLoginPress = () => {
-    login(loginUsername, loginPassword)
-      .then(() => {
-        hideLoginModal();
-        navigation.navigate('Home');
-      })
-      .catch((err) => console.log(err));
+    authMemo.login(loginUsername, loginPassword);
+    hideLoginModal();
+    navigation.navigate('Home');
     // After Authenticattion
     // Direct to Drawer Navigator
   };
@@ -48,12 +45,9 @@ export default function OnboardingScreen({ navigation }) {
 
   // Trigger Registration
   const handleSignUpPress = () => {
-    register(signUpUsername, signUpEmail, signUpPassword)
-      .then(() => {
-        hideSignUpModal();
-        navigation.navigate('Home');
-      })
-      .catch((err) => console.log(err));
+    authMemo.register(signUpUsername, signUpEmail, signUpPassword);
+    hideSignUpModal();
+    navigation.navigate('Home');
     // Once the register done
     // Direct to Drawer Navigator
     // hideSignUpModal();
