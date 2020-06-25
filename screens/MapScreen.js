@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-// import * as Permissions from 'expo-permissions';
+import { StyleSheet, Text, View, Dimensions, Alert } from 'react-native';
 import * as Location from 'expo-location';
 
 const styles = StyleSheet.create({
@@ -18,19 +17,6 @@ const styles = StyleSheet.create({
 });
 
 export default function MapScreen() {
-  //   const [location, setLocation] = useState({ latitude: null, longitude: null });
-
-  //   useEffect(async () => {
-  //     const { status } = await Permissions.getAsync(Permissions.LOCATION);
-
-  //     if (status !== 'granted') {
-  //       const response = await Permissions.askAsync(Permissions.LOCATION);
-  //     }
-  //     navigator.geolocation.getCurrentPosition(
-  //       ({ coords: { latitude, longitude } }) => setLocation({ latitude, longitude }),
-  //       (error) => console.log('Error', error)
-  //     );
-  //   }, []);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -66,7 +52,9 @@ export default function MapScreen() {
         setIsLoading(false);
       }
       // contains object of timestamp: sec, mocked: boolean, coords: {altitude: int, heading: int, longitude: float, speed: float, latitude: float, accuracy: float}
-      const locationRaw = await Location.getCurrentPositionAsync({});
+      const locationRaw = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
       setLocation(locationRaw.coords);
     })();
   });
@@ -84,8 +72,6 @@ export default function MapScreen() {
     const maxLongDiff = markers
       .map((marker) => marker.latlng.longitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.longitude), acc), 0);
-
-    console.log('delta lat and long', maxLatDiff, maxLongDiff);
 
     return (
       <View style={styles.container}>
@@ -105,8 +91,14 @@ export default function MapScreen() {
           }}
         >
           {markers.map((marker) => {
-            // console.log('marker', marker);
-            return <Marker key={marker.id} coordinate={marker.latlng} title={marker.title} />;
+            return (
+              <Marker
+                key={marker.id}
+                coordinate={marker.latlng}
+                title={marker.title}
+                onPress={() => Alert.alert('slider here')}
+              />
+            );
           })}
         </MapView>
       </View>
