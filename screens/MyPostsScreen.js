@@ -78,7 +78,7 @@ export default function MyPostsScreen() {
   const renderItem = ({ item, index }) => {
     return (
       <View>
-        {/* <ProductMainCard {...item} cardStyle={[t.m1]} /> */}
+        {/* <ProductMainCard key={item.id} {...item} cardStyle={[t.m1]} /> */}
         <ProductDetailCard key={item.id} />
       </View>
     );

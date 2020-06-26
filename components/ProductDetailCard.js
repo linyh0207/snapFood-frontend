@@ -43,16 +43,16 @@ export default function ProductDetailCard({
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showMapModal, setShowMapModal] = React.useState(false);
   return (
-    <SafeAreaView style={[t.flex1]}>
+    <View style={[t.flex1]}>
       <Portal>
         <Modal visible={showMapModal} onDismiss={() => setShowMapModal(!showMapModal)}>
           <Map />
         </Modal>
       </Portal>
-      <View>
-        <View>
+      <View style={[t.flex, t.flexCol]}>
+        <View style={[t.flex, t.flexRow, t.justifyBetween]}>
           <Text>19 hours ago</Text>
-          <View>
+          <View style={[t.flex, t.flexRow, t.justifyEnd]}>
             <IconButton icon="map-marker" onPress={() => setShowMapModal(!showMapModal)} />
             <Text>T&T Supermarket (500m)</Text>
           </View>
@@ -63,7 +63,7 @@ export default function ProductDetailCard({
           resizeMode="center"
           source={{ uri: 'https://picsum.photos/700' }}
         />
-        <View>
+        <View style={[t.flex, t.flexRow, t.justifyBetween]}>
           <LikedCounter likes={10} dislikes={1} variant="detail" />
           <ToggleButton
             selected={bookmarked}
@@ -85,7 +85,7 @@ export default function ProductDetailCard({
           </Text>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 // <View>

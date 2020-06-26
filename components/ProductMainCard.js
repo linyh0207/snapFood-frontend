@@ -12,11 +12,14 @@ import {
   Card,
   Title,
   Paragraph,
+  Portal,
+  Modal,
 } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 import UserName from './TopBar/UserName';
 import LikedCounter from './LikedCounter';
+import ProductDetailCard from './ProductDetailCard';
 
 const styles = StyleSheet.create({
   image: {
@@ -33,11 +36,20 @@ export default function ProductMainCard({
   coverStyle = [],
 }) {
   const [bookmarked, setBookmarked] = React.useState(false);
+  const [showDetailModal, setShowDetailModal] = React.useState(false);
+
   return (
     <View>
       {/* <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" /> */}
-
-      <Card style={[t.flex, t.flexCol, t.alignCenter, ...cardStyle]}>
+      <Portal>
+        <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
+          <ProductDetailCard />
+        </Modal>
+      </Portal>
+      <Card
+        style={[t.flex, t.flexCol, t.alignCenter, ...cardStyle]}
+        onLongPress={() => setShowDetailModal(!showDetailModal)}
+      >
         {/* <ImageBackground style={styles.image} source={{ uri: 'https://picsum.photos/700' }}>
           <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" />
         </ImageBackground> */}
@@ -57,7 +69,7 @@ export default function ProductMainCard({
         </View>
         <Card.Content style={[t.flex, t.flexRow, t.justifyBetween]}>
           <View style={[t.flex, t.flexCol]}>
-            <Text>{totalVotes} likes</Text>
+            {/* <Text>{totalVotes} likes</Text> */}
             <LikedCounter />
           </View>
           <View style={[t.flex, t.flexCol, t.itemsEnd]}>
