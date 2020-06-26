@@ -11,7 +11,6 @@ import BottomTabNavigator from './BottomTabNavigator';
 import AchievementScreen from '../screens/AchievementScreen';
 import MyPostsScreen from '../screens/MyPostsScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
-import MapScreen from '../screens/MapScreen';
 
 const Drawer = createDrawerNavigator();
 

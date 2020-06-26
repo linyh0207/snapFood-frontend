@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function MapScreen() {
+export default function Map() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -74,7 +74,7 @@ export default function MapScreen() {
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.longitude), acc), 0);
 
     return (
-      <View style={styles.container}>
+      <View>
         <Text>{text}</Text>
         <MapView
           showsUserLocation
