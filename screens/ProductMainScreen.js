@@ -60,7 +60,6 @@ export default function ProductMainScreen({ navigation }) {
           onPress={() => navigation.openDrawer()}
         />
         {/* Searchbar Placeholder */}
-        <StyledButton size="small" icon="map-outline" onPress={toMapView} />
 
         {/* Refine Modal */}
         <Portal>
@@ -87,7 +86,6 @@ export default function ProductMainScreen({ navigation }) {
             <StoresMenu />
           </Modal>
         </Portal>
-        {showMap ? <Map /> : <View />}
         <StyledButton
           icon="playlist-edit"
           title="Refine"
@@ -95,17 +93,26 @@ export default function ProductMainScreen({ navigation }) {
           onPress={handleRefineModalPress}
         />
         {/* MapView / ListView Toggle Button Placeholder */}
-      </View>
-
-      <ScrollView contentContainerStyle={[t.p6]}>
-        {/* Product card for product main page */}
-        <ProductMainCard
-          price={{ regular: 2.99, discounted: 0.99 }}
-          totalVotes={10}
-          storeName="T&T Supermarket"
-          distance="500m"
+        <StyledButton
+          size="small"
+          icon={showMap ? 'view-list' : 'map-outline'}
+          onPress={toMapView}
         />
-      </ScrollView>
+      </View>
+      {showMap ? (
+        <Map />
+      ) : (
+        <ScrollView contentContainerStyle={[t.p6]}>
+          {/* Product card for product main page */}
+          <ProductMainCard
+            price={{ regular: 2.99, discounted: 0.99 }}
+            totalVotes={10}
+            storeName="T&T Supermarket"
+            distance="500m"
+          />
+        </ScrollView>
+      )}
+
       <SnackBar />
     </SafeAreaView>
   );

@@ -83,12 +83,13 @@ export default function Map() {
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
-            latitudeDelta: maxLatDiff * 2 + 0.3,
-            longitudeDelta: maxLongDiff * 2 + 0.3,
+            latitudeDelta: maxLatDiff * 2 + 0.4,
+            longitudeDelta: maxLongDiff * 2 + 0.4,
 
             // latitudeDelta: 0.922,
             // longitudeDelta: 0.421,
           }}
+          moveOnMarkerPress={false}
         >
           {markers.map((marker) => {
             return (
