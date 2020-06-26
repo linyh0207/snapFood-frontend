@@ -31,12 +31,30 @@ export default function AddPostScreen({ navigation }) {
 
   const takePicture = async () => {
     if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
+      const photo = await cameraRef.takePictureAsync({ base64: true });
       // photo uri to store in the db
-      // console.log('photo', photo.uri);
-      return setImageUri(photo.uri);
+      //console.log(photo);
+      const base64Img = `data:image/jpg;base64,${photo.base64}`;
+      const data = {
+        file: base64Img,
+        upload_preset: 'oohwpvh9',
+      };
+      const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload';
+      fetch(Cloud, {
+        body: JSON.stringify(data),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      })
+        .then(async (res) => {
+          let pic = await res.json();
+          //console.log(data.url);
+          return setImageUri(pic.url);
+        })
+        .catch((err) => console.log(err));
     }
-    return setImageUri('');
+    //return setImageUri('');
   };
 
   function cancelPhoto() {
