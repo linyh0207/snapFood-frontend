@@ -1,7 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { StyleSheet, Text, View, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
+import { Portal, Modal } from 'react-native-paper';
+import Carousel from 'react-native-snap-carousel';
+import { t } from 'react-native-tailwindcss';
+import ProductMainCard from './ProductMainCard';
+import { scrollInterpolator, animatedStyles } from '../utils/animations';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,6 +22,55 @@ const styles = StyleSheet.create({
 });
 
 export default function Map() {
+  // Products Swiper Modal --- start
+  const SLIDER_WIDTH = Dimensions.get('window').width;
+  const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
+  const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
+
+  // Dummy screen datas
+  const SCREENS = [
+    <ProductMainCard
+      price={{ regular: 3.99, discounted: 1.99 }}
+      totalVotes={10}
+      storeName="T&T Supermarket"
+      distance="500m"
+    />,
+    <ProductMainCard
+      price={{ regular: 10.99, discounted: 4.99 }}
+      totalVotes={10}
+      storeName="Superstore"
+      distance="500m"
+    />,
+    <ProductMainCard
+      price={{ regular: 2.99, discounted: 0.99 }}
+      totalVotes={10}
+      storeName="Save On Food"
+      distance="500m"
+    />,
+  ];
+
+  const renderItem = ({ item }) => {
+    return (
+      <View
+        style={{
+          width: ITEM_WIDTH,
+          height: ITEM_HEIGHT,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {item}
+      </View>
+    );
+  };
+
+  const [activeTab, setActiveTab] = useState(0);
+  const [productsSwiperModalVisible, setProductsSwiperModalVisibility] = useState(false);
+  const showProductsSwiperModal = () => setProductsSwiperModalVisibility(true);
+  const hideProductsSwiperModal = () => setProductsSwiperModalVisibility(false);
+  // Products Swiper Modal --- end
+
+  // Map View --- start
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -97,11 +151,33 @@ export default function Map() {
                 key={marker.id}
                 coordinate={marker.latlng}
                 title={marker.title}
-                onPress={() => Alert.alert('slider here')}
+                onPress={showProductsSwiperModal}
               />
             );
           })}
         </MapView>
+        {/* Products Swiper Modal --- start */}
+        <Portal>
+          <Modal visible={productsSwiperModalVisible} onDismiss={hideProductsSwiperModal}>
+            <View>
+              <Carousel
+                data={SCREENS}
+                renderItem={renderItem}
+                sliderWidth={SLIDER_WIDTH}
+                itemWidth={ITEM_WIDTH}
+                inactiveSlideShift={0}
+                onSnapToItem={(i) => setActiveTab(i)}
+                scrollInterpolator={scrollInterpolator}
+                slideInterpolatedStyle={animatedStyles}
+                useScrollView
+              />
+              <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
+                {activeTab + 1} / {SCREENS.length}
+              </Text>
+            </View>
+          </Modal>
+        </Portal>
+        {/* Products Swiper Modal --- end */}
       </View>
     );
   }
