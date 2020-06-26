@@ -10,15 +10,21 @@ import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
+import LikedCounter from '../components/LikedCounter';
+import Map from '../components/Map';
 
 export default function ProductMainScreen({ navigation }) {
   const [refineModalVisible, setRefineModalVisibility] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
   const hideRefineModal = () => setRefineModalVisibility(false);
   const handleRefineModalPress = () => {
     showRefineModal();
   };
 
+  const toMapView = () => {
+    setShowMap(!showMap);
+  };
   // Default 5km for the placeholder
   const [distance, setDistance] = useState('');
 
@@ -54,6 +60,7 @@ export default function ProductMainScreen({ navigation }) {
           onPress={() => navigation.openDrawer()}
         />
         {/* Searchbar Placeholder */}
+
         {/* Refine Modal */}
         <Portal>
           <Modal
@@ -86,17 +93,26 @@ export default function ProductMainScreen({ navigation }) {
           onPress={handleRefineModalPress}
         />
         {/* MapView / ListView Toggle Button Placeholder */}
-      </View>
-
-      <ScrollView contentContainerStyle={[t.p6]}>
-        {/* Product card for product main page */}
-        <ProductMainCard
-          price={{ regular: 2.99, discounted: 0.99 }}
-          totalVotes={10}
-          storeName="T&T Supermarket"
-          distance="500m"
+        <StyledButton
+          size="small"
+          icon={showMap ? 'view-list' : 'map-outline'}
+          onPress={toMapView}
         />
-      </ScrollView>
+      </View>
+      {showMap ? (
+        <Map />
+      ) : (
+        <ScrollView contentContainerStyle={[t.p6]}>
+          {/* Product card for product main page */}
+          <ProductMainCard
+            price={{ regular: 2.99, discounted: 0.99 }}
+            totalVotes={10}
+            storeName="T&T Supermarket"
+            distance="500m"
+          />
+        </ScrollView>
+      )}
+
       <SnackBar />
     </SafeAreaView>
   );
