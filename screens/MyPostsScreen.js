@@ -9,6 +9,7 @@ import StyledButton from '../components/StyledButton';
 import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
 import ProductMainCard from '../components/ProductMainCard';
+import ProductDetailCard from '../components/ProductDetailCard';
 
 const posts = [
   {
@@ -77,7 +78,8 @@ export default function MyPostsScreen() {
   const renderItem = ({ item, index }) => {
     return (
       <View>
-        <ProductMainCard {...item} cardStyle={[t.m1]} />
+        {/* <ProductMainCard {...item} cardStyle={[t.m1]} /> */}
+        <ProductDetailCard key={item.id} />
       </View>
     );
   };
@@ -89,10 +91,12 @@ export default function MyPostsScreen() {
           UserName
         </UserName>
       </View>
+      {/* <ProductDetailCard /> */}
+
       <AchievementStatement>I have posted 100 posts</AchievementStatement>
-      <View>
-        <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
-      </View>
+      {/* <ScrollView> */}
+      <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }
