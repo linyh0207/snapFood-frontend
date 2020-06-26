@@ -64,7 +64,7 @@ export default function ProductDetailCard({
           source={{ uri: 'https://picsum.photos/700' }}
         />
         <View>
-          <LikedCounter />
+          <LikedCounter likes={10} dislikes={1} variant="detail" />
           <ToggleButton
             selected={bookmarked}
             selectedIcon="bookmark"

@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 
-const LikedCounter = (netLiked = 0) => {
+const LikedCounter = ({ likes = 0, dislikes = 0, variant = 'general' }) => {
   const [liked, setLiked] = useState(false);
   const [notLiked, setNotLiked] = useState(false);
 
@@ -20,27 +20,29 @@ const LikedCounter = (netLiked = 0) => {
     }
   }, [notLiked]);
   return (
-    <View style={[t.flex, t.flexCol]}>
-      {/* <Text>{netLiked} likes</Text> */}
-      <View style={[t.flex, t.flexRow, t.justifyStart]}>
+    <View style={[t.flex, t.flexRow, t.justifyStart]}>
+      <View style={[t.flex, t.flexCol]}>
         <ToggleButton
           selected={liked}
           selectedIcon="thumb-up"
           unselectedIcon="thumb-up-outline"
           handleSelected={() => {
             setLiked(!liked);
-            // setNotLiked(liked);
           }}
         />
+        {variant === 'detail' && <Text>{likes}</Text>}
+      </View>
+      {variant === 'general' && <Text>{likes - dislikes}</Text>}
+      <View>
         <ToggleButton
           selected={notLiked}
           selectedIcon="thumb-down"
           unselectedIcon="thumb-down-outline"
           handleSelected={() => {
             setNotLiked(!notLiked);
-            // setLiked(notLiked);
           }}
         />
+        {variant === 'detail' && <Text>{dislikes}</Text>}
       </View>
     </View>
   );
