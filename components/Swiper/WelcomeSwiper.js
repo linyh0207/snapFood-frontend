@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Dimensions, Alert } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { MaterialIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { t } from 'react-native-tailwindcss';
