@@ -4,7 +4,7 @@ import { Searchbar, List, Card } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 
 function SearchBar({ searcher, latitude, longitude, radius }) {
-  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [searchSuggestions, setSearchSuggestions] = useState(['bread', 'banana', 'chocolate']);
   const [searchTerm, setSearchTerm] = useState('');
   const onChangeSearch = (query) => {
     setSearchTerm(query);
@@ -12,7 +12,7 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
 
   const loadData = async () => {
     const apiData = await fetch(
-      `http://localhost:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
+      `http://10.0.3.2:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
     );
     const responseText = await apiData.text();
     const { tags } = JSON.parse(responseText);
