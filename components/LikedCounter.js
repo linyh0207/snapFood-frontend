@@ -27,7 +27,7 @@ const LikedCounter = ({
 
   const toggleLikePost = (upvote) => {
     const remove = (upvote && liked) || (!upvote && notLiked);
-    fetch(`http://10.0.3.2:8000/posts/${postId}`, {
+    fetch(`http://localhost:8000/posts/${postId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',

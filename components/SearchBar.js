@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import { Searchbar, List, Card, Chip } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 
+const MAX_RESULTS_DISPLAYED = 5;
+
 function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiveTags }) {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,7 +15,7 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
 
   const loadData = async () => {
     const apiData = await fetch(
-      `http://10.0.3.2:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
+      `http://localhost:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
     );
     const responseText = await apiData.text();
     const { tags } = JSON.parse(responseText);
@@ -27,7 +29,7 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
   const matchTags = (tag) => {
     try {
       const re = new RegExp(`${searchTerm}`, 'i');
-      return tag.match(re);
+      return tag.match(re) && !activeTags.includes(tag);
     } catch {
       return false;
     }
@@ -43,8 +45,9 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
     console.log('searched');
   };
 
-  const showSearchSuggestions =
-    searchTerm.length > 0 && searchSuggestions.filter(matchTags).length > 0;
+  const searching = searchTerm.length > 0;
+
+  const showNoSuggestions = searching && searchSuggestions.filter(matchTags).length === 0;
 
   return (
     <>
@@ -55,15 +58,23 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
         style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '']}
         onIconPress={handleSearchPress}
       />
-      {showSearchSuggestions && (
-        <Card style={[t.roundedTNone, t.z10]}>
-          <List.Section>
-            {searchSuggestions.filter(matchTags).map((text, i) => (
-              <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
-            ))}
-          </List.Section>
-        </Card>
-      )}
+      {searching &&
+        (showNoSuggestions ? (
+          <List.Item title="No Matching Tags in your Area." />
+        ) : (
+          <Card style={[t.roundedTNone, t.z10]}>
+            <List.Section>
+              {searchSuggestions
+                .filter(matchTags)
+                .map(
+                  (text, i) =>
+                    i < MAX_RESULTS_DISPLAYED && (
+                      <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
+                    )
+                )}
+            </List.Section>
+          </Card>
+        ))}
       <Card style={t.z10}>
         <View style={t.flexRow}>
           {activeTags.length > 0 &&

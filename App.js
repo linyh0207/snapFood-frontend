@@ -15,7 +15,7 @@ export default function App(props) {
   const isLoadingComplete = useCachedResources();
 
   // Authentication flow set up pending
-  const isAuth = false;
+  const isAuth = true;
   // true: home screen ; false: login/signup onboarding screen
   // need to manually RELOAD the app to update initialRoute
 

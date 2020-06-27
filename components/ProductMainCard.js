@@ -52,7 +52,7 @@ export default function ProductMainCard({
 
   const toggleSavePost = () => {
     setUserSavedPost((prev) => !prev);
-    fetch(`http://10.0.3.2:8000/users/${userId}`, {
+    fetch(`http://localhost:8000/users/${userId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
