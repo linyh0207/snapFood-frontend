@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { View } from 'react-native';
-import { Searchbar, List, Card } from 'react-native-paper';
+import { Searchbar, List, Card, Chip } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 
-function SearchBar({ searcher, latitude, longitude, radius }) {
-  const [searchSuggestions, setSearchSuggestions] = useState(['bread', 'banana', 'chocolate']);
+function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiveTags }) {
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
   const onChangeSearch = (query) => {
     setSearchTerm(query);
   };
@@ -26,14 +27,15 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
   const matchTags = (tag) => {
     try {
       const re = new RegExp(`${searchTerm}`, 'i');
-      return tag.match(re).length > 0;
+      return tag.match(re);
     } catch {
       return false;
     }
   };
 
   const handleItemPress = (text) => {
-    setSearchTerm(text);
+    setSearchTerm('');
+    setActiveTags((prev) => [...prev, text]);
     console.log(text);
   };
 
@@ -41,30 +43,42 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
     console.log('searched');
   };
 
+  const showSearchSuggestions =
+    searchTerm.length > 0 && searchSuggestions.filter(matchTags).length > 0;
+
   return (
     <>
       <Searchbar
         placeholder="Search"
         onChangeText={onChangeSearch}
         value={searchTerm}
-        style={searchTerm.length > 0 ? t.roundedBNone : ''}
+        style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '']}
         onIconPress={handleSearchPress}
       />
-      {searchTerm.length > 0 && (
+      {showSearchSuggestions && (
         <Card style={[t.roundedTNone, t.z10]}>
           <List.Section>
-            {searchSuggestions.filter(matchTags).length > 0 ? (
-              searchSuggestions
-                .filter(matchTags)
-                .map((text, i) => (
-                  <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
-                ))
-            ) : (
-              <List.Item title="No matching tags found." />
-            )}
+            {searchSuggestions.filter(matchTags).map((text, i) => (
+              <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
+            ))}
           </List.Section>
         </Card>
       )}
+      <Card style={t.z10}>
+        <View style={t.flexRow}>
+          {activeTags.length > 0 &&
+            activeTags.map((tag) => (
+              <Chip
+                onClose={() =>
+                  setActiveTags((prev) => prev.filter((activeTag) => activeTag !== tag))
+                }
+                style={[t.flexGrow0, t.flexWrap, t.m1]}
+              >
+                {tag}
+              </Chip>
+            ))}
+        </View>
+      </Card>
     </>
   );
 }
