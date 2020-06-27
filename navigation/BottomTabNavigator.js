@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import TabBarIcon from '../components/TabBarIcon';
 import ProductMainScreen from '../screens/ProductMainScreen';
-import CameraScreen from '../screens/CameraScreen';
+import AddPostScreen from '../screens/AddPostScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
 
 const BottomTab = createBottomTabNavigator();
@@ -22,7 +22,7 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Camera"
-        component={CameraScreen}
+        component={AddPostScreen}
         options={{
           title: 'Camera',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-camera" />,

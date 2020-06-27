@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Text } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
 import StyledButton from '../components/StyledButton';
@@ -12,7 +13,7 @@ export default function AchievementScreen() {
   const navigation = useNavigation();
 
   return (
-    <View>
+    <SafeAreaView>
       <View style={[t.flex, t.flexRow, t.itemsCenter, t.p2]}>
         <StyledButton icon="account" size="small" onPress={() => navigation.openDrawer()} />
         <UserName styles={[t.pX1]} textStyles={[t.textLg]} status="super">
@@ -25,6 +26,6 @@ export default function AchievementScreen() {
       <AchievementStatement>
         This a second <Text style={[t.textRed400]}>test</Text>{' '}
       </AchievementStatement>
-    </View>
+    </SafeAreaView>
   );
 }
