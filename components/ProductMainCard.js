@@ -30,7 +30,11 @@ export default function ProductMainCard({
       }}
     >
       <Portal>
-        <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
+        <Modal
+          contentContainerStyle={[t.bgWhite, t.itemsCenter, t.selfCenter, t.p8, t.mB4]}
+          visible={showDetailModal}
+          onDismiss={() => setShowDetailModal(!showDetailModal)}
+        >
           <ProductDetailCard />
         </Modal>
       </Portal>
@@ -60,7 +64,12 @@ export default function ProductMainCard({
 
         {/* <Card.Content style={[t.flexNone, t.flexRow, t.justifyBetween]}> */}
         <Card.Content
-          style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between', width: 190 }}
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <LikedCounter />

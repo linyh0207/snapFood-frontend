@@ -49,7 +49,7 @@ export default function ProductDetailCard({
           <Map />
         </Modal>
       </Portal> */}
-      <View style={[t.flex, t.flexCol]}>
+      <View style={[t.flex1, t.flexCol]}>
         <View style={[t.flex, t.flexRow, t.justifyBetween]}>
           <Text>19 hours ago</Text>
           <View style={[t.flex, t.flexRow, t.justifyEnd]}>
