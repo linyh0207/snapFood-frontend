@@ -21,7 +21,6 @@ function AddressSearchBar({ latitude, longitude, radius }) {
       );
       const resString = await res.text();
       const { predictions } = JSON.parse(resString);
-      console.log(predictions);
       const formattedPredictions = predictions.map((prediction) => {
         const name = prediction.description.split(',')[0];
         const address = prediction.description.split(',')[1];

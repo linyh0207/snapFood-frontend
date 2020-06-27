@@ -52,7 +52,7 @@ export default function ProductMainCard({
 
   const toggleSavePost = () => {
     setUserSavedPost((prev) => !prev);
-    fetch(`http://localhost:8000/users/${userId}`, {
+    fetch(`http://10.0.2.2:8000/users/${userId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
@@ -87,11 +87,11 @@ export default function ProductMainCard({
         </View>
         <Card.Content style={[t.flex, t.flexRow, t.justifyBetween]}>
           <View style={[t.flex, t.flexCol]}>
-            <Text>{likes} likes</Text>
             <LikedCounter
               initialLiked={userLikedPost}
               initialDisliked={userDislikedPost}
               postId={postId}
+              likes={likes}
             />
           </View>
           <View style={[t.flex, t.flexCol, t.itemsEnd]}>

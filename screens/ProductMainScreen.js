@@ -11,6 +11,8 @@ import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
+import LikedCounter from '../components/LikedCounter';
+import Map from '../components/Map';
 
 export default function ProductMainScreen({ navigation }) {
   // For account button to open drawer navigator
@@ -20,6 +22,7 @@ export default function ProductMainScreen({ navigation }) {
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('Sort: Rating');
   const [refineModalVisible, setRefineModalVisibility] = useState(false);
+  const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
   const hideRefineModal = () => setRefineModalVisibility(false);
   const handleRefineModalPress = () => {
@@ -27,14 +30,12 @@ export default function ProductMainScreen({ navigation }) {
   };
 
   const loadData = async () => {
-    const searchUri = `http://localhost:8000/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
+    const searchUri = `http://10.0.2.2:8000/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
-    console.log(searchUri);
     const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
-    console.log(loadedPosts);
     setPosts(sortPosts(loadedPosts) || []);
   };
 
@@ -44,7 +45,6 @@ export default function ProductMainScreen({ navigation }) {
 
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
-    console.log(posts);
   }, [sort]);
 
   const sortPosts = (currentPosts) => {
@@ -66,6 +66,11 @@ export default function ProductMainScreen({ navigation }) {
         return currentPosts;
     }
   };
+  const toMapView = () => {
+    setShowMap(!showMap);
+  };
+  // Default 5km for the placeholder
+  const [distance, setDistance] = useState('');
 
   const DistanceEntryError = () => {
     function isNormalInteger(str) {
@@ -99,6 +104,7 @@ export default function ProductMainScreen({ navigation }) {
           onPress={() => navigation.openDrawer()}
         />
         {/* Searchbar Placeholder */}
+
         {/* Refine Modal */}
         <Portal>
           <Modal
@@ -131,6 +137,11 @@ export default function ProductMainScreen({ navigation }) {
           onPress={handleRefineModalPress}
         />
         {/* MapView / ListView Toggle Button Placeholder */}
+        <StyledButton
+          size="small"
+          icon={showMap ? 'view-list' : 'map-outline'}
+          onPress={toMapView}
+        />
       </View>
       <SearchBar
         searcher={1}
@@ -140,25 +151,29 @@ export default function ProductMainScreen({ navigation }) {
         setActiveTags={setActiveTags}
         activeTags={activeTags}
       />
-      <ScrollView contentContainerStyle={[t.p6]}>
-        {/* Product card for product main page */}
-        {posts.map((post) => (
-          <ProductMainCard
-            price={{ regular: post.price, discounted: post.discountPrice }}
-            totalVotes={post.likes}
-            storeName={post.storename}
-            address={post.address}
-            created={post.createdAt}
-            distance={post.distance}
-            initialUserSavedPost={post.userSavedPost}
-            userLikedPost={post.userLikedPost}
-            userDislikedPost={post.userDislikedPost}
-            likes={post.likes}
-            postId={post.id}
-            key={post.id}
-          />
-        ))}
-      </ScrollView>
+      {showMap ? (
+        <Map />
+      ) : (
+        <ScrollView contentContainerStyle={[t.p6]}>
+          {/* Product card for product main page */}
+          {posts.map((post) => (
+            <ProductMainCard
+              price={{ regular: post.price, discounted: post.discountPrice }}
+              totalVotes={post.likes}
+              storeName={post.storename}
+              address={post.address}
+              created={post.createdAt}
+              distance={post.distance}
+              initialUserSavedPost={post.userSavedPost}
+              userLikedPost={post.userLikedPost}
+              userDislikedPost={post.userDislikedPost}
+              likes={post.likes}
+              postId={post.id}
+              key={post.id}
+            />
+          ))}
+        </ScrollView>
+      )}
       <SnackBar />
     </SafeAreaView>
   );
