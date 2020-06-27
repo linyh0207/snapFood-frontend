@@ -51,13 +51,6 @@ export default function DrawerNavigator() {
           drawerIcon: () => <Avatar.Icon size={24} icon="trophy" />,
         }}
       />
-      {/* <Drawer.Screen
-        name="Map"
-        component={MapScreen}
-        options={{
-          drawerIcon: () => <Avatar.Icon size={24} icon="map" />,
-        }}
-      /> */}
       <Drawer.Screen
         name="Logout"
         component={OnboardingScreen}
