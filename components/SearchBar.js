@@ -3,6 +3,8 @@ import { View } from 'react-native';
 import { Searchbar, List, Card, Chip } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 
+const MAX_RESULTS_DISPLAYED = 5;
+
 function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiveTags }) {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,22 +27,26 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
   }, []);
 
   const matchTags = (tag) => {
-    const re = new RegExp(`${searchTerm}`, 'i');
-    return tag.match(re);
+    try {
+      const re = new RegExp(`^${searchTerm}`, 'i');
+      return tag.match(re) && !activeTags.includes(tag);
+    } catch {
+      return false;
+    }
   };
 
   const handleItemPress = (text) => {
     setSearchTerm('');
     setActiveTags((prev) => [...prev, text]);
-    console.log(text);
   };
 
   const handleSearchPress = () => {
     console.log('searched');
   };
 
-  const showSearchSuggestions =
-    searchTerm.length > 0 && searchSuggestions.filter(matchTags).length > 0;
+  const searching = searchTerm.length > 0;
+  // If searching but no suggestions match, show no suggestions message to user
+  const showNoSuggestions = searching && searchSuggestions.filter(matchTags).length === 0;
 
   return (
     <>
@@ -51,19 +57,24 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
         style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '']}
         onIconPress={handleSearchPress}
       />
-      {showSearchSuggestions && (
-        <View style={[t.h0, t.overflowVisible, t.z10]}>
+      {searching &&
+        (showNoSuggestions ? (
+          <List.Item title="No Matching Tags in your Area." />
+        ) : (
           <Card style={[t.roundedTNone, t.z10]}>
             <List.Section>
-              {searchSuggestions.filter(matchTags).map((text, i) => (
-                <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
-              ))}
+              {searchSuggestions.filter(matchTags).map(
+                (text, i) =>
+                  // Only show top x results (currently set to 5)
+                  i < MAX_RESULTS_DISPLAYED && (
+                    <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
+                  )
+              )}
             </List.Section>
           </Card>
-        </View>
-      )}
+        ))}
       <Card style={t.z10}>
-        <View style={t.flexRow}>
+        <View style={[t.flexRow, t.flexWrap]}>
           {activeTags.length > 0 &&
             activeTags.map((tag) => (
               <Chip
@@ -71,6 +82,7 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
                   setActiveTags((prev) => prev.filter((activeTag) => activeTag !== tag))
                 }
                 style={[t.flexGrow0, t.flexWrap, t.m1]}
+                key={tag}
               >
                 {tag}
               </Chip>
