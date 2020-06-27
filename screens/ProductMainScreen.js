@@ -10,7 +10,6 @@ import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
-import LikedCounter from '../components/LikedCounter';
 import Map from '../components/Map';
 
 export default function ProductMainScreen({ navigation }) {
@@ -18,9 +17,6 @@ export default function ProductMainScreen({ navigation }) {
   const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
   const hideRefineModal = () => setRefineModalVisibility(false);
-  const handleRefineModalPress = () => {
-    showRefineModal();
-  };
 
   const toMapView = () => {
     setShowMap(!showMap);
@@ -64,7 +60,7 @@ export default function ProductMainScreen({ navigation }) {
         {/* Refine Modal */}
         <Portal>
           <Modal
-            contentContainerStyle={[t.bgWhite]}
+            contentContainerStyle={{ backgroundColor: 'white' }}
             visible={refineModalVisible}
             onDismiss={hideRefineModal}
           >
@@ -86,12 +82,7 @@ export default function ProductMainScreen({ navigation }) {
             <StoresMenu />
           </Modal>
         </Portal>
-        <StyledButton
-          icon="playlist-edit"
-          title="Refine"
-          size="small"
-          onPress={handleRefineModalPress}
-        />
+        <StyledButton icon="playlist-edit" title="Refine" size="small" onPress={showRefineModal} />
         {/* MapView / ListView Toggle Button Placeholder */}
         <StyledButton
           size="small"
@@ -112,7 +103,6 @@ export default function ProductMainScreen({ navigation }) {
           />
         </ScrollView>
       )}
-
       <SnackBar />
     </SafeAreaView>
   );
