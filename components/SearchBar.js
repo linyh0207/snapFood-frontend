@@ -24,8 +24,12 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
   }, []);
 
   const matchTags = (tag) => {
-    const re = new RegExp(`${searchTerm}`, 'i');
-    return tag.match(re);
+    try {
+      const re = new RegExp(`${searchTerm}`, 'i');
+      return tag.match(re).length > 0;
+    } catch {
+      return false;
+    }
   };
 
   const handleItemPress = (text) => {
@@ -47,15 +51,19 @@ function SearchBar({ searcher, latitude, longitude, radius }) {
         onIconPress={handleSearchPress}
       />
       {searchTerm.length > 0 && (
-        <View style={[t.h0, t.overflowVisible, t.z10]}>
-          <Card style={[t.roundedTNone, t.z10]}>
-            <List.Section>
-              {searchSuggestions.filter(matchTags).map((text, i) => (
-                <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
-              ))}
-            </List.Section>
-          </Card>
-        </View>
+        <Card style={[t.roundedTNone, t.z10]}>
+          <List.Section>
+            {searchSuggestions.filter(matchTags).length > 0 ? (
+              searchSuggestions
+                .filter(matchTags)
+                .map((text, i) => (
+                  <List.Item title={text} key={text} onPress={() => handleItemPress(text)} />
+                ))
+            ) : (
+              <List.Item title="No matching tags found." />
+            )}
+          </List.Section>
+        </Card>
       )}
     </>
   );
