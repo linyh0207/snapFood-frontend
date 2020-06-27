@@ -67,7 +67,11 @@ export default function Map() {
   const [activeTab, setActiveTab] = useState(0);
   const [productsSwiperModalVisible, setProductsSwiperModalVisibility] = useState(false);
   const showProductsSwiperModal = () => setProductsSwiperModalVisibility(true);
-  const hideProductsSwiperModal = () => setProductsSwiperModalVisibility(false);
+  const hideProductsSwiperModal = () => {
+    setActiveTab(0);
+    setProductsSwiperModalVisibility(false);
+  };
+
   // Products Swiper Modal --- end
 
   // Map View --- start
