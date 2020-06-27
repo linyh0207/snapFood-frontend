@@ -68,35 +68,50 @@ const posts = [
 //     totalLastRow += 1;
 //   }
 // };
+// const WIDTH = Dimensions.get('window').width;
 
 const numColumns = 2;
-const WIDTH = Dimensions.get('window').width;
 
 export default function MyPostsScreen() {
   const navigation = useNavigation();
 
   const renderItem = ({ item, index }) => {
     return (
-      <View>
-        {/* <ProductMainCard key={item.id} {...item} cardStyle={[t.m1]} /> */}
-        <ProductDetailCard key={item.id} />
+      <View
+      // style={{
+      //   flex: 1,
+      //   // flexDirection: 'column',
+      //   // alignItems: 'center',
+      //   // justifyContent: 'center',
+      //   width: 100,
+      //   marginHorizontal: 10,
+      //   marginVertical: 10,
+      // }}
+      >
+        <ProductMainCard key={item.id} {...item} cardStyle={[t.m1]} />
+        {/* <ProductDetailCard key={item.id} /> */}
       </View>
     );
   };
   return (
-    <SafeAreaView style={[t.flex, t.flexCol]}>
-      <View style={[t.flex, t.flexRow, t.itemsCenter, t.p2]}>
+    <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+      {/* <View style={[t.flex1, t.flexRow, t.itemsCenter, t.p2]}> */}
+      <View
+        style={{
+          flex: 0,
+          flexDirection: 'row',
+          padding: 20,
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+        }}
+      >
         <StyledButton icon="account" size="small" onPress={() => navigation.openDrawer()} />
         <UserName styles={[t.pX1]} textStyles={[t.textLg]} status="super">
-          UserName
+          Amy
         </UserName>
       </View>
-      {/* <ProductDetailCard /> */}
-
       <AchievementStatement>I have posted 100 posts</AchievementStatement>
-      {/* <ScrollView> */}
       <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
-      {/* </ScrollView> */}
     </SafeAreaView>
   );
 }

@@ -23,7 +23,7 @@ import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 import UserName from './TopBar/UserName';
 import LikedCounter from './LikedCounter';
-import Map from './Map';
+// import Map from './Map';
 
 const styles = StyleSheet.create({
   image: {
@@ -44,11 +44,11 @@ export default function ProductDetailCard({
   const [showMapModal, setShowMapModal] = React.useState(false);
   return (
     <View style={[t.flex1]}>
-      <Portal>
+      {/* <Portal>
         <Modal visible={showMapModal} onDismiss={() => setShowMapModal(!showMapModal)}>
           <Map />
         </Modal>
-      </Portal>
+      </Portal> */}
       <View style={[t.flex, t.flexCol]}>
         <View style={[t.flex, t.flexRow, t.justifyBetween]}>
           <Text>19 hours ago</Text>
