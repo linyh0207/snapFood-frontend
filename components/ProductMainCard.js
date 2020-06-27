@@ -52,7 +52,7 @@ export default function ProductMainCard({
 
   const toggleSavePost = () => {
     setUserSavedPost((prev) => !prev);
-    fetch(`http://localhost:8000/users/${userId}`, {
+    fetch(`https://glacial-cove-31720.herokuapp.com/users/${userId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',

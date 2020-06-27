@@ -13,7 +13,7 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
 
   const loadData = async () => {
     const apiData = await fetch(
-      `http://localhost:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
+      `https://glacial-cove-31720.herokuapp.com/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
     );
     const responseText = await apiData.text();
     const { tags } = JSON.parse(responseText);
