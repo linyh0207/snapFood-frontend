@@ -5,6 +5,7 @@ import { t } from 'react-native-tailwindcss';
 import { Headline, TextInput } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
+import api from '../constants/Api';
 
 export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -64,7 +65,25 @@ export default function AddPostScreen({ navigation }) {
 
   function post() {
     // Backend - Need to save the post uri to db
-    setImageUri('');
+    const postData = {
+      price: regularPrice,
+      discountPrice: discountPrice,
+      imageUrl: imageUri,
+      // need to add:
+      // storename,
+      // address,
+      // tags,
+      // latitude,
+      // longitude,
+    };
+    fetch(api.ADD_POST, {
+      body: JSON.stringify(postData),
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'POST',
+    }).catch((err) => console.log(err));
+    //setImageUri('');
     navigation.navigate('ProductMain');
   }
 
