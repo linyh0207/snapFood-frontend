@@ -30,15 +30,15 @@ export default function Map() {
   // Dummy screen datas
   const SCREENS = [
     <ProductMainCard
-      price={{ regular: 3.99, discounted: 1.99 }}
+      price={{ regular: 2.99, discounted: 0.99 }}
       totalVotes={10}
-      storeName="T&T Supermarket"
+      storeName="Save On Food"
       distance="500m"
     />,
     <ProductMainCard
-      price={{ regular: 10.99, discounted: 4.99 }}
+      price={{ regular: 2.99, discounted: 0.99 }}
       totalVotes={10}
-      storeName="Superstore"
+      storeName="Save On Food"
       distance="500m"
     />,
     <ProductMainCard
