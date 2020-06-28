@@ -15,6 +15,8 @@ export default function AddPostScreen({ navigation }) {
   const [searchBarVisible, setSearchBarVisibility] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(null);
   const [regularPrice, setRegularPrice] = useState(null);
+  const [uploadData, setUploadData] = useState(null);
+  const [finalImageUri, setFinalImageUri] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -22,6 +24,26 @@ export default function AddPostScreen({ navigation }) {
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+  useEffect(() => {
+    if (uploadData) {
+      const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
+      fetch(Cloud, {
+        body: JSON.stringify(uploadData),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      })
+        .then(async (res) => {
+          console.log('Successfully uploaded image');
+          const pic = await res.json();
+          console.log('url:', pic.url);
+          setFinalImageUri(pic.url);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [uploadData]);
 
   if (hasPermission === null) {
     return <View />;
@@ -34,56 +56,45 @@ export default function AddPostScreen({ navigation }) {
     if (cameraRef) {
       const photo = await cameraRef.takePictureAsync({ base64: true });
       // photo uri to store in the db
-      //console.log(photo);
+      // console.log(photo);
       const base64Img = `data:image/jpg;base64,${photo.base64}`;
       const data = {
         file: base64Img,
         upload_preset: 'oohwpvh9',
       };
-      const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload';
-      fetch(Cloud, {
-        body: JSON.stringify(data),
-        headers: {
-          'content-type': 'application/json',
-        },
-        method: 'POST',
-      })
-        .then(async (res) => {
-          let pic = await res.json();
-          //console.log(data.url);
-          return setImageUri(pic.url);
-        })
-        .catch((err) => console.log(err));
+      setUploadData(data);
+      return setImageUri(photo.uri);
     }
-    //return setImageUri('');
+    return setImageUri('');
   };
 
   function cancelPhoto() {
     setImageUri('');
+    setUploadData(null);
     setSearchBarVisibility(false);
   }
 
   function post() {
-    // Backend - Need to save the post uri to db
-    const postData = {
-      price: regularPrice,
-      discountPrice: discountPrice,
-      imageUrl: imageUri,
-      // need to add:
-      // storename,
-      // address,
-      // tags,
-      // latitude,
-      // longitude,
-    };
-    fetch(api.ADD_POST, {
-      body: JSON.stringify(postData),
-      headers: {
-        'content-type': 'application/json',
-      },
-      method: 'POST',
-    }).catch((err) => console.log(err));
-    //setImageUri('');
+    // // Backend - Need to save the post uri to db
+    // const postData = {
+    //   price: regularPrice,
+    //   discountPrice,
+    //   imageUrl: finalImageUri,
+    //   // need to add:
+    //   // storename,
+    //   // address,
+    //   // tags,
+    //   // latitude,
+    //   // longitude,
+    // };
+    // fetch(api.ADD_POST, {
+    //   body: JSON.stringify(postData),
+    //   headers: {
+    //     'content-type': 'application/json',
+    //   },
+    //   method: 'POST',
+    // }).catch((err) => console.log(err));
+    setFinalImageUri('');
     navigation.navigate('ProductMain');
   }
 
