@@ -25,13 +25,16 @@ export default function ProductMainCard(props) {
     <View
       style={{
         flex: 1,
-        flexDirection: 'column',
-        justifyContent: 'center',
       }}
     >
       <Portal>
         <Modal
-          contentContainerStyle={[t.bgWhite, t.itemsCenter, t.selfCenter, t.p8, t.mB4]}
+          contentContainerStyle={{
+            backgroundColor: 'white',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
           visible={showDetailModal}
           onDismiss={() => setShowDetailModal(!showDetailModal)}
         >
