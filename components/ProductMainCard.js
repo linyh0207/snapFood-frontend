@@ -1,6 +1,5 @@
-import { Ionicons } from '@expo/vector-icons';
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { Card, Portal, Modal } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
@@ -8,11 +7,10 @@ import LikedCounter from './LikedCounter';
 import ProductDetailCard from './ProductDetailCard';
 
 export default function ProductMainCard({
+  timeFromNow = '10 minutes ago', // dummy default data
   price,
   storeName,
   distance,
-  cardStyle = [],
-  coverStyle = [],
 }) {
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -22,11 +20,7 @@ export default function ProductMainCard({
       style={{
         flex: 1,
         flexDirection: 'column',
-        // alignItems: 'center',
         justifyContent: 'center',
-        // width: 100,
-        // marginHorizontal: 10,
-        // marginVertical: 10,
       }}
     >
       <Portal>
@@ -39,30 +33,21 @@ export default function ProductMainCard({
         </Modal>
       </Portal>
       <Card
-        // style={[t.flex, t.flexCol, t.alignCenter, ...cardStyle]}
         style={{
           flex: 1,
-          // flexDirection: 'column',
-          // alignItems: 'center',
           marginHorizontal: 5,
           marginVertical: 5,
         }}
         onLongPress={() => setShowDetailModal(!showDetailModal)}
       >
         <View style={[]}>
-          <Text>10 minutes ago</Text>
+          <Text>{timeFromNow}</Text>
         </View>
         <Card.Cover
-          source={{ uri: 'https://picsum.photos/700' }}
-          style={[...coverStyle]}
+          source={{ uri: 'https://picsum.photos/200/300' }}
           resizeMethod="resize"
           resizeMode="center"
         />
-        {/* <View style={{ width: 80 }}>
-            <Text>View here with width 80</Text>
-          </View> */}
-
-        {/* <Card.Content style={[t.flexNone, t.flexRow, t.justifyBetween]}> */}
         <Card.Content
           style={{
             flex: 1,
@@ -80,8 +65,7 @@ export default function ProductMainCard({
               handleSelected={() => setBookmarked(!bookmarked)}
             />
           </View>
-          {/* <View style={[t.flex, t.flexCol, t.itemsEnd]}> */}
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
             <Text style={[t.textLg]}>${price.discounted}</Text>
             <Text style={[t.lineThrough]}>${price.regular}</Text>
           </View>
