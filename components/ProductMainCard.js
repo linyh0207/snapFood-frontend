@@ -6,13 +6,18 @@ import ToggleButton from './ToggleButton';
 import LikedCounter from './LikedCounter';
 import ProductDetailCard from './ProductDetailCard';
 
-export default function ProductMainCard({
-  timeFromNow = '10 minutes ago', // dummy default data
-  price,
-  storeName,
-  distance,
-  posterStatus,
-}) {
+export default function ProductMainCard(props) {
+  const {
+    timeFromNow = '1 day ago',
+    price,
+    storeName,
+    distance,
+    likes,
+    dislikes,
+    posterName,
+    posterStatus = 'regular',
+    tags = [],
+  } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
 
@@ -30,7 +35,7 @@ export default function ProductMainCard({
           visible={showDetailModal}
           onDismiss={() => setShowDetailModal(!showDetailModal)}
         >
-          <ProductDetailCard price={price} />
+          <ProductDetailCard {...props} />
         </Modal>
       </Portal>
       <Card
@@ -51,7 +56,7 @@ export default function ProductMainCard({
           resizeMethod="resize"
           resizeMode="center"
         />
-        <View
+        <Card.Content
           style={{
             flex: 1,
             flexDirection: 'column',
@@ -76,7 +81,7 @@ export default function ProductMainCard({
             <Text>{storeName}</Text>
             <Text>{distance}</Text>
           </View>
-        </View>
+        </Card.Content>
       </Card>
     </View>
   );

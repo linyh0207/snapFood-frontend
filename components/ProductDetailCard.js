@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { Card, Chip, IconButton, Portal, Modal } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
@@ -8,15 +8,17 @@ import UserName from './TopBar/UserName';
 import LikedCounter from './LikedCounter';
 // import Map from './Map'; //es-lint error
 
-const styles = StyleSheet.create({
-  image: {
-    resizeMode: 'cover',
-    ...t.flex1,
-  },
-});
-export default function ProductDetailCard({ price, totalVotes, storeName, distance }) {
-  const tags = ['bread', 'sliced']; // dummy data
-
+export default function ProductDetailCard({
+  timeFromNow = '1 day ago',
+  price,
+  storeName,
+  distance,
+  likes,
+  dislikes,
+  posterName,
+  posterStatus = 'regular',
+  tags = [],
+}) {
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showMapModal, setShowMapModal] = React.useState(false);
   return (
@@ -27,7 +29,7 @@ export default function ProductDetailCard({ price, totalVotes, storeName, distan
           <Map />
         </Modal>
       </Portal> */}
-      <View style={{ flex: 1, flexDirection: 'column' }}>
+      <Card style={{ flex: 1, flexDirection: 'column' }}>
         <View
           style={{
             flex: 1,
@@ -36,7 +38,7 @@ export default function ProductDetailCard({ price, totalVotes, storeName, distan
             alignItems: 'flex-end',
           }}
         >
-          <Text>19 hours ago</Text>
+          <Text>{timeFromNow}</Text>
           <View
             style={{
               flex: 1,
@@ -51,7 +53,9 @@ export default function ProductDetailCard({ price, totalVotes, storeName, distan
               compact
               style={{ marginBottom: -5, marginRight: -5 }}
             />
-            <Text>T&T Supermarket (500m)</Text>
+            <Text>
+              {storeName} ({distance})
+            </Text>
           </View>
         </View>
         <Card.Cover
@@ -61,7 +65,7 @@ export default function ProductDetailCard({ price, totalVotes, storeName, distan
         />
 
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <LikedCounter likes={10} dislikes={1} variant="detail" />
+          <LikedCounter likes={likes} dislikes={dislikes} variant="detail" />
           <ToggleButton
             selected={bookmarked}
             selectedIcon="bookmark"
@@ -69,26 +73,34 @@ export default function ProductDetailCard({ price, totalVotes, storeName, distan
             handleSelected={() => setBookmarked(!bookmarked)}
           />
         </View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
+        <Card.Content style={{ flex: 1, flexDirection: 'row' }}>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
               <Text>By: </Text>
-              <UserName status="super">Amy</UserName>
+              <UserName status={posterStatus}>{posterName}</UserName>
             </View>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
               <Text style={[t.textLg]}>${price.discounted}</Text>
               <Text style={[t.lineThrough]}>${price.regular}</Text>
             </View>
           </View>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start' }}>
+        </Card.Content>
+        <Card.Content
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            marginTop: 3,
+            marginLeft: -3,
+          }}
+        >
           {tags.map((tag) => (
             <Chip key={tag} mode="outlined" style={{}}>
               {tag}
             </Chip>
           ))}
-        </View>
-      </View>
+        </Card.Content>
+      </Card>
     </View>
   );
 }

@@ -15,42 +15,59 @@ const posts = [
   {
     id: '1',
     price: { discounted: 2.99, regular: 4.99 },
-    totalVotes: 10,
     storeName: 'T&T Supermarket',
     distance: '500m',
+    timeFromNow: '1 day ago',
+    likes: 10,
+    dislikes: 4,
+    posterName: 'Amy',
     posterStatus: 'super',
+    tags: ['bread', 'sliced'],
   },
   {
     id: '2',
-
     price: { discounted: 2.99, regular: 4.99 },
-    totalVotes: 10,
     storeName: 'T&T Supermarket',
     distance: '500m',
+    timeFromNow: '1 day ago',
+    likes: 10,
+    dislikes: 4,
+    posterName: 'Amy',
+    tags: ['bread', 'sliced'],
   },
   {
     id: '3',
-
     price: { discounted: 2.99, regular: 4.99 },
-    totalVotes: 10,
     storeName: 'T&T Supermarket',
     distance: '500m',
+    timeFromNow: '1 day ago',
+    likes: 10,
+    dislikes: 4,
+    posterName: 'Amy',
+    posterStatus: 'super',
+    tags: ['bread', 'sliced'],
   },
   {
     id: '4',
-
     price: { discounted: 2.99, regular: 4.99 },
-    totalVotes: 10,
     storeName: 'T&T Supermarket',
     distance: '500m',
+    timeFromNow: '1 day ago',
+    likes: 10,
+    dislikes: 4,
+    posterName: 'Amy',
+    tags: ['bread', 'sliced'],
   },
   {
-    id: '5',
-
     price: { discounted: 2.99, regular: 4.99 },
-    totalVotes: 10,
     storeName: 'T&T Supermarket',
     distance: '500m',
+    timeFromNow: '1 day ago',
+    likes: 10,
+    dislikes: 4,
+    posterName: 'Amy',
+
+    tags: ['bread', 'sliced'],
   },
 ];
 // const formatData = (data, numColumns) => {
@@ -76,33 +93,22 @@ const numColumns = 2;
 export default function MyPostsScreen() {
   const navigation = useNavigation();
 
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({ item }) => {
     return (
-      <View
-      // style={{
-      //   flex: 1,
-      //   // flexDirection: 'column',
-      //   // alignItems: 'center',
-      //   // justifyContent: 'center',
-      //   width: 100,
-      //   marginHorizontal: 10,
-      //   marginVertical: 10,
-      // }}
-      >
+      <View>
         <ProductMainCard key={item.id} {...item} cardStyle={[t.m1]} />
-        {/* <ProductDetailCard key={item.id} /> */}
       </View>
     );
   };
+
   return (
     <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-      {/* <View style={[t.flex1, t.flexRow, t.itemsCenter, t.p2]}> */}
       <View
         style={{
           flex: 0,
           flexDirection: 'row',
-          padding: 20,
-          justifyContent: 'center',
+          // padding: 10,
+          justifyContent: 'flex-start',
           alignItems: 'flex-start',
         }}
       >
