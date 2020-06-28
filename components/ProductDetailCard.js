@@ -45,7 +45,12 @@ export default function ProductDetailCard({ price, totalVotes, storeName, distan
               alignItems: 'flex-end',
             }}
           >
-            <IconButton icon="map-marker" onPress={() => setShowMapModal(!showMapModal)} compact />
+            <IconButton
+              icon="map-marker"
+              onPress={() => setShowMapModal(!showMapModal)}
+              compact
+              style={{ marginBottom: -5, marginRight: -5 }}
+            />
             <Text>T&T Supermarket (500m)</Text>
           </View>
         </View>
