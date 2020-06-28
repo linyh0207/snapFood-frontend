@@ -11,6 +11,7 @@ export default function ProductMainCard({
   price,
   storeName,
   distance,
+  posterStatus,
 }) {
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -37,6 +38,8 @@ export default function ProductMainCard({
           flex: 1,
           marginHorizontal: 5,
           marginVertical: 5,
+          borderColor: posterStatus === 'super' ? '#48bb78' : 'transparent',
+          borderWidth: posterStatus === 'super' ? 2 : 0,
         }}
         onLongPress={() => setShowDetailModal(!showDetailModal)}
       >

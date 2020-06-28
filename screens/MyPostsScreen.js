@@ -18,6 +18,7 @@ const posts = [
     totalVotes: 10,
     storeName: 'T&T Supermarket',
     distance: '500m',
+    posterStatus: 'super',
   },
   {
     id: '2',
