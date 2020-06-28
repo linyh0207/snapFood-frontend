@@ -1,15 +1,12 @@
 import * as React from 'react';
-import { View, FlatList, Dimensions, StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, FlatList } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
 import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
 import ProductMainCard from '../components/ProductMainCard';
-import ProductDetailCard from '../components/ProductDetailCard';
 
 const posts = [
   {
@@ -70,23 +67,6 @@ const posts = [
     tags: ['bread', 'sliced'],
   },
 ];
-// const formatData = (data, numColumns) => {
-//   const totalRows = Math.floor(data.length / numColumns);
-//   let totalLastRow = posts.length - totalRows * numColumns;
-
-//   while (totalLastRow !== 0 && totalLastRow !== numColumns) {
-//     posts.push({
-//       id: `blank-${posts.length}`,
-//       price: { discounted: 0, regular: 0 },
-//       totalVotes: 0,
-//       storeName: 'blank',
-//       distance: '0m',
-//       empty: true,
-//     });
-//     totalLastRow += 1;
-//   }
-// };
-// const WIDTH = Dimensions.get('window').width;
 
 const numColumns = 2;
 
@@ -107,7 +87,6 @@ export default function MyPostsScreen() {
         style={{
           flex: 0,
           flexDirection: 'row',
-          // padding: 10,
           justifyContent: 'flex-start',
           alignItems: 'flex-start',
         }}
@@ -122,19 +101,3 @@ export default function MyPostsScreen() {
     </SafeAreaView>
   );
 }
-
-// const style = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//   },
-//   item: {
-//     backgroundColor: '#3232ff',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     flex: 1,
-//     margin: 1,
-//     height: WIDTH / numColumns,
-//   },
-// });
