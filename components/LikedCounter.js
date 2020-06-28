@@ -19,38 +19,63 @@ const LikedCounter = ({ likes = 0, dislikes = 0, variant = 'general', style = {}
     }
   }, [notLiked]);
   return (
-    <View
-      style={{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'flex-start',
-        alignItems: 'center',
-        ...style,
-      }}
-    >
-      <View style={variant === 'detail' ? { flex: 1, flexDirection: 'column' } : {}}>
-        <ToggleButton
-          selected={liked}
-          selectedIcon="thumb-up"
-          unselectedIcon="thumb-up-outline"
-          handleSelected={() => {
-            setLiked(!liked);
+    <View>
+      {variant === 'general' && (
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            ...style,
           }}
-        />
-        {variant === 'detail' && <Text>{likes}</Text>}
-      </View>
-      {variant === 'general' && <Text>{likes - dislikes}</Text>}
-      <View style={variant === 'detail' ? { flex: 1, flexDirection: 'column' } : {}}>
-        <ToggleButton
-          selected={notLiked}
-          selectedIcon="thumb-down"
-          unselectedIcon="thumb-down-outline"
-          handleSelected={() => {
-            setNotLiked(!notLiked);
-          }}
-        />
-        {variant === 'detail' && <Text>{dislikes}</Text>}
-      </View>
+        >
+          <ToggleButton
+            selected={liked}
+            selectedIcon="thumb-up"
+            unselectedIcon="thumb-up-outline"
+            handleSelected={() => {
+              setLiked(!liked);
+            }}
+          />
+          <Text>{likes - dislikes}</Text>
+          <ToggleButton
+            selected={notLiked}
+            selectedIcon="thumb-down"
+            unselectedIcon="thumb-down-outline"
+            handleSelected={() => {
+              setNotLiked(!notLiked);
+            }}
+          />
+        </View>
+      )}
+      {variant === 'detail' && (
+        <View style={{ flex: 1, flexDirection: 'row', ...style }}>
+          <View>
+            <ToggleButton
+              selected={liked}
+              selectedIcon="thumb-up"
+              unselectedIcon="thumb-up-outline"
+              handleSelected={() => {
+                setLiked(!liked);
+              }}
+              style={{ marginBottom: -10 }}
+            />
+            <Text style={{ textAlign: 'center' }}>{likes}</Text>
+          </View>
+          <View style={{}}>
+            <ToggleButton
+              selected={notLiked}
+              selectedIcon="thumb-down"
+              unselectedIcon="thumb-down-outline"
+              handleSelected={() => {
+                setNotLiked(!notLiked);
+              }}
+              style={{ marginBottom: -10 }}
+            />
+            <Text style={{ textAlign: 'center' }}>{dislikes}</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };

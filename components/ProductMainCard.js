@@ -30,7 +30,7 @@ export default function ProductMainCard({
           visible={showDetailModal}
           onDismiss={() => setShowDetailModal(!showDetailModal)}
         >
-          <ProductDetailCard />
+          <ProductDetailCard price={price} />
         </Modal>
       </Portal>
       <Card
@@ -51,7 +51,7 @@ export default function ProductMainCard({
           resizeMethod="resize"
           resizeMode="center"
         />
-        <Card.Content
+        <View
           style={{
             flex: 1,
             flexDirection: 'column',
@@ -76,7 +76,7 @@ export default function ProductMainCard({
             <Text>{storeName}</Text>
             <Text>{distance}</Text>
           </View>
-        </Card.Content>
+        </View>
       </Card>
     </View>
   );
