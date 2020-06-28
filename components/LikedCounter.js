@@ -20,8 +20,10 @@ const LikedCounter = ({ likes = 0, dislikes = 0, variant = 'general' }) => {
     }
   }, [notLiked]);
   return (
-    <View style={[t.flex, t.flexRow, t.justifyStart]}>
-      <View style={[t.flex, t.flexCol]}>
+    <View
+      style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}
+    >
+      <View style={{ flex: 1, flexDirection: 'column' }}>
         <ToggleButton
           selected={liked}
           selectedIcon="thumb-up"
@@ -33,7 +35,7 @@ const LikedCounter = ({ likes = 0, dislikes = 0, variant = 'general' }) => {
         {variant === 'detail' && <Text>{likes}</Text>}
       </View>
       {variant === 'general' && <Text>{likes - dislikes}</Text>}
-      <View>
+      <View style={{ flex: 1, flexDirection: 'column' }}>
         <ToggleButton
           selected={notLiked}
           selectedIcon="thumb-down"
