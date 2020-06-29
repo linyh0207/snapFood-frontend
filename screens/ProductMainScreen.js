@@ -90,6 +90,28 @@ export default function ProductMainScreen({ navigation }) {
     );
   };
 
+  // sample data from one post returned from db
+  // {
+  //   "address": "2 main st.",
+  //   "createdAt": "2020-06-19T23:16:53.582Z",
+  //   "discountPrice": 3.35,
+  //   "dislikes": 2,
+  //   "distance": 235547.53350062753,
+  //   "id": "5eead9d6d34bf31f58a86905",
+  //   "latitude": 3.2,
+  //   "likes": 1,
+  //   "longitude": 5,
+  //   "price": 5.1,
+  //   "storename": "walmart",
+  //   "tags": Array [
+  //     "chicken",
+  //     "meat",
+  //   ],
+  //   "userDislikedPost": false,
+  //   "userLikedPost": true,
+  //   "userSavedPost": true,
+  // }
+
   return (
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
       <View style={[t.flexRow, t.itemsCenter]}>
