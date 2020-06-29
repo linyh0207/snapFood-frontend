@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
-
 import { Card, Chip, IconButton, Portal, Modal } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
@@ -22,80 +21,48 @@ export default function ProductDetailCard({
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showMapModal, setShowMapModal] = React.useState(false);
   return (
-    <View style={[t.flex1]}>
-      {/* throws eslint error  */}
-      {/* <Portal>
-        <Modal visible={showMapModal} onDismiss={() => setShowMapModal(!showMapModal)}>
-          <Map />
-        </Modal>
-      </Portal> */}
-      <Card style={{ flex: 1, flexDirection: 'column' }}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-          }}
-        >
+    <View>
+      {/* //  throws eslint error
+    //  <Portal>
+    //   <Modal visible={showMapModal} onDismiss={() => setShowMapModal(!showMapModal)}>
+    //     <Map />
+    //   </Modal>
+    // </Portal> */}
+      <Card>
+        <Card.Content style={[t.flex1, t.flexRow, t.justifyBetween, t.itemsCenter, t.p6]}>
           <Text>{timeFromNow}</Text>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
-            }}
-          >
-            <IconButton
-              icon="map-marker"
-              onPress={() => setShowMapModal(!showMapModal)}
-              compact
-              style={{ marginBottom: -5, marginRight: -5 }}
-            />
-            <Text>
-              {storeName} ({distance})
-            </Text>
-          </View>
-        </View>
-        <Card.Cover
-          source={{ uri: 'https://picsum.photos/200/300' }}
-          resizeMethod="resize"
-          resizeMode="center"
-        />
+          <IconButton
+            icon="map-marker"
+            onPress={() => setShowMapModal(!showMapModal)}
+            compact
+            style={[t.mLAuto]}
+          />
+          <Text>
+            {storeName} ({distance})
+          </Text>
+        </Card.Content>
+        <Card.Cover source={{ uri: 'https://picsum.photos/200/300' }} style={t.mX2} />
 
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Card.Actions>
           <LikedCounter likes={likes} dislikes={dislikes} variant="detail" />
           <ToggleButton
             selected={bookmarked}
             selectedIcon="bookmark"
             unselectedIcon="bookmark-outline"
             handleSelected={() => setBookmarked(!bookmarked)}
+            style={[t.mLAuto]}
           />
-        </View>
-        <Card.Content style={{ flex: 1, flexDirection: 'row' }}>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-              <Text>By: </Text>
-              <UserName status={posterStatus}>{posterName}</UserName>
-            </View>
-            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-              <Text style={[t.textLg]}>${price.discounted}</Text>
-              <Text style={[t.lineThrough]}>${price.regular}</Text>
-            </View>
-          </View>
+        </Card.Actions>
+        <Card.Content style={[t.flex1, t.flexRow, t.justifyBetween, t.itemsCenter, t.pY4]}>
+          <Text>By: </Text>
+          <UserName status={posterStatus}>{posterName}</UserName>
+
+          <Text style={[t.textLg, t.mLAuto]}>${price.discounted}</Text>
+          <Text style={[t.lineThrough]}>${price.regular}</Text>
         </Card.Content>
-        <Card.Content
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            marginTop: 3,
-            marginLeft: -3,
-          }}
-        >
+        <Card.Content style={[t.flex1, t.flexRow, t.flexWrap, t.justifyStart, t.mB12]}>
           {tags.map((tag) => (
-            <Chip key={tag} mode="outlined" style={{}}>
+            <Chip key={tag} height={30} textStyle={[t.textBlack, t.textSm]} mode="outlined">
               {tag}
             </Chip>
           ))}
