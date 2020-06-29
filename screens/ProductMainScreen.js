@@ -11,6 +11,7 @@ import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import Map from '../components/Map';
+import ProductDetailCard from '../components/ProductDetailCard';
 
 export default function ProductMainScreen({ navigation }) {
   const [refineModalVisible, setRefineModalVisibility] = useState(false);
@@ -97,9 +98,25 @@ export default function ProductMainScreen({ navigation }) {
           {/* Product card for product main page */}
           <ProductMainCard
             price={{ regular: 2.99, discounted: 0.99 }}
-            totalVotes={10}
             storeName="T&T Supermarket"
             distance="500m"
+            timeFromNow="1 day ago"
+            likes={10}
+            dislikes={4}
+            posterName="Amy"
+            posterStatus="super"
+            tags={['bread', 'sliced']}
+          />
+          <ProductDetailCard
+            price={{ regular: 2.99, discounted: 0.99 }}
+            storeName="T&T Supermarket"
+            distance="500m"
+            timeFromNow="1 day ago"
+            likes={10}
+            dislikes={4}
+            posterName="Amy"
+            posterStatus="super"
+            tags={['bread', 'sliced']}
           />
         </ScrollView>
       )}
