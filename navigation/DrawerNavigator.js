@@ -8,8 +8,6 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
-import AchievementScreen from '../screens/AchievementScreen';
-import MyPostsScreen from '../screens/MyPostsScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 
 const Drawer = createDrawerNavigator();
@@ -39,25 +37,18 @@ export default function DrawerNavigator() {
       />
       <Drawer.Screen
         name="My Posts"
-        component={MyPostsScreen}
+        component={BottomTabNavigator}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="folder-multiple-image" />,
         }}
       />
       <Drawer.Screen
         name="My Achievements"
-        component={AchievementScreen}
+        component={BottomTabNavigator}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="trophy" />,
         }}
       />
-      {/* <Drawer.Screen
-        name="Map"
-        component={MapScreen}
-        options={{
-          drawerIcon: () => <Avatar.Icon size={24} icon="map" />,
-        }}
-      /> */}
       <Drawer.Screen
         name="Logout"
         component={OnboardingScreen}

@@ -5,13 +5,23 @@ import TabBarIcon from '../components/TabBarIcon';
 import ProductMainScreen from '../screens/ProductMainScreen';
 import AddPostScreen from '../screens/AddPostScreen';
 import BookmarkScreen from '../screens/BookmarkScreen';
+import MyPostsScreen from '../screens/MyPostsScreen';
+import AchievementScreen from '../screens/AchievementScreen';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'ProductMain';
 
-export default function BottomTabNavigator() {
+export default function BottomTabNavigator({ route }) {
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator
+      initialRouteName={route.name}
+      screenOptions={({ route }) => ({
+        tabBarButton: ['My Posts', 'My Achievements'].includes(route.name)
+          ? () => {
+              return null;
+            }
+          : undefined,
+      })}
+    >
       <BottomTab.Screen
         name="ProductMain"
         component={ProductMainScreen}
@@ -34,6 +44,22 @@ export default function BottomTabNavigator() {
         options={{
           title: 'Bookmark',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-bookmark" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="My Posts"
+        component={MyPostsScreen}
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-search" />,
+        }}
+      />
+      <BottomTab.Screen
+        name="My Achievements"
+        component={AchievementScreen}
+        options={{
+          title: 'Search',
+          tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-search" />,
         }}
       />
     </BottomTab.Navigator>

@@ -11,8 +11,8 @@ import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
-import LikedCounter from '../components/LikedCounter';
 import Map from '../components/Map';
+import ProductDetailCard from '../components/ProductDetailCard';
 
 export default function ProductMainScreen({ navigation }) {
   // For account button to open drawer navigator
@@ -25,9 +25,6 @@ export default function ProductMainScreen({ navigation }) {
   const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
   const hideRefineModal = () => setRefineModalVisibility(false);
-  const handleRefineModalPress = () => {
-    showRefineModal();
-  };
 
   const loadData = async () => {
     const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
@@ -108,7 +105,7 @@ export default function ProductMainScreen({ navigation }) {
         {/* Refine Modal */}
         <Portal>
           <Modal
-            contentContainerStyle={[t.bgWhite]}
+            contentContainerStyle={{ backgroundColor: 'white' }}
             visible={refineModalVisible}
             onDismiss={hideRefineModal}
           >
@@ -130,12 +127,7 @@ export default function ProductMainScreen({ navigation }) {
             <StoresMenu />
           </Modal>
         </Portal>
-        <StyledButton
-          icon="playlist-edit"
-          title="Refine"
-          size="small"
-          onPress={handleRefineModalPress}
-        />
+        <StyledButton icon="playlist-edit" title="Refine" size="small" onPress={showRefineModal} />
         {/* MapView / ListView Toggle Button Placeholder */}
         <StyledButton
           size="small"
@@ -159,10 +151,10 @@ export default function ProductMainScreen({ navigation }) {
           {posts.map((post) => (
             <ProductMainCard
               price={{ regular: post.price, discounted: post.discountPrice }}
-              totalVotes={post.likes}
+              // totalVotes={post.likes}
               storeName={post.storename}
               address={post.address}
-              created={post.createdAt}
+              // created={post.createdAt}
               distance={post.distance}
               initialUserSavedPost={post.userSavedPost}
               userLikedPost={post.userLikedPost}
@@ -170,10 +162,26 @@ export default function ProductMainScreen({ navigation }) {
               likes={post.likes}
               postId={post.id}
               key={post.id}
+              timeFromNow="1 day ago"
+              dislikes={4}
+              posterName="Amy"
+              posterStatus="super"
+              tags={['bread', 'sliced']}
             />
           ))}
         </ScrollView>
       )}
+      {/* <ProductDetailCard
+        price={{ regular: 2.99, discounted: 0.99 }}
+        storeName="T&T Supermarket"
+        distance="500m"
+        timeFromNow="1 day ago"
+        likes={10}
+        dislikes={4}
+        posterName="Amy"
+        posterStatus="super"
+        tags={['bread', 'sliced']}
+      /> */}
       <SnackBar />
     </SafeAreaView>
   );
