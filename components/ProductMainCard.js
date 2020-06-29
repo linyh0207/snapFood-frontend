@@ -22,22 +22,9 @@ export default function ProductMainCard(props) {
   const [showDetailModal, setShowDetailModal] = React.useState(false);
 
   return (
-    <View
-      style={{
-        flex: 1,
-      }}
-    >
+    <View>
       <Portal>
-        <Modal
-          contentContainerStyle={{
-            backgroundColor: 'white',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-          visible={showDetailModal}
-          onDismiss={() => setShowDetailModal(!showDetailModal)}
-        >
+        <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
           <ProductDetailCard {...props} />
         </Modal>
       </Portal>
