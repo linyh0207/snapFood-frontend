@@ -39,6 +39,7 @@
   },
   "plugins": ["prettier", "jest"],
   "globals": {
+    "fetch": false,
     "__CLIENT__": true,
     "__SERVER__": true,
     "__DEV__": true,
