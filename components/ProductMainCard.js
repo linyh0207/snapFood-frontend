@@ -56,9 +56,7 @@ export default function ProductMainCard(props) {
     <View pointerEvents={isExpired ? 'none' : 'auto'}>
       <Portal>
         <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
-          <View style={{ width: '85%', alignSelf: 'center' }}>
-            <ProductDetailCard {...props} />
-          </View>
+          <ProductDetailCard {...props} />
         </Modal>
       </Portal>
       <Card
@@ -75,9 +73,9 @@ export default function ProductMainCard(props) {
           <Text>{timeFromNow}</Text>
         </View>
         <Card.Cover
-          source={{ uri: 'https://i.imgur.com/e8vQC8e.jpg' }}
-          resizeMethod="resize"
-          resizeMode="center"
+          source={{
+            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
+          }}
         />
         <Card.Content
           style={{

@@ -42,10 +42,10 @@ export default function ProductDetailCard({
           </Text>
         </Card.Content>
         <Card.Cover
-          source={{ uri: 'https://i.imgur.com/e8vQC8e.jpg' }}
-          resizeMethod="resize"
-          resizeMode="center"
-          style={{ width: '95%', height: undefined, aspectRatio: 2 / 3, alignSelf: 'center' }}
+          source={{
+            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
+          }}
+          style={{ width: '80%', height: undefined, aspectRatio: 4 / 5, alignSelf: 'center' }}
         />
 
         <Card.Actions>
