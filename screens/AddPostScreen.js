@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import { t } from 'react-native-tailwindcss';
-import { Headline, TextInput } from 'react-native-paper';
+import { Headline, TextInput, Card } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import StyledButton from '../components/StyledButton';
+import AddressSearchBar from '../components/AddressSearchBar';
+import SearchBar from '../components/SearchBar';
 
 export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -14,6 +17,8 @@ export default function AddPostScreen({ navigation }) {
   const [searchBarVisible, setSearchBarVisibility] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(null);
   const [regularPrice, setRegularPrice] = useState(null);
+  const scrollRef = useRef(null);
+  const [activeTags, setActiveTags] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -113,73 +118,70 @@ export default function AddPostScreen({ navigation }) {
         </Camera>
       ) : (
         // Add Post Screen
+        <ScrollView ref={scrollRef} keyboardShouldPersistTaps>
+          <KeyboardAwareScrollView
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={false}
+            keyboardShouldPersistTaps
+          >
+            {/* Image  */}
+            <Card style={t.m1}>
+              <Image source={{ uri: imageUri }} style={[t.wFull, t.h56]} />
+            </Card>
 
-        <View style={[t.flex1]}>
-          {!searchBarVisible ? (
-            // User current location
-            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap, t.pB10]}>
-              <Headline>T&T Supermarket</Headline>
-              <StyledButton
-                title="edit"
-                icon="square-edit-outline"
-                size="small"
-                onPress={() => setSearchBarVisibility(true)}
+            {/* Location */}
+            <Card style={t.m1}>
+              <Card.Title title="Store Information" />
+              <AddressSearchBar
+                latitude={48.4073}
+                longitude={-123.3298}
+                radius={10000}
+                scrollRef={scrollRef}
               />
-              <Text style={[t.textCenter]}>{'\n'}123 Happy Street, Vancouver, BC VS5 3D6</Text>
-            </View>
-          ) : (
-            // User edit store location
-            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap, t.pB10]}>
-              {/* Search store location bar placeholder */}
-              <Text>SEARCH BAR</Text>
-              <StyledButton
-                title="cancel"
-                icon="square-edit-outline"
-                size="small"
-                onPress={() => setSearchBarVisibility(false)}
-              />
-            </View>
-          )}
+            </Card>
 
-          <Image
-            source={{ uri: imageUri }}
-            style={{ flex: 3, height: undefined, width: undefined }}
-            resizeMode="contain"
-          />
+            {/* Pricing */}
+            <Card style={t.m1}>
+              <Card.Title title="Pricing" />
+              <View style={[t.flexRow, t.justifyAround]}>
+                <TextInput
+                  value={discountPrice}
+                  onChangeText={(text) => setDiscountPrice(text)}
+                  style={[t.w40, t.m1]}
+                  mode="outlined"
+                  label="Discount Price"
+                  dense
+                />
 
-          <View style={[t.flex1, t.flexRow, t.justifyBetween, t.mR4, t.mL4, t.mB5]}>
-            <View>
-              <Text>Discount Price</Text>
-              <TextInput
-                value={discountPrice}
-                onChangeText={(text) => setDiscountPrice(text)}
-                style={[t.h10, t.pX20]}
-              />
-            </View>
+                <TextInput
+                  value={regularPrice}
+                  onChangeText={(text) => setRegularPrice(text)}
+                  style={[t.w40, t.m1]}
+                  mode="outlined"
+                  label="Regular Price"
+                  dense
+                />
+              </View>
+            </Card>
 
-            <View>
-              <Text>Regular Price</Text>
-              <TextInput
-                value={regularPrice}
-                onChangeText={(text) => setRegularPrice(text)}
-                style={[t.h10, t.pX20]}
+            <Card style={t.m1}>
+              <Card.Title title="Add Tags" />
+              <SearchBar
+                latitude={48.4073}
+                longitude={-123.3298}
+                radius={10000}
+                activeTags={activeTags}
+                setActiveTags={setActiveTags}
               />
-            </View>
-          </View>
-          <View style={[t.flex1, t.pT6]}>
-            {/* Tag entry bar placeholder  */}
-            <Text style={[t.textCenter]}>TAG ENTRY BAR</Text>
-            <TouchableOpacity
-              style={[t.justifyEnd]}
-              onPress={() => {
-                cancelPhoto();
-              }}
-            >
-              <Text style={[t.textLg]}> Cancel </Text>
-            </TouchableOpacity>
+            </Card>
+
             <StyledButton title="Post" mode="outlined" size="small" onPress={post} />
-          </View>
-        </View>
+
+            {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
+            <View style={t.h64} />
+            <View style={t.h64} />
+          </KeyboardAwareScrollView>
+        </ScrollView>
       )}
     </SafeAreaView>
   );

@@ -1,42 +1,61 @@
-import React, { useState } from 'react';
-import { View } from 'react-native';
-import { Searchbar, List, Card } from 'react-native-paper';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, ScrollView } from 'react-native';
+import { Searchbar, List, Card, TextInput, Button } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { API_KEY } from 'react-native-dotenv';
-import { AntDesign } from '@expo/vector-icons';
 
-const DEBOUNCE = 200;
+const DEBOUNCE = 500;
 
-function AddressSearchBar({ latitude, longitude, radius }) {
+function AddressSearchBar({ latitude, longitude, radius, scrollRef }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [apiRequestPaused, setApiRequestPaused] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [selectedPlace, setSelectedPlace] = useState({});
+  const [showSearch, setShowSearch] = useState(false);
+  const searchBarRef = useRef(null);
+
+  useEffect(() => {
+    if (searchSuggestions.length > 0) {
+      scrollRef.current.scrollTo({ animated: true, y: 280 });
+    }
+  }, [searchSuggestions]);
 
   const onChangeSearch = async (query) => {
     setSearchTerm(query);
     if (!apiRequestPaused) {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}&location=${latitude},${longitude}&radius=${radius}&types=establishment`
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}&location=${latitude},${longitude}&radius=${radius}&types=establishment&strictbounds`
       );
       const resString = await res.text();
       const { predictions } = JSON.parse(resString);
       const formattedPredictions = predictions.map((prediction) => {
         const name = prediction.description.split(',')[0];
         const address = prediction.description.split(',')[1];
-        return { id: prediction.id, name, address };
+        return { id: prediction.place_id, name, address };
       });
       setSearchSuggestions(formattedPredictions);
       setApiRequestPaused(true);
       setTimeout(() => {
         setApiRequestPaused(false);
       }, DEBOUNCE);
+      // Hardcoded position, should use refs but couldnt get the .measure method working
     }
   };
 
-  const handleItemPress = (name, address) => {
-    setSelectedPlace({ name, address });
-    setSearchSuggestions([]);
+  const handleItemPress = async (id) => {
+    try {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/details/json?key=${API_KEY}&place_id=${id}&fields=formatted_address,name`
+      );
+      const resString = await res.text();
+      const { result } = JSON.parse(resString);
+      setSelectedPlace({ name: result.name, address: result.formatted_address });
+      searchBarRef.current.blur();
+      setSearchTerm(result.name);
+      setSearchSuggestions([]);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleSearchPress = () => {
@@ -45,37 +64,53 @@ function AddressSearchBar({ latitude, longitude, radius }) {
 
   return (
     <>
-      {selectedPlace && (
-        <List.Item
-          title={selectedPlace.name}
-          description={selectedPlace.address}
-          right={() => <AntDesign name="close" size={20} color="gray" />}
-          onPress={() => setSelectedPlace(null)}
-        />
-      )}
       <Searchbar
-        placeholder="Search"
+        placeholder="Search for Location"
         onChangeText={onChangeSearch}
         value={searchTerm}
-        style={searchTerm.length > 0 ? t.roundedBNone : ''}
+        style={[searchTerm.length > 0 ? t.roundedBNone : '', t.shadowNone, t.border, t.mL4, t.mR4]}
         onIconPress={handleSearchPress}
+        onBlur={() => setShowSearch(false)}
+        onFocus={() => setShowSearch(true)}
+        ref={searchBarRef}
       />
-      {searchSuggestions.length > 0 && (
-        <View style={[t.h0, t.overflowVisible, t.z10]}>
-          <Card style={[t.roundedTNone, t.z10]}>
-            <List.Section>
-              {searchSuggestions.map(({ name, address, id }) => (
-                <List.Item
-                  title={name}
-                  description={address}
-                  key={id}
-                  onPress={() => handleItemPress(name, address)}
-                />
-              ))}
-            </List.Section>
-          </Card>
-        </View>
+
+      {/* Search Results Dropdown */}
+      {showSearch && searchSuggestions.length > 0 && (
+        <Card style={[t.wFull]}>
+          <List.Section>
+            {searchSuggestions.map(({ name, address, id }) => (
+              <List.Item
+                title={name}
+                description={address}
+                key={id}
+                onPress={() => handleItemPress(id)}
+                right={() => <Button icon="check" />}
+              />
+            ))}
+          </List.Section>
+        </Card>
       )}
+
+      {/* Inputs for address and Name */}
+      <View style={[t.mT1, t.mB1]}>
+        <TextInput
+          dense
+          label="Store Name"
+          mode="outlined"
+          style={[t.mL4, t.mR4]}
+          value={selectedPlace.name}
+          onChangeText={(text) => setSelectedPlace((prev) => ({ ...prev, name: text }))}
+        />
+        <TextInput
+          dense
+          label="Address"
+          mode="outlined"
+          style={[t.mL4, t.mR4]}
+          value={selectedPlace.address}
+          onChangeText={(text) => setSelectedPlace((prev) => ({ ...prev, address: text }))}
+        />
+      </View>
     </>
   );
 }

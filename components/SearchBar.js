@@ -41,7 +41,8 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
   };
 
   const handleSearchPress = () => {
-    console.log('searched');
+    setActiveTags((prev) => [...prev, searchTerm]);
+    setSearchTerm('');
   };
 
   const searching = searchTerm.length > 0;
@@ -56,6 +57,7 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
         value={searchTerm}
         style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '']}
         onIconPress={handleSearchPress}
+        icon="plus"
       />
       {searching &&
         (showNoSuggestions ? (
