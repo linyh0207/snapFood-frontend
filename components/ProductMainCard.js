@@ -17,9 +17,39 @@ export default function ProductMainCard(props) {
     posterName,
     posterStatus = 'regular',
     tags = [],
+    address,
+    created,
+    initialUserSavedPost,
+    userLikedPost,
+    userDislikedPost,
+    postId,
+    userId = '5eead9d6d34bf31f58a86904',
   } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
+
+  const [userSavedPost, setUserSavedPost] = React.useState(initialUserSavedPost);
+
+  const formatDistance = (rawDistance) => {
+    if (distance < 1000) {
+      return `${Math.round(rawDistance / 100) * 100}m`;
+    }
+    return `${Math.round(rawDistance / 1000)}km`;
+  };
+
+  const toggleSavePost = () => {
+    setUserSavedPost((prev) => !prev);
+    fetch(`http://10.0.2.2:8000/users/${userId}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId,
+        saving: !userSavedPost,
+      }),
+    });
+  };
 
   return (
     <View>
@@ -55,7 +85,12 @@ export default function ProductMainCard(props) {
           }}
         >
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <LikedCounter />
+            <LikedCounter
+              initialLiked={userLikedPost}
+              initialDisliked={userDislikedPost}
+              postId={postId}
+              likes={likes}
+            />
             <ToggleButton
               selected={bookmarked}
               selectedIcon="bookmark"
@@ -69,7 +104,7 @@ export default function ProductMainCard(props) {
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text>{storeName}</Text>
-            <Text>{distance}</Text>
+            <Text>{formatDistance(distance)}</Text>
           </View>
         </Card.Content>
       </Card>
