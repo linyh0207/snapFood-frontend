@@ -55,7 +55,9 @@ export default function ProductMainCard(props) {
     <View>
       <Portal>
         <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
-          <ProductDetailCard {...props} />
+          <View style={{ width: '85%', alignSelf: 'center' }}>
+            <ProductDetailCard {...props} />
+          </View>
         </Modal>
       </Portal>
       <Card
@@ -72,7 +74,7 @@ export default function ProductMainCard(props) {
           <Text>{timeFromNow}</Text>
         </View>
         <Card.Cover
-          source={{ uri: 'https://picsum.photos/200/300' }}
+          source={{ uri: 'https://i.imgur.com/e8vQC8e.jpg' }}
           resizeMethod="resize"
           resizeMode="center"
         />

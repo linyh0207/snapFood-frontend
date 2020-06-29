@@ -41,7 +41,12 @@ export default function ProductDetailCard({
             {storeName} ({distance})
           </Text>
         </Card.Content>
-        <Card.Cover source={{ uri: 'https://picsum.photos/200/300' }} style={t.mX2} />
+        <Card.Cover
+          source={{ uri: 'https://i.imgur.com/e8vQC8e.jpg' }}
+          resizeMethod="resize"
+          resizeMode="center"
+          style={{ width: '95%', height: undefined, aspectRatio: 2 / 3, alignSelf: 'center' }}
+        />
 
         <Card.Actions>
           <LikedCounter likes={likes} dislikes={dislikes} variant="detail" />
