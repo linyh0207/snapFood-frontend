@@ -6,11 +6,17 @@ import { API_KEY } from 'react-native-dotenv';
 
 const DEBOUNCE = 500;
 
-function AddressSearchBar({ latitude, longitude, radius, scrollRef }) {
+function AddressSearchBar({
+  latitude,
+  longitude,
+  radius,
+  scrollRef,
+  selectedPlace,
+  setSelectedPlace,
+}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [apiRequestPaused, setApiRequestPaused] = useState(false);
-  const [selectedPlace, setSelectedPlace] = useState({});
   const [showSearch, setShowSearch] = useState(false);
   const searchBarRef = useRef(null);
 

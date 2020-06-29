@@ -19,6 +19,7 @@ export default function AddPostScreen({ navigation }) {
   const [regularPrice, setRegularPrice] = useState(null);
   const scrollRef = useRef(null);
   const [activeTags, setActiveTags] = useState([]);
+  const [selectedPlace, setSelectedPlace] = useState({});
 
   useEffect(() => {
     (async () => {
@@ -49,8 +50,25 @@ export default function AddPostScreen({ navigation }) {
     setSearchBarVisibility(false);
   }
 
-  function post() {
+  async function post() {
     // Backend - Need to save the post uri to db
+    // TODO: Incomplete post error handling
+    await fetch('https://glacial-cove-31720.herokuapp.com/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        address: selectedPlace.address,
+        storename: selectedPlace.name,
+        tags: activeTags,
+        latitude: 5,
+        longitude: 6,
+        price: regularPrice,
+        discountPrice,
+        imageUrl: imageUri,
+      }),
+    });
     setImageUri('');
     navigation.navigate('ProductMain');
   }
@@ -118,11 +136,11 @@ export default function AddPostScreen({ navigation }) {
         </Camera>
       ) : (
         // Add Post Screen
-        <ScrollView ref={scrollRef} keyboardShouldPersistTaps>
+        <ScrollView ref={scrollRef} keyboardShouldPersistTaps="always">
           <KeyboardAwareScrollView
             resetScrollToCoords={{ x: 0, y: 0 }}
             scrollEnabled={false}
-            keyboardShouldPersistTaps
+            keyboardShouldPersistTaps="always"
           >
             {/* Image  */}
             <Card style={t.m1}>
@@ -137,6 +155,8 @@ export default function AddPostScreen({ navigation }) {
                 longitude={-123.3298}
                 radius={10000}
                 scrollRef={scrollRef}
+                selectedPlace={selectedPlace}
+                setSelectedPlace={setSelectedPlace}
               />
             </Card>
 
@@ -175,7 +195,7 @@ export default function AddPostScreen({ navigation }) {
               />
             </Card>
 
-            <StyledButton title="Post" mode="outlined" size="small" onPress={post} />
+            <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
 
             {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
             <View style={t.h64} />
