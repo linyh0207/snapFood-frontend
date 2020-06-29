@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
 import { Headline, Avatar } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import {
@@ -12,11 +12,12 @@ import AchievementScreen from '../screens/AchievementScreen';
 import MyPostsScreen from '../screens/MyPostsScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import { AuthContext } from '../state/auth/authContext';
+import actionTypes from '../state/auth/actionTypes';
 
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
-  const { authMemo, authState } = React.useContext(AuthContext);
+  const { authState, authDispatch } = React.useContext(AuthContext);
   console.log(authState);
   // Add drawer navigator header
   function CustomDrawerContent(props) {
@@ -57,6 +58,11 @@ export default function DrawerNavigator() {
       <Drawer.Screen
         name="Logout"
         component={OnboardingScreen}
+        onPress={() => {
+          AsyncStorage.removeItem('user').catch((err) => console.log(err));
+          AsyncStorage.removeItem('userToken').catch((err) => console.log(err));
+          authDispatch({ type: actionTypes.LOGOUT });
+        }}
         options={{
           drawerIcon: () => <Avatar.Icon size={24} icon="logout" />,
         }}

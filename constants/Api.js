@@ -1,5 +1,6 @@
 export default {
-  API_URL: 'http://localhost:8000',
-  REGISTER: `http://localhost:8000/users/register`,
-  LOGIN: `http://localhost:8000/users/login`,
+  API_URL: 'https://glacial-cove-31720.herokuapp.com/',
+  REGISTER: `https://glacial-cove-31720.herokuapp.com/users/register`,
+  LOGIN: `https://glacial-cove-31720.herokuapp.com/users/login`,
+  ADD_POST: 'https://glacial-cove-31720.herokuapp.com/posts',
 };

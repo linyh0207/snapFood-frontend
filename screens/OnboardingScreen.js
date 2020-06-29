@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View } from 'react-native';
+import { View, AsyncStorage } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
 import WelcomeSwiper from '../components/Swiper/WelcomeSwiper';
 import StyledButton from '../components/StyledButton';
 import { AuthContext } from '../state/auth/authContext';
+import api from '../constants/Api';
+import actionTypes from '../state/auth/actionTypes';
 
 export default function OnboardingScreen({ navigation }) {
-  const { authMemo } = React.useContext(AuthContext);
+  const { authState, authDispatch } = React.useContext(AuthContext);
   // Manage login states
   const [loginModalVisible, setLoginModalVisibility] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
@@ -33,9 +35,23 @@ export default function OnboardingScreen({ navigation }) {
 
   // Trigger Authentication
   const handleLoginPress = () => {
-    authMemo.login(loginUsername, loginPassword);
+    fetch(api.LOGIN, {
+      body: JSON.stringify({ email: loginUsername, password: loginPassword }),
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'POST',
+    })
+      .then((res) => {
+        console.log(res);
+        AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
+        AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
+        authDispatch({ type: actionTypes.LOGIN, user: res.user, token: res.token });
+      })
+      .catch((err) => console.log(err));
+    console.log(authState);
     hideLoginModal();
-    navigation.navigate('Home');
+    //navigation.navigate('Home');
     // After Authenticattion
     // Direct to Drawer Navigator
   };
@@ -45,9 +61,23 @@ export default function OnboardingScreen({ navigation }) {
 
   // Trigger Registration
   const handleSignUpPress = () => {
-    authMemo.register(signUpUsername, signUpEmail, signUpPassword);
+    fetch(api.REGISTER, {
+      body: JSON.stringify({ name: signUpUsername, email: signUpEmail, password: signUpPassword }),
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'POST',
+    })
+      .then((res) => {
+        console.log(res);
+        AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
+        AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
+        authDispatch({ type: actionTypes.REGISTER, user: res.user, token: res.token });
+      })
+      .catch((err) => console.log(err));
+    console.log(authState);
     hideSignUpModal();
-    navigation.navigate('Home');
+    //navigation.navigate('Home');
     // Once the register done
     // Direct to Drawer Navigator
     // hideSignUpModal();
