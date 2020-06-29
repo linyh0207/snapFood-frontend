@@ -20,6 +20,7 @@ const posts = [
     posterName: 'Amy',
     posterStatus: 'super',
     tags: ['bread', 'sliced'],
+    isExpired: true,
   },
   {
     id: '2',
