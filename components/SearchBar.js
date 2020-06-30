@@ -41,6 +41,9 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
   };
 
   const handleSearchPress = () => {
+    if (!searchTerm) {
+      return;
+    }
     setActiveTags((prev) => [...prev, searchTerm]);
     setSearchTerm('');
   };

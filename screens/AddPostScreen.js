@@ -86,6 +86,16 @@ export default function AddPostScreen({ navigation }) {
   }
 
   async function post() {
+    if (
+      !selectedPlace.address ||
+      !selectedPlace.storename ||
+      activeTags.length === 0 ||
+      !regularPrice ||
+      !discountPrice
+    ) {
+      // Can add an error message here
+      return console.log('missing information');
+    }
     setShowSpinner(true);
     const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
     try {
@@ -121,6 +131,7 @@ export default function AddPostScreen({ navigation }) {
     } catch (e) {
       console.error(e);
     }
+    return '';
   }
 
   return (
