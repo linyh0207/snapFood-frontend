@@ -25,6 +25,7 @@ export default function ProductMainCard(props) {
     postId,
     userId = '5eead9d6d34bf31f58a86904',
     imageUrl,
+    isExpired = false,
   } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -53,7 +54,7 @@ export default function ProductMainCard(props) {
   };
 
   return (
-    <View>
+    <View pointerEvents={isExpired ? 'none' : 'auto'}>
       <Portal>
         <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
           <ProductDetailCard {...props} />
