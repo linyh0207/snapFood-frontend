@@ -12,7 +12,7 @@ const posts = [
   {
     id: '1',
     price: { discounted: 2.99, regular: 4.99 },
-    storeName: 'T&T Supermarket',
+    storeName: 'Expired Post',
     distance: '500',
     timeFromNow: '1 day ago',
     likes: 10,
