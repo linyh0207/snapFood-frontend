@@ -7,13 +7,14 @@ import logo from '../../assets/images/Onboarding/logo.png';
 import find from '../../assets/images/Onboarding/find.png';
 import help from '../../assets/images/Onboarding/help.png';
 import snap from '../../assets/images/Onboarding/snap.png';
+// Icons made by Freepik from www.flaticon.com
 
 export default function WelcomeSwiper() {
   const SCREEN_WIDTH = Dimensions.get('window').width;
 
   const Screen = ({ header, icon, description }) => (
     <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.mX5]}>
-      <Image source={icon} style={{ resizeMode: 'contain', flex: 1 }} />
+      <Image source={icon} style={{ width: 159, height: 159 }} />
       <Text style={[t.textWhite, t.text3xl, t.fontBold, t.mY4, t.textCenter]}>{header}</Text>
       <Text style={[t.textWhite, t.textLg, t.fontBold, t.mX8, t.textCenter]}>{description}</Text>
     </View>
