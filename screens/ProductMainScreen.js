@@ -6,6 +6,7 @@ import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-
 import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { formatDistanceToNow } from 'date-fns';
 import StyledButton from '../components/StyledButton';
 import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
@@ -13,7 +14,6 @@ import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 import Map from '../components/Map';
-import ProductDetailCard from '../components/ProductDetailCard';
 
 export default function ProductMainScreen({ navigation }) {
   // For account button to open drawer navigator
@@ -96,22 +96,24 @@ export default function ProductMainScreen({ navigation }) {
     );
   };
 
-  // sample data from one post returned from db
-  // {
-  //   "address": "2 main st.",
-  //   "createdAt": "2020-06-19T23:16:53.582Z",
-  //   "discountPrice": 3.35,
-  //   "dislikes": 2,
-  //   "distance": 235547.53350062753,
-  //   "id": "5eead9d6d34bf31f58a86905",
-  //   "latitude": 3.2,
-  //   "likes": 1,
-  //   "longitude": 5,
-  //   "price": 5.1,
-  //   "storename": "walmart",
+  // console.log('sample post', posts[0]);
+  // Object {
+  //   "address": "5762 Hwy 7, Markham, ON L3P 1A8, Canada",
+  //   "createdAt": "2020-06-30T15:53:46.733Z",
+  //   "discountPrice": 1.35,
+  //   "dislikes": 0,
+  //   "distance": 34770.10542051625,
+  //   "id": "5eead9d6d34bf31f58a86904",
+  //   "imageUrl": "https://thumbs.dreamstime.com/b/stacked-bread-packages-store-to-sell-sliced-bread-sealed-plastic-packaging-stacked-basket-store-selling-bakery-148749850.jpg",
+  //   "latitude": -79.266,
+  //   "likes": 2,
+  //   "longitude": 43.872,
+  //   "price": 2,
+  //   "storename": "No Frills",
   //   "tags": Array [
-  //     "chicken",
-  //     "meat",
+  //     "bread",
+  //     "sliced",
+  //     "grain",
   //   ],
   //   "userDislikedPost": false,
   //   "userLikedPost": true,
@@ -190,11 +192,11 @@ export default function ProductMainScreen({ navigation }) {
               likes={post.likes}
               postId={post.id}
               key={post.id}
-              timeFromNow="1 day ago"
+              timeFromNow={formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
               dislikes={4}
               posterName="Amy"
               posterStatus="super"
-              tags={['bread', 'sliced']}
+              tags={post.tags}
               imageUrl={post.imageUrl}
             />
           ))}
