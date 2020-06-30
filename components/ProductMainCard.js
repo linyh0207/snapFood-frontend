@@ -24,6 +24,7 @@ export default function ProductMainCard(props) {
     userDislikedPost,
     postId,
     userId = '5eead9d6d34bf31f58a86904',
+    isExpired = false,
   } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -52,7 +53,7 @@ export default function ProductMainCard(props) {
   };
 
   return (
-    <View>
+    <View pointerEvents={isExpired ? 'none' : 'auto'}>
       <Portal>
         <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
           <ProductDetailCard {...props} />
@@ -72,9 +73,9 @@ export default function ProductMainCard(props) {
           <Text>{timeFromNow}</Text>
         </View>
         <Card.Cover
-          source={{ uri: 'https://picsum.photos/200/300' }}
-          resizeMethod="resize"
-          resizeMode="center"
+          source={{
+            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
+          }}
         />
         <Card.Content
           style={{
