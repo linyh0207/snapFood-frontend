@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import { t } from 'react-native-tailwindcss';
-import { Headline, TextInput, Card } from 'react-native-paper';
+import { Headline, TextInput, Card, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import StyledButton from '../components/StyledButton';
@@ -24,6 +24,9 @@ export default function AddPostScreen({ navigation }) {
   const [uploadData, setUploadData] = useState(null);
   const [finalImageUri, setFinalImageUri] = useState('');
 
+  // Handles waiting for uploaded image url to come back. Posting will show spinner if not uploaded yet
+  const [showSpinner, setShowSpinner] = useState(false);
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
@@ -31,25 +34,27 @@ export default function AddPostScreen({ navigation }) {
     })();
   }, []);
 
-  useEffect(() => {
-    if (uploadData) {
-      const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
-      fetch(Cloud, {
-        body: JSON.stringify(uploadData),
-        headers: {
-          'content-type': 'application/json',
-        },
-        method: 'POST',
-      })
-        .then(async (res) => {
-          console.log('Successfully uploaded image');
-          const pic = await res.json();
-          console.log('url:', pic.url);
-          setFinalImageUri(pic.url);
-        })
-        .catch((err) => console.log(err));
-    }
-  }, [uploadData]);
+  // useEffect(() => {
+  //   if (uploadData) {
+  //   //   setShowSpinner(true);
+  //   //   const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
+  //   //   fetch(Cloud, {
+  //   //     body: JSON.stringify(uploadData),
+  //   //     headers: {
+  //   //       'content-type': 'application/json',
+  //   //     },
+  //   //     method: 'POST',
+  //   //   })
+  //   //     .then(async (res) => {
+  //   //       console.log('Successfully uploaded image');
+  //   //       const pic = await res.json();
+  //   //       console.log('url:', pic.url);
+  //   //       setFinalImageUri(pic.url);
+  //   //       setShowSpinner(false)
+  //   //     })
+  //   //     .catch((err) => console.log(err));
+  //   }
+  // }, [uploadData]);
 
   if (hasPermission === null) {
     return <View />;
@@ -81,27 +86,41 @@ export default function AddPostScreen({ navigation }) {
   }
 
   async function post() {
-    console.log('posting', finalImageUri);
-    // Backend - Need to save the post uri to db
-    // TODO: Incomplete post error handling
-    await fetch('https://glacial-cove-31720.herokuapp.com/posts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        address: selectedPlace.address,
-        storename: selectedPlace.name,
-        tags: activeTags,
-        latitude: 5,
-        longitude: 6,
-        price: regularPrice,
-        discountPrice,
-        imageUrl: finalImageUri,
-      }),
-    });
-    setImageUri('');
-    navigation.navigate('ProductMain');
+    setShowSpinner(true);
+    const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
+    try {
+      const res = await fetch(Cloud, {
+        body: JSON.stringify(uploadData),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      });
+      const pic = await res.json();
+      setFinalImageUri(pic.url);
+      setShowSpinner(false);
+      await fetch('https://glacial-cove-31720.herokuapp.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: selectedPlace.address,
+          storename: selectedPlace.name,
+          tags: activeTags,
+          latitude: -79,
+          longitude: 43,
+          price: regularPrice,
+          discountPrice,
+          imageUrl: pic.url,
+        }),
+      });
+
+      setImageUri('');
+      navigation.navigate('ProductMain');
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   return (
@@ -218,15 +237,18 @@ export default function AddPostScreen({ navigation }) {
             <Card style={t.m1}>
               <Card.Title title="Add Tags" />
               <SearchBar
-                latitude={48.4073}
-                longitude={-123.3298}
+                latitude={43.4073}
+                longitude={-79.3298}
                 radius={10000}
                 activeTags={activeTags}
                 setActiveTags={setActiveTags}
               />
             </Card>
-
-            <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
+            {showSpinner ? (
+              <ActivityIndicator />
+            ) : (
+              <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
+            )}
 
             {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
             <View style={t.h64} />

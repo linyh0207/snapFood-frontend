@@ -24,6 +24,7 @@ export default function ProductMainCard(props) {
     userDislikedPost,
     postId,
     userId = '5eead9d6d34bf31f58a86904',
+    imageUrl,
   } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -71,11 +72,7 @@ export default function ProductMainCard(props) {
         <View style={[]}>
           <Text>{timeFromNow}</Text>
         </View>
-        <Card.Cover
-          source={{ uri: 'https://picsum.photos/200/300' }}
-          resizeMethod="resize"
-          resizeMode="center"
-        />
+        <Card.Cover source={{ uri: imageUrl }} resizeMethod="resize" resizeMode="center" />
         <Card.Content
           style={{
             flex: 1,

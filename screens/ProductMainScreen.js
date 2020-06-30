@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { View } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
@@ -27,7 +28,7 @@ export default function ProductMainScreen({ navigation }) {
   const hideRefineModal = () => setRefineModalVisibility(false);
 
   const loadData = async () => {
-    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
+    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}00000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
@@ -37,8 +38,13 @@ export default function ProductMainScreen({ navigation }) {
   };
 
   React.useEffect(() => {
+    console.log('load posts ran');
     loadData();
   }, [activeTags, searchRadius]);
+
+  useFocusEffect(() => {
+    loadData();
+  });
 
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
@@ -136,10 +142,10 @@ export default function ProductMainScreen({ navigation }) {
         />
       </View>
       <SearchBar
-        searcher={1}
-        latitude="20"
-        longitude="10"
-        radius="10000000"
+        searcher={0}
+        latitude="43"
+        longitude="-79"
+        radius="100000000"
         setActiveTags={setActiveTags}
         activeTags={activeTags}
       />
@@ -167,6 +173,7 @@ export default function ProductMainScreen({ navigation }) {
               posterName="Amy"
               posterStatus="super"
               tags={['bread', 'sliced']}
+              imageUrl={post.imageUrl}
             />
           ))}
         </ScrollView>
