@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { MaterialIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { t } from 'react-native-tailwindcss';
 import logo from '../../assets/images/Onboarding/logo.png';
 import find from '../../assets/images/Onboarding/find.png';
