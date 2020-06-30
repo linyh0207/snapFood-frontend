@@ -25,7 +25,6 @@ export default function ProductMainCard(props) {
     postId,
     userId = '5eead9d6d34bf31f58a86904',
     isExpired = false,
-    imageUrl,
   } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -75,7 +74,7 @@ export default function ProductMainCard(props) {
         </View>
         <Card.Cover
           source={{
-            uri: imageUrl,
+            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
           }}
         />
         <Card.Content
