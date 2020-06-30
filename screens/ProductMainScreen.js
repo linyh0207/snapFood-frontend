@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { View } from 'react-native';
-import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
+import { Portal, Modal, TextInput, Text, Title, HelperText, IconButton } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StyledButton from '../components/StyledButton';
 import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
@@ -116,12 +115,13 @@ export default function ProductMainScreen({ navigation }) {
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
       <View style={[t.flexRow, t.itemsCenter]}>
         {/* Account Button to open drawer navigator */}
-        <StyledButton
+        <IconButton
           icon="account-circle-outline"
-          title="Account"
-          size="small"
+          color="#22543d"
+          size={30}
           onPress={() => navigation.openDrawer()}
         />
+
         {/* Searchbar Placeholder */}
 
         {/* Refine Modal */}
@@ -149,11 +149,13 @@ export default function ProductMainScreen({ navigation }) {
             <StoresMenu />
           </Modal>
         </Portal>
-        <StyledButton icon="playlist-edit" title="Refine" size="small" onPress={showRefineModal} />
+        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineModal} />
+
         {/* MapView / ListView Toggle Button Placeholder */}
-        <StyledButton
-          size="small"
+        <IconButton
+          color="#22543d"
           icon={showMap ? 'view-list' : 'map-outline'}
+          size={30}
           onPress={toMapView}
         />
       </View>
