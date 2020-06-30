@@ -1,74 +1,111 @@
-import { Ionicons } from '@expo/vector-icons';
-import * as WebBrowser from 'expo-web-browser';
 import * as React from 'react';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
-import { RectButton, ScrollView } from 'react-native-gesture-handler';
-import {
-  ActivityIndicator,
-  Colors,
-  Drawer,
-  Avatar,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-} from 'react-native-paper';
+import { Text, View } from 'react-native';
+import { Card, Portal, Modal } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
-import UserName from './TopBar/UserName';
 import LikedCounter from './LikedCounter';
+import ProductDetailCard from './ProductDetailCard';
 
-const styles = StyleSheet.create({
-  image: {
-    resizeMode: 'cover',
-    ...t.flex1,
-  },
-});
-export default function ProductMainCard({
-  price,
-  totalVotes,
-  storeName,
-  distance,
-  cardStyle = [],
-  coverStyle = [],
-}) {
+export default function ProductMainCard(props) {
+  const {
+    timeFromNow = '1 day ago',
+    price,
+    storeName,
+    distance,
+    likes,
+    dislikes,
+    posterName,
+    posterStatus = 'regular',
+    tags = [],
+    address,
+    created,
+    initialUserSavedPost,
+    userLikedPost,
+    userDislikedPost,
+    postId,
+    userId = '5eead9d6d34bf31f58a86904',
+    isExpired = false,
+  } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
-  return (
-    <View>
-      {/* <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" /> */}
+  const [showDetailModal, setShowDetailModal] = React.useState(false);
 
-      <Card style={[t.flex, t.flexCol, t.alignCenter, ...cardStyle]}>
-        {/* <ImageBackground style={styles.image} source={{ uri: 'https://picsum.photos/700' }}>
-          <ToggleIcon selectedIcon="bookmark" unselectedIcon="bookmark-outline" />
-        </ImageBackground> */}
+  const [userSavedPost, setUserSavedPost] = React.useState(initialUserSavedPost);
+
+  const formatDistance = (rawDistance) => {
+    if (distance < 1000) {
+      return `${Math.round(rawDistance / 100) * 100}m`;
+    }
+    return `${Math.round(rawDistance / 1000)}km`;
+  };
+
+  const toggleSavePost = () => {
+    setUserSavedPost((prev) => !prev);
+    fetch(`http://10.0.2.2:8000/users/${userId}`, {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        postId,
+        saving: !userSavedPost,
+      }),
+    });
+  };
+
+  return (
+    <View pointerEvents={isExpired ? 'none' : 'auto'}>
+      <Portal>
+        <Modal visible={showDetailModal} onDismiss={() => setShowDetailModal(!showDetailModal)}>
+          <ProductDetailCard {...props} />
+        </Modal>
+      </Portal>
+      <Card
+        style={{
+          flex: 1,
+          marginHorizontal: 5,
+          marginVertical: 5,
+          borderColor: posterStatus === 'super' ? '#48bb78' : 'transparent',
+          borderWidth: posterStatus === 'super' ? 2 : 0,
+        }}
+        onLongPress={() => setShowDetailModal(!showDetailModal)}
+      >
         <View style={[]}>
-          <Card.Cover
-            source={{ uri: 'https://picsum.photos/700' }}
-            style={[...coverStyle]}
-            resizeMethod="resize"
-            resizeMode="center"
-          />
-          <ToggleButton
-            selected={bookmarked}
-            selectedIcon="bookmark"
-            unselectedIcon="bookmark-outline"
-            handleSelected={() => setBookmarked(!bookmarked)}
-          />
+          <Text>{timeFromNow}</Text>
         </View>
-        <Card.Content style={[t.flex, t.flexRow, t.justifyBetween]}>
-          <View style={[t.flex, t.flexCol]}>
-            <Text>{totalVotes} likes</Text>
-            <LikedCounter />
+        <Card.Cover
+          source={{
+            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
+          }}
+        />
+        <Card.Content
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+        >
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <LikedCounter
+              initialLiked={userLikedPost}
+              initialDisliked={userDislikedPost}
+              postId={postId}
+              likes={likes}
+            />
+            <ToggleButton
+              selected={bookmarked}
+              selectedIcon="bookmark"
+              unselectedIcon="bookmark-outline"
+              handleSelected={() => setBookmarked(!bookmarked)}
+            />
           </View>
-          <View style={[t.flex, t.flexCol, t.itemsEnd]}>
-            <View style={[t.flex, t.flexRow]}>
-              <Text style={[t.textLg]}>${price.discounted}</Text>
-              <Text style={[t.lineThrough]}>${price.regular}</Text>
-            </View>
-            <View style={[t.flex, t.flexRow]}>
-              <Text>{storeName}</Text>
-              <Text>{distance}</Text>
-            </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Text style={[t.textLg]}>${price.discounted}</Text>
+            <Text style={[t.lineThrough]}>${price.regular}</Text>
+          </View>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text>{storeName}</Text>
+            <Text>{formatDistance(distance)}</Text>
           </View>
         </Card.Content>
       </Card>

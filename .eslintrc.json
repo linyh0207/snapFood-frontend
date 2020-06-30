@@ -8,6 +8,7 @@
   ],
   "parser": "babel-eslint",
   "rules": {
+    "no-shadow": [2, { "allow": ["route"] }],
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
     "jest/no-identical-title": "error",
