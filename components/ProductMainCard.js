@@ -97,8 +97,8 @@ export default function ProductMainCard(props) {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Text style={[t.textLg]}>${price.discounted}</Text>
-            <Text style={[t.lineThrough]}>${price.regular}</Text>
+            <Text style={[t.textLg]}>${price.discounted.toFixed(2)}</Text>
+            <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text>{storeName}</Text>

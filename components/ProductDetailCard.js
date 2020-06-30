@@ -63,8 +63,8 @@ export default function ProductDetailCard({
           <Text>By: </Text>
           <UserName status={posterStatus}>{posterName}</UserName>
 
-          <Text style={[t.textLg, t.mLAuto]}>${price.discounted}</Text>
-          <Text style={[t.lineThrough]}>${price.regular}</Text>
+          <Text style={[t.textLg, t.mLAuto]}>${price.discounted.toFixed(2)}</Text>
+          <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
         </Card.Content>
         <Card.Content style={[t.flex1, t.flexRow, t.flexWrap, t.justifyStart, t.mB12]}>
           {tags.map((tag) => (
