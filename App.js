@@ -17,37 +17,6 @@ export default function App() {
   const isLoadingComplete = useCachedResources();
   const [authState, authDispatch] = useReducer(reducer, initialState);
 
-  // const authMemo = React.useMemo(
-  //   () => ({
-  //     login: (email, password) => {
-  //       axios
-  //         .post(api.LOGIN, { email, password })
-  //         .then((res) => {
-  //           AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
-  //           AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
-  //           authDispatch({ type: actionTypes.LOGIN, user: res.user, token: res.token });
-  //         })
-  //         .catch((err) => console.log(err));
-  //     },
-  //     logout: () => {
-  //       AsyncStorage.removeItem('user').catch((err) => console.log(err));
-  //       AsyncStorage.removeItem('userToken').catch((err) => console.log(err));
-  //       authDispatch({ type: actionTypes.LOGOUT });
-  //     },
-  //     register: (name, email, password) => {
-  //       axios
-  //         .post(api.REGISTER, { name, email, password })
-  //         .then((res) => {
-  //           AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
-  //           AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
-  //           authDispatch({ type: actionTypes.REGISTER, user: res.user, token: res.token });
-  //         })
-  //         .catch((err) => console.log(err));
-  //     },
-  //   }),
-  //   []
-  // );
-
   let isAuth = false;
   React.useEffect(() => {
     let user = null;

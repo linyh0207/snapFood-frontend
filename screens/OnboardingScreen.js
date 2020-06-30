@@ -34,21 +34,21 @@ export default function OnboardingScreen({ navigation }) {
   };
 
   // Trigger Authentication
-  const handleLoginPress = () => {
-    fetch(api.LOGIN, {
+  const handleLoginPress = async () => {
+    const response = await fetch(api.LOGIN, {
       body: JSON.stringify({ email: loginUsername, password: loginPassword }),
       headers: {
         'content-type': 'application/json',
       },
       method: 'POST',
-    })
-      .then((res) => {
-        console.log(res);
-        AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
-        AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
-        authDispatch({ type: actionTypes.LOGIN, user: res.user, token: res.token });
-      })
-      .catch((err) => console.log(err));
+    });
+    const text = await response.text();
+    console.log(text);
+    const res = await JSON.parse(text);
+    console.log(res);
+    await AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
+    await AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
+    await authDispatch({ type: actionTypes.LOGIN, user: res.user, token: res.token });
     console.log(authState);
     hideLoginModal();
     //navigation.navigate('Home');
@@ -60,21 +60,21 @@ export default function OnboardingScreen({ navigation }) {
   const handleForgotPasswordPress = () => {};
 
   // Trigger Registration
-  const handleSignUpPress = () => {
-    fetch(api.REGISTER, {
+  const handleSignUpPress = async () => {
+    const response = await fetch(api.REGISTER, {
       body: JSON.stringify({ name: signUpUsername, email: signUpEmail, password: signUpPassword }),
       headers: {
         'content-type': 'application/json',
       },
       method: 'POST',
-    })
-      .then((res) => {
-        console.log(res);
-        AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
-        AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
-        authDispatch({ type: actionTypes.REGISTER, user: res.user, token: res.token });
-      })
-      .catch((err) => console.log(err));
+    });
+    const text = await response.text();
+    console.log(text);
+    const res = await JSON.parse(text);
+    console.log(res);
+    await AsyncStorage.setItem('user', res.user).catch((err) => console.log(err));
+    await AsyncStorage.setItem('userToken', res.token).catch((err) => console.log(err));
+    await authDispatch({ type: actionTypes.REGISTER, user: res.user, token: res.token });
     console.log(authState);
     hideSignUpModal();
     //navigation.navigate('Home');
