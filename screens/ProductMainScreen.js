@@ -27,8 +27,7 @@ export default function ProductMainScreen({ navigation }) {
   const hideRefineModal = () => setRefineModalVisibility(false);
 
   const loadData = async () => {
-    console.log('loading');
-    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}00000000${activeTags.map(
+    const searchUri = `http://10.0.2.2:8000/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
