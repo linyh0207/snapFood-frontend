@@ -24,7 +24,6 @@ const StyledButton = ({
       mode={mode}
       onPress={onPress}
       uppercase={uppercase}
-      color="#22543d"
       theme={theme}
     >
       {title}
