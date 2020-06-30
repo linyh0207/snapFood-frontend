@@ -181,10 +181,8 @@ export default function ProductMainScreen({ navigation }) {
           {posts.map((post) => (
             <ProductMainCard
               price={{ regular: post.price, discounted: post.discountPrice }}
-              // totalVotes={post.likes}
               storeName={post.storename}
               address={post.address}
-              // created={post.createdAt}
               distance={post.distance}
               initialUserSavedPost={post.userSavedPost}
               userLikedPost={post.userLikedPost}
@@ -193,9 +191,9 @@ export default function ProductMainScreen({ navigation }) {
               postId={post.id}
               key={post.id}
               timeFromNow={formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
-              dislikes={4}
-              posterName="Amy"
-              posterStatus="super"
+              dislikes={post.dislikes}
+              posterName="Amy" // TODO: Add missing data from back-end
+              posterStatus="super" // TODO: Add missing data from back-end
               tags={post.tags}
               imageUrl={post.imageUrl}
             />

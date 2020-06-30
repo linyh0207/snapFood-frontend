@@ -17,6 +17,7 @@ export default function ProductDetailCard({
   posterName,
   posterStatus = 'regular',
   tags = [],
+  imageUrl,
 }) {
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showMapModal, setShowMapModal] = React.useState(false);
@@ -43,7 +44,7 @@ export default function ProductDetailCard({
         </Card.Content>
         <Card.Cover
           source={{
-            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
+            uri: imageUrl,
           }}
           style={{ width: '80%', height: undefined, aspectRatio: 4 / 5, alignSelf: 'center' }}
         />
