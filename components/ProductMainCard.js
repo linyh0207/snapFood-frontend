@@ -88,6 +88,7 @@ export default function ProductMainCard(props) {
               initialDisliked={userDislikedPost}
               postId={postId}
               likes={likes}
+              dislikes={dislikes}
             />
             <ToggleButton
               selected={bookmarked}

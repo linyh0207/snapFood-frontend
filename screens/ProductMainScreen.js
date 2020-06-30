@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatDistanceToNow } from 'date-fns';
@@ -26,6 +26,8 @@ export default function ProductMainScreen({ navigation }) {
   const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
   const hideRefineModal = () => setRefineModalVisibility(false);
+
+  const numColumns = 2;
 
   const loadData = async () => {
     const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}00000${activeTags.map(
@@ -120,6 +122,32 @@ export default function ProductMainScreen({ navigation }) {
   //   "userSavedPost": true,
   // }
 
+  const renderItem = ({ item }) => {
+    return (
+      <View>
+        <ProductMainCard
+          price={{ regular: item.price, discounted: item.discountPrice }}
+          storeName={item.storename}
+          address={item.address}
+          distance={item.distance}
+          initialUserSavedPost={item.userSavedPost}
+          userLikedPost={item.userLikedPost}
+          userDislikedPost={item.userDislikedPost}
+          likes={item.likes}
+          postId={item.id}
+          key={item.id}
+          timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+          dislikes={item.dislikes}
+          posterName="Amy" // TODO: Add missing data from back-end
+          posterStatus="super" // TODO: Add missing data from back-end
+          tags={item.tags}
+          imageUrl={item.imageUrl}
+          cardStyle={[t.m1]}
+        />
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
       <View style={[t.flexRow, t.itemsCenter]}>
@@ -176,41 +204,9 @@ export default function ProductMainScreen({ navigation }) {
       {showMap ? (
         <Map />
       ) : (
-        <ScrollView contentContainerStyle={[t.p6]}>
-          {/* Product card for product main page */}
-          {posts.map((post) => (
-            <ProductMainCard
-              price={{ regular: post.price, discounted: post.discountPrice }}
-              storeName={post.storename}
-              address={post.address}
-              distance={post.distance}
-              initialUserSavedPost={post.userSavedPost}
-              userLikedPost={post.userLikedPost}
-              userDislikedPost={post.userDislikedPost}
-              likes={post.likes}
-              postId={post.id}
-              key={post.id}
-              timeFromNow={formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
-              dislikes={post.dislikes}
-              posterName="Amy" // TODO: Add missing data from back-end
-              posterStatus="super" // TODO: Add missing data from back-end
-              tags={post.tags}
-              imageUrl={post.imageUrl}
-            />
-          ))}
-        </ScrollView>
+        <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
       )}
-      {/* <ProductDetailCard
-        price={{ regular: 2.99, discounted: 0.99 }}
-        storeName="T&T Supermarket"
-        distance="500m"
-        timeFromNow="1 day ago"
-        likes={10}
-        dislikes={4}
-        posterName="Amy"
-        posterStatus="super"
-        tags={['bread', 'sliced']}
-      /> */}
+
       <SnackBar />
     </SafeAreaView>
   );
