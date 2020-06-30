@@ -17,7 +17,7 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <View style={[t.flex1, t.flexRow, t.p8, t.itemsCenter, t.bgGreen600]}>
-        <Headline style={[t.pR2]}>Username</Headline>
+        <Headline style={[t.pR2, t.textWhite]}>Username</Headline>
         <Avatar.Icon size={24} icon="crown" />
       </View>
       <DrawerItemList {...props} />
@@ -27,7 +27,10 @@ function CustomDrawerContent(props) {
 
 export default function DrawerNavigator() {
   return (
-    <Drawer.Navigator drawerContent={(items) => <CustomDrawerContent {...items} />}>
+    <Drawer.Navigator
+      drawerContent={(items) => <CustomDrawerContent {...items} />}
+      drawerContentOptions={{ activeTintColor: '#22543d' }}
+    >
       <Drawer.Screen
         name="Home"
         component={BottomTabNavigator}
