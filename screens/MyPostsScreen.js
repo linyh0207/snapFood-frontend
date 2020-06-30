@@ -8,69 +8,90 @@ import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
 import ProductMainCard from '../components/ProductMainCard';
 
-const posts = [
-  {
-    id: '1',
-    price: { discounted: 2.99, regular: 4.99 },
-    storeName: 'T&T Supermarket',
-    distance: '500m',
-    timeFromNow: '1 day ago',
-    likes: 10,
-    dislikes: 4,
-    posterName: 'Amy',
-    posterStatus: 'super',
-    tags: ['bread', 'sliced'],
-  },
-  {
-    id: '2',
-    price: { discounted: 2.99, regular: 4.99 },
-    storeName: 'T&T Supermarket',
-    distance: '500m',
-    timeFromNow: '1 day ago',
-    likes: 10,
-    dislikes: 4,
-    posterName: 'Amy',
-    tags: ['bread', 'sliced'],
-  },
-  {
-    id: '3',
-    price: { discounted: 2.99, regular: 4.99 },
-    storeName: 'T&T Supermarket',
-    distance: '500m',
-    timeFromNow: '1 day ago',
-    likes: 10,
-    dislikes: 4,
-    posterName: 'Amy',
-    posterStatus: 'super',
-    tags: ['bread', 'sliced'],
-  },
-  {
-    id: '4',
-    price: { discounted: 2.99, regular: 4.99 },
-    storeName: 'T&T Supermarket',
-    distance: '500m',
-    timeFromNow: '1 day ago',
-    likes: 10,
-    dislikes: 4,
-    posterName: 'Amy',
-    tags: ['bread', 'sliced'],
-  },
-  {
-    price: { discounted: 2.99, regular: 4.99 },
-    storeName: 'T&T Supermarket',
-    distance: '500m',
-    timeFromNow: '1 day ago',
-    likes: 10,
-    dislikes: 4,
-    posterName: 'Amy',
+// const posts = [
+//   {
+//     id: '1',
+//     price: { discounted: 2.99, regular: 4.99 },
+//     storeName: 'T&T Supermarket',
+//     distance: '500m',
+//     timeFromNow: '1 day ago',
+//     likes: 10,
+//     dislikes: 4,
+//     posterName: 'Amy',
+//     posterStatus: 'super',
+//     tags: ['bread', 'sliced'],
+//   },
+//   {
+//     id: '2',
+//     price: { discounted: 2.99, regular: 4.99 },
+//     storeName: 'T&T Supermarket',
+//     distance: '500m',
+//     timeFromNow: '1 day ago',
+//     likes: 10,
+//     dislikes: 4,
+//     posterName: 'Amy',
+//     tags: ['bread', 'sliced'],
+//   },
+//   {
+//     id: '3',
+//     price: { discounted: 2.99, regular: 4.99 },
+//     storeName: 'T&T Supermarket',
+//     distance: '500m',
+//     timeFromNow: '1 day ago',
+//     likes: 10,
+//     dislikes: 4,
+//     posterName: 'Amy',
+//     posterStatus: 'super',
+//     tags: ['bread', 'sliced'],
+//   },
+//   {
+//     id: '4',
+//     price: { discounted: 2.99, regular: 4.99 },
+//     storeName: 'T&T Supermarket',
+//     distance: '500m',
+//     timeFromNow: '1 day ago',
+//     likes: 10,
+//     dislikes: 4,
+//     posterName: 'Amy',
+//     tags: ['bread', 'sliced'],
+//   },
+//   {
+//     price: { discounted: 2.99, regular: 4.99 },
+//     storeName: 'T&T Supermarket',
+//     distance: '500m',
+//     timeFromNow: '1 day ago',
+//     likes: 10,
+//     dislikes: 4,
+//     posterName: 'Amy',
 
-    tags: ['bread', 'sliced'],
-  },
-];
+//     tags: ['bread', 'sliced'],
+//   },
+// ];
 
 const numColumns = 2;
 
-export default function MyPostsScreen() {
+export default async function MyPostsScreen() {
+  let test = await fetch('https://glacial-cove-31720.herokuapp.com/posts?filter=saved');
+  let res = await test.json();
+
+  let posts = [];
+
+  for (obj of res.posts) {
+    posts.push({
+      id: obj.id,
+      price: { discounted: obj.discountPrice, regular: obj.price },
+      storeName: obj.storename,
+      distance: obj.distance,
+      timeFromNow: obj.createdAt,
+      likes: '5',
+      dislikes: '4',
+      posterName: 'User',
+      tags: obj.tags,
+    });
+  }
+
+  console.log(posts);
+
   const navigation = useNavigation();
 
   const renderItem = ({ item }) => {
