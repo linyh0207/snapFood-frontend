@@ -8,6 +8,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import StyledButton from '../components/StyledButton';
 import AddressSearchBar from '../components/AddressSearchBar';
 import SearchBar from '../components/SearchBar';
+import api from '../constants/Api';
 
 export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -20,6 +21,8 @@ export default function AddPostScreen({ navigation }) {
   const scrollRef = useRef(null);
   const [activeTags, setActiveTags] = useState([]);
   const [selectedPlace, setSelectedPlace] = useState({});
+  const [uploadData, setUploadData] = useState(null);
+  const [finalImageUri, setFinalImageUri] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -27,6 +30,26 @@ export default function AddPostScreen({ navigation }) {
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+  useEffect(() => {
+    if (uploadData) {
+      const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
+      fetch(Cloud, {
+        body: JSON.stringify(uploadData),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      })
+        .then(async (res) => {
+          console.log('Successfully uploaded image');
+          const pic = await res.json();
+          console.log('url:', pic.url);
+          setFinalImageUri(pic.url);
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [uploadData]);
 
   if (hasPermission === null) {
     return <View />;
@@ -37,9 +60,15 @@ export default function AddPostScreen({ navigation }) {
 
   const takePicture = async () => {
     if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
+      const photo = await cameraRef.takePictureAsync({ base64: true });
       // photo uri to store in the db
-      // console.log('photo', photo.uri);
+      // console.log(photo);
+      const base64Img = `data:image/jpg;base64,${photo.base64}`;
+      const data = {
+        file: base64Img,
+        upload_preset: 'oohwpvh9',
+      };
+      setUploadData(data);
       return setImageUri(photo.uri);
     }
     return setImageUri('');
@@ -47,10 +76,12 @@ export default function AddPostScreen({ navigation }) {
 
   function cancelPhoto() {
     setImageUri('');
+    setUploadData(null);
     setSearchBarVisibility(false);
   }
 
   async function post() {
+    console.log('posting', finalImageUri);
     // Backend - Need to save the post uri to db
     // TODO: Incomplete post error handling
     await fetch('https://glacial-cove-31720.herokuapp.com/posts', {
@@ -66,7 +97,7 @@ export default function AddPostScreen({ navigation }) {
         longitude: 6,
         price: regularPrice,
         discountPrice,
-        imageUrl: imageUri,
+        imageUrl: finalImageUri,
       }),
     });
     setImageUri('');
