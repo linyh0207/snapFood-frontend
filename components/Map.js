@@ -21,33 +21,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Map() {
+export default function Map({ posts }) {
   // Products Swiper Modal --- start
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
 
   // Dummy screen datas
-  const SCREENS = [
-    <ProductMainCard
-      price={{ regular: 2.99, discounted: 0.99 }}
-      totalVotes={10}
-      storeName="Save On Food"
-      distance="500m"
-    />,
-    <ProductMainCard
-      price={{ regular: 2.99, discounted: 0.99 }}
-      totalVotes={10}
-      storeName="Save On Food"
-      distance="500m"
-    />,
-    <ProductMainCard
-      price={{ regular: 2.99, discounted: 0.99 }}
-      totalVotes={10}
-      storeName="Save On Food"
-      distance="500m"
-    />,
-  ];
+  // const SCREENS = posts.map((post) => {});
 
   const renderItem = ({ item }) => {
     return (
@@ -59,7 +40,25 @@ export default function Map() {
           justifyContent: 'center',
         }}
       >
-        {item}
+        <ProductMainCard
+          price={{ regular: item.price, discounted: item.discountPrice }}
+          // totalVotes={post.likes}
+          storeName={item.storename}
+          address={item.address}
+          // created={post.createdAt}
+          distance={item.distance}
+          initialUserSavedPost={item.userSavedPost}
+          userLikedPost={item.userLikedPost}
+          userDislikedPost={item.userDislikedPost}
+          likes={item.likes}
+          postId={item.id}
+          timeFromNow="1 day ago"
+          dislikes={4}
+          posterName="Amy"
+          posterStatus="super"
+          tags={['bread', 'sliced']}
+          imageUrl={item.imageUrl}
+        />
       </View>
     );
   };
@@ -114,18 +113,30 @@ export default function Map() {
 
   useEffect(() => {
     (async () => {
+      console.log('effect ran');
       const { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         setIsLoading(false);
+        console.log('permission granted');
       }
       // contains object of timestamp: sec, mocked: boolean, coords: {altitude: int, heading: int, longitude: float, speed: float, latitude: float, accuracy: float}
       const locationRaw = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
-      setLocation(locationRaw.coords);
+      console.log(locationRaw);
+      // Temp for testing in markham
+      setLocation({
+        accuracy: 30,
+        altitude: 21.54458999633789,
+        altitudeAccuracy: 4,
+        heading: -1,
+        latitude: 43.2,
+        longitude: -79,
+        speed: 0,
+      });
     })();
-  });
+  }, []);
 
   let text = 'Waiting..';
   if (errorMsg) {
@@ -157,7 +168,7 @@ export default function Map() {
             // longitudeDelta: 0.421,
           }}
           moveOnMarkerPress={false}
-          onPress={() => setCurrentMarker({})}
+          // onPress={() => setCurrentMarker({})}
         >
           {markers.map((marker) => {
             return (
@@ -177,11 +188,13 @@ export default function Map() {
         <Portal>
           <Modal visible={productsSwiperModalVisible} onDismiss={hideProductsSwiperModal}>
             <View>
+              <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>HIHIHI</Text>
               <Carousel
-                data={SCREENS}
+                data={posts}
                 renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={ITEM_WIDTH}
+                itemHeight={ITEM_HEIGHT}
                 inactiveSlideShift={0}
                 onSnapToItem={(i) => setActiveTab(i)}
                 scrollInterpolator={scrollInterpolator}
@@ -189,7 +202,7 @@ export default function Map() {
                 useScrollView
               />
               <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
-                {activeTab + 1} / {SCREENS.length}
+                {activeTab + 1} / {posts.length}
               </Text>
             </View>
           </Modal>
