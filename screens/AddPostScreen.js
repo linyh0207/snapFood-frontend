@@ -265,6 +265,7 @@ export default function AddPostScreen({ navigation }) {
             ) : (
               <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
             )}
+            <StyledButton title="Cancel" mode="outlined" size="large" onPress={cancelPhoto} />
 
             {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
             <View style={t.h64} />
