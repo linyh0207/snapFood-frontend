@@ -37,7 +37,7 @@ function AddressSearchBar({
       console.log('predictions', predictions);
       const formattedPredictions = predictions.map((prediction) => {
         const name = prediction.description.split(',')[0];
-        const address = prediction.description.split(',')[1];
+        const address = prediction.description.split(',').splice(1, 4).join(', ');
         return { id: prediction.place_id, name, address };
       });
       setSearchSuggestions(formattedPredictions);
