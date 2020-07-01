@@ -115,31 +115,37 @@ export default function ProductMainScreen({ navigation }) {
   return (
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
       {/* Top Navigator --- Start */}
-      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween]}>
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.pX4]}>
         <IconButton
           icon="account-circle-outline"
           color="#22543d"
           size={30}
           onPress={() => navigation.openDrawer()}
-          style={[t.pL4]}
         />
-        <Image source={logo} style={[t.w56, t.h24, t.mL6, t._mR8]} />
-        <IconButton
-          color="#22543d"
-          icon="playlist-edit"
-          size={30}
-          onPress={showRefineModal}
-          style={[t._mR5, t.mL6]}
-        />
+        <Image source={logo} style={[t.w56, t.h24]} />
         <IconButton
           color="#22543d"
           icon={showMap ? 'view-list' : 'map-outline'}
           size={30}
           onPress={toMapView}
-          style={[t.mR6]}
         />
       </View>
       {/* Top Navigator --- End */}
+      <View style={[t.borderGray300, t.borderB, t.mX3, t._mT4]} />
+      {/* Search bar & Refine Menu --- Start */}
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.p4]}>
+        <SearchBar
+          searcher={1}
+          latitude="20"
+          longitude="10"
+          radius="10000000"
+          setActiveTags={setActiveTags}
+          activeTags={activeTags}
+          style={[t.flex1]}
+        />
+        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineModal} />
+      </View>
+      {/* Search bar & Refine Menu --- End */}
       {/* Refine Modal --- Start */}
       <Portal>
         <Modal
@@ -167,14 +173,6 @@ export default function ProductMainScreen({ navigation }) {
       </Portal>
       {/* Refine Modal --- End */}
 
-      <SearchBar
-        searcher={1}
-        latitude="20"
-        longitude="10"
-        radius="10000000"
-        setActiveTags={setActiveTags}
-        activeTags={activeTags}
-      />
       {showMap ? (
         <Map />
       ) : (
