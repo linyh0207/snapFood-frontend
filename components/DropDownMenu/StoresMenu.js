@@ -49,6 +49,7 @@ export default function SortByMenu({ stores, setStoreFilter }) {
         {stores.map((store) => {
           return (
             <Menu.Item
+              key={`${store.name}--${store.address}`}
               onPress={(e) => {
                 handleSelection(e, store);
               }}
