@@ -149,18 +149,23 @@ export default function ProductMainScreen({ navigation }) {
       {/* Refine Modal --- Start */}
       <Portal>
         <Modal
-          contentContainerStyle={{ backgroundColor: 'white' }}
+          contentContainerStyle={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
           visible={refineModalVisible}
           onDismiss={hideRefineModal}
         >
-          <Title style={[t.textCenter]}>SORT BY</Title>
+          <View style={[t.bgGreen600]}>
+            <Title style={[t.textCenter, t.textWhite]}>SORT BY</Title>
+          </View>
           <SortByMenu setSort={setSort} />
-          <Title style={[t.textCenter]}>FILTER BY</Title>
+
+          <View style={[t.bgGreen600]}>
+            <Title style={[t.textCenter, t.textWhite]}>FILTER BY</Title>
+          </View>
+
           <View style={[t.flexRow, t.itemsCenter]}>
             <TextInput
               label="Distance"
               value={searchRadius}
-              mode="outline"
               placeholder="5"
               onChangeText={(text) => setSearchRadius(text)}
               style={[t.w3_4, t.m2]}

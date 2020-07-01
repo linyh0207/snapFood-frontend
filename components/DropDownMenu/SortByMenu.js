@@ -1,67 +1,34 @@
-import { useState } from 'react';
 import * as React from 'react';
 import { View } from 'react-native';
-import { Menu, Divider } from 'react-native-paper';
+import { RadioButton, Text } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
-import StyledButton from '../StyledButton';
 
 export default function SortByMenu({ setSort }) {
-  const [visible, setVisibility] = useState(false);
-  const [title, setTitle] = useState('Sort');
-
-  const openMenu = () => setVisibility(true);
-  const closeMenu = () => setVisibility(false);
-  const handleSelection = (e, selection) => {
-    closeMenu();
-    setTitle(selection);
-    setSort(selection);
+  const handleSelection = (value) => {
+    setValue(value);
+    setSort(value);
   };
 
+  const [value, setValue] = React.useState('Rating');
+
   return (
-    <View style={[t.pT10, t.flexRow, t.justifyCenter]}>
-      <Menu
-        visible={visible}
-        statusBarHeight={75}
-        style={[t.justifyCenter]}
-        onDismiss={closeMenu}
-        anchor={
-          <StyledButton
-            title={title}
-            mode="outlined"
-            size="small"
-            icon="sort-variant"
-            onPress={openMenu}
-          />
-        }
-      >
-        <Menu.Item
-          onPress={(e) => {
-            handleSelection(e, 'Sort: Rating');
-          }}
-          title="Rating"
-        />
-        <Divider />
-        <Menu.Item
-          onPress={(e) => {
-            handleSelection(e, 'Sort: Distance');
-          }}
-          title="Distance"
-        />
-        <Divider />
-        <Menu.Item
-          onPress={(e) => {
-            handleSelection(e, 'Sort: Best Deal');
-          }}
-          title="Best Deal"
-        />
-        <Divider />
-        <Menu.Item
-          onPress={(e) => {
-            handleSelection(e, 'Sort: Most Recent');
-          }}
-          title="Most Recent"
-        />
-      </Menu>
-    </View>
+    <RadioButton.Group onValueChange={handleSelection} value={value}>
+      <View style={[t.flexRow, t.justifyBetween, t.p1]}>
+        <Text>Rating</Text>
+        <RadioButton color="#22543d" value="rating" />
+      </View>
+      <View style={[t.flexRow, t.justifyBetween, t.p1]}>
+        <Text>Distance</Text>
+        <RadioButton color="#22543d" value="distance" />
+      </View>
+      <View style={[t.flexRow, t.justifyBetween, t.p1]}>
+        <Text>Best Deal</Text>
+        <RadioButton color="#22543d" value="bestDeal" />
+      </View>
+      <View style={[t.flexRow, t.justifyBetween, t.p1]}>
+        <Text>Most Recent</Text>
+        <RadioButton color="#22543d" value="mostRecent" />
+      </View>
+    </RadioButton.Group>
   );
 }
