@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -115,8 +114,20 @@ export default function OnboardingScreen({ navigation }) {
         </Modal>
       </Portal>
       {/* Login and Sign Up Buttons */}
-      <StyledButton title="Login" mode="contained" bordered onPress={showLoginModal} />
-      <StyledButton title="Sign Up" mode="outlined" bordered onPress={showSignUpModal} />
+      <StyledButton
+        title="Login"
+        mode="contained"
+        bordered
+        onPress={showLoginModal}
+        style={[t.mB4]}
+      />
+      <StyledButton
+        title="Sign Up"
+        mode="outlined"
+        bordered
+        onPress={showSignUpModal}
+        style={[t.mB10]}
+      />
     </SafeAreaView>
   );
 }

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
-import { MaterialIcons, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { t } from 'react-native-tailwindcss';
 import logo from '../../assets/images/Onboarding/logo.png';
 import find from '../../assets/images/Onboarding/find.png';
@@ -13,7 +12,7 @@ export default function WelcomeSwiper() {
   const SCREEN_WIDTH = Dimensions.get('window').width;
 
   const Screen = ({ header, icon, description }) => (
-    <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.mX5]}>
+    <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.mT8]}>
       <Image source={icon} style={{ width: 159, height: 159 }} />
       <Text style={[t.textWhite, t.text3xl, t.fontBold, t.mY4, t.textCenter]}>{header}</Text>
       <Text style={[t.textWhite, t.textLg, t.fontBold, t.mX8, t.textCenter]}>{description}</Text>
@@ -42,7 +41,7 @@ export default function WelcomeSwiper() {
 
   return (
     <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
-      <Image source={logo} style={{ width: 425, height: 200 }} />
+      <Image source={logo} style={[t.mT6]} />
       <Carousel
         data={SCREENS}
         renderItem={({ item }) => item}
