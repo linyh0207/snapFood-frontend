@@ -30,7 +30,7 @@ const LikedCounter = ({
 
   const toggleLikePost = (upvote) => {
     const remove = (upvote && liked) || (!upvote && notLiked);
-    fetch(`http://10.0.2.2:8000/posts/${postId}`, {
+    fetch(`https://glacial-cove-31720.herokuapp.com/posts/${postId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
