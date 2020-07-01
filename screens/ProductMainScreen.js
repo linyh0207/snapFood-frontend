@@ -24,6 +24,7 @@ export default function ProductMainScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('Sort: Rating');
+  const [storeFilter, setStoreFilter] = React.useState('All');
   const [refineModalVisible, setRefineModalVisibility] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
@@ -56,6 +57,19 @@ export default function ProductMainScreen({ navigation }) {
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
   }, [sort]);
+
+  React.useEffect(() => {
+    console.log('enters store filter', storeFilter);
+    setPosts((oldPosts) => {
+      return oldPosts.map((oldPost) => {
+        if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
+        if (`${oldPost.storename}--${oldPost.address}` === storeFilter) {
+          return { ...oldPost, isFiltered: false };
+        }
+        return { ...oldPost, isFiltered: true };
+      });
+    });
+  }, [storeFilter]);
 
   const sortPosts = (currentPosts) => {
     if (!currentPosts) return null;
@@ -121,13 +135,16 @@ export default function ProductMainScreen({ navigation }) {
         acc[`${curr.storename}--${curr.address}`] = {
           name: curr.storename,
           distance: curr.distance,
+          address: curr.address,
         };
       }
       return acc;
     }, {});
-    return Object.values(uniqueStores)
+    const formattedStores = Object.values(uniqueStores)
       .sort((a, b) => a.distance - b.distance)
       .map((item) => ({ ...item, distance: formatDistance(item.distance) }));
+
+    return [{ name: 'All', address: '', distance: '' }, ...formattedStores];
   };
   // console.log('sample post', posts[0]);
   // Object {
@@ -235,7 +252,7 @@ export default function ProductMainScreen({ navigation }) {
             <Text>km</Text>
           </View>
           <DistanceEntryError />
-          <StoresMenu stores={getStoresInfo(posts)} />
+          <StoresMenu stores={getStoresInfo(posts)} setStoreFilter={setStoreFilter} />
         </Modal>
       </Portal>
       {/* Refine Modal --- End */}
@@ -243,7 +260,11 @@ export default function ProductMainScreen({ navigation }) {
       {showMap ? (
         <Map />
       ) : (
-        <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
+        <FlatList
+          data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
+          numColumns={numColumns}
+          renderItem={renderItem}
+        />
       )}
 
       <SnackBar />

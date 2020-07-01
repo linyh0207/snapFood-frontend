@@ -5,7 +5,7 @@ import { Menu, Divider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import StyledButton from '../StyledButton';
 
-export default function SortByMenu({ stores }) {
+export default function SortByMenu({ stores, setStoreFilter }) {
   const [visible, setVisibility] = useState(false);
   const [title, setTitle] = useState('Select a store');
 
@@ -13,7 +13,8 @@ export default function SortByMenu({ stores }) {
   const closeMenu = () => setVisibility(false);
   const handleSelection = (e, selection) => {
     closeMenu();
-    setTitle(selection);
+    setTitle(selection.name);
+    setStoreFilter(selection.name === 'All' ? 'All' : `${selection.name}--${selection.address}`);
   };
 
   // Dummy data - sorted stores list
@@ -49,7 +50,7 @@ export default function SortByMenu({ stores }) {
           return (
             <Menu.Item
               onPress={(e) => {
-                handleSelection(e, store.name);
+                handleSelection(e, store);
               }}
               title={`${store.name} ${store.distance}`}
             />
