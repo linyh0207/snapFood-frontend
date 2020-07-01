@@ -206,6 +206,7 @@ export default function ProductMainScreen({ navigation }) {
       {showMap ? (
         <Map />
       ) : (
+        // <Map />
         <ScrollView contentContainerStyle={[t.p6]}>
           {/* Product card for product main page */}
           {posts.map((post) => (
