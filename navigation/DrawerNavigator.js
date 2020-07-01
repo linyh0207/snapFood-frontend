@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { View } from 'react-native';
-import { Headline, Avatar } from 'react-native-paper';
+import { Avatar } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import {
   createDrawerNavigator,
@@ -9,6 +9,7 @@ import {
 } from '@react-navigation/drawer';
 import BottomTabNavigator from './BottomTabNavigator';
 import OnboardingScreen from '../screens/OnboardingScreen';
+import UserName from '../components/TopBar/UserName';
 
 const Drawer = createDrawerNavigator();
 
@@ -17,8 +18,9 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <View style={[t.flex1, t.flexRow, t.p8, t.itemsCenter, t.bgGreen600]}>
-        <Headline style={[t.pR2, t.textWhite]}>Username</Headline>
-        <Avatar.Icon size={24} icon="crown" />
+        <UserName styles={[t.pX1]} textStyles={[t.textLg, t.textWhite]} status="super">
+          UserName
+        </UserName>
       </View>
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
