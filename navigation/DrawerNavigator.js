@@ -18,7 +18,12 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <View style={[t.flex1, t.flexRow, t.p8, t.itemsCenter, t.bgGreen600]}>
-        <UserName styles={[t.pX1]} textStyles={[t.text2xl, t.textWhite]} status="super">
+        <UserName
+          styles={[t.pX1]}
+          textStyles={[t.text2xl, t.textWhite]}
+          status="super"
+          iconColor="white"
+        >
           UserName
         </UserName>
       </View>
