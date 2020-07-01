@@ -16,7 +16,9 @@ export default function MyPostsScreen() {
 
   React.useEffect(() => {
     async function fetchData() {
-      const test = await fetch('https://glacial-cove-31720.herokuapp.com/posts?filter=created');
+      const test = await fetch(
+        'https://glacial-cove-31720.herokuapp.com/posts?filter=created&latitude=-79&longitude=43'
+      );
       const load = await test.text();
       const posted = await JSON.parse(load).posts;
       setPosts(posted);
