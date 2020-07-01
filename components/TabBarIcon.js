@@ -9,7 +9,7 @@ export default function TabBarIcon({ name, focused }) {
       name={name}
       size={30}
       style={{ marginBottom: -3 }}
-      color={focused ? Colors.tabIconSelected : Colors.tabIconDefault}
+      color={focused ? '#22543d' : Colors.tabIconDefault}
     />
   );
 }

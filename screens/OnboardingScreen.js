@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { Modal, Portal, Text, TextInput, HelperText } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,8 +25,9 @@ export default function OnboardingScreen({ navigation }) {
     hideLoginModal();
     showSignUpModal();
   };
-  const hasErrors = (email) => {
-    return !email.includes('@');
+
+  const hasErrors = () => {
+    return !signUpEmail.includes('@');
   };
 
   // Trigger Authentication
@@ -56,7 +56,7 @@ export default function OnboardingScreen({ navigation }) {
       {/* Login Modal */}
       <Portal>
         <Modal
-          contentContainerStyle={[t.bgWhite, t.p8]}
+          contentContainerStyle={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
           visible={loginModalVisible}
           onDismiss={hideLoginModal}
         >
@@ -83,7 +83,7 @@ export default function OnboardingScreen({ navigation }) {
       {/* Sign Up Modal */}
       <Portal>
         <Modal
-          contentContainerStyle={[t.bgWhite, t.p8]}
+          contentContainerStyle={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
           visible={signUpModalVisible}
           onDismiss={hideSignUpModal}
         >
@@ -103,9 +103,15 @@ export default function OnboardingScreen({ navigation }) {
             value={signUpEmail}
             onChangeText={(text) => setSignUpEmail(text)}
           />
-          <HelperText type="error" visible={hasErrors(signUpEmail)}>
-            Email address is invalid!
-          </HelperText>
+          {!signUpEmail ? (
+            <HelperText type="info" visible style={[t.textGreen900, t.fontSemibold]}>
+              Email address is empty!
+            </HelperText>
+          ) : (
+            <HelperText type="error" visible={hasErrors()}>
+              Email address is invalid!
+            </HelperText>
+          )}
           <StyledButton
             title="Sign Up Now"
             mode="outlined"
@@ -115,8 +121,20 @@ export default function OnboardingScreen({ navigation }) {
         </Modal>
       </Portal>
       {/* Login and Sign Up Buttons */}
-      <StyledButton title="Login" mode="contained" bordered onPress={showLoginModal} />
-      <StyledButton title="Sign Up" mode="outlined" bordered onPress={showSignUpModal} />
+      <StyledButton
+        title="Login"
+        mode="contained"
+        bordered
+        onPress={showLoginModal}
+        style={[t.mB4]}
+      />
+      <StyledButton
+        title="Sign Up"
+        mode="outlined"
+        bordered
+        onPress={showSignUpModal}
+        style={[t.mB10]}
+      />
     </SafeAreaView>
   );
 }

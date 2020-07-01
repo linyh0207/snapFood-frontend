@@ -21,6 +21,7 @@ export default function BottomTabNavigator({ route }) {
             }
           : undefined,
       })}
+      tabBarOptions={{ activeTintColor: '#22543d' }}
     >
       <BottomTab.Screen
         name="ProductMain"

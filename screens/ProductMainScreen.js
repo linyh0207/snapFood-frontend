@@ -1,34 +1,43 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { View } from 'react-native';
+import { View, Image, Alert } from 'react-native';
+import { Portal, TextInput, Text, Title, IconButton, Dialog } from 'react-native-paper';
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { useFocusEffect } from '@react-navigation/native';
-import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StyledButton from '../components/StyledButton';
-import SortByMenu from '../components/DropDownMenu/SortByMenu';
-import StoresMenu from '../components/DropDownMenu/StoresMenu';
+import { formatDistanceToNow } from 'date-fns';
+import SortByMenu from '../components/RefineMenu/SortByMenu';
+import StoresMenu from '../components/RefineMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 import Map from '../components/Map';
-import ProductDetailCard from '../components/ProductDetailCard';
+import formatDistance from '../helpers/formatDistance';
+import logo from '../assets/images/logos/green-logo.png';
+import StyledButton from '../components/StyledButton';
 
 export default function ProductMainScreen({ navigation }) {
-  // For account button to open drawer navigator
-  // const navigation = useNavigation();
-  const [searchRadius, setSearchRadius] = useState('499');
+  const [searchRadius, setSearchRadius] = React.useState('499');
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
-  const [sort, setSort] = React.useState('Sort: Rating');
-  const [refineModalVisible, setRefineModalVisibility] = useState(false);
-  const [showMap, setShowMap] = useState(false);
-  const showRefineModal = () => setRefineModalVisibility(true);
-  const hideRefineModal = () => setRefineModalVisibility(false);
+  const [sort, setSort] = React.useState('rating');
+  const [storeFilter, setStoreFilter] = React.useState('All');
+  const [showMap, setShowMap] = React.useState(false);
+
+  // Refine menu dialog
+  const [refineDialogVisible, setRefineDialogVisibility] = React.useState(false);
+  const showRefineDialog = () => setRefineDialogVisibility(true);
+  const hideRefineDialog = () => setRefineDialogVisibility(false);
+  // Store list within refine menu
+  const [expanded, setExpanded] = React.useState(false);
+  const [selectedStore, setStore] = React.useState('Select a store');
+  // Snack bar
+  const [snackBarVisible, setSnackBarVisibility] = React.useState(false);
+
+  const numColumns = 2;
 
   const loadData = async () => {
-    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}00000${activeTags.map(
+    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
@@ -44,29 +53,53 @@ export default function ProductMainScreen({ navigation }) {
 
   useFocusEffect(
     React.useCallback(() => {
+      console.log('should run once only when onFirstLoad');
       loadData();
     }, [])
-  );
+  ); // run once when screen loads
 
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
   }, [sort]);
 
+  React.useEffect(() => {
+    console.log('enters store filter', storeFilter);
+    setPosts((oldPosts) => {
+      return oldPosts.map((oldPost) => {
+        if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
+        if (`${oldPost.storename}--${oldPost.address}` === storeFilter) {
+          return { ...oldPost, isFiltered: false };
+        }
+        return { ...oldPost, isFiltered: true };
+      });
+    });
+  }, [storeFilter]);
+
   const sortPosts = (currentPosts) => {
     if (!currentPosts) return null;
     switch (sort) {
-      case 'Sort: Rating':
-        return currentPosts.slice(0).sort((a, b) => b.likes - a.likes);
-      case 'Sort: Distance':
+      case 'rating':
+        return currentPosts.slice(0).sort((a, b) => {
+          const netLikeA = a.likes - a.dislikes;
+          const netLikeB = b.likes - b.dislikes;
+          if (netLikeA > netLikeB) {
+            return -1;
+          }
+          if (netLikeA < netLikeB) {
+            return 1;
+          }
+          return 0;
+        });
+      case 'distance':
         return currentPosts.slice(0).sort((a, b) => a.distance - b.distance);
-      case 'Sort: Best Deal':
+      case 'bestDeal':
         return currentPosts
           .slice(0)
-          .sort((a, b) => a.price - a.discountPrice - (b.price - b.discountPrice));
-      case 'Sort: Most Recent':
+          .sort((a, b) => b.price - b.discountPrice - (a.price - a.discountPrice));
+      case 'mostRecent':
         return currentPosts
           .slice(0)
-          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       default:
         return currentPosts;
     }
@@ -74,10 +107,8 @@ export default function ProductMainScreen({ navigation }) {
   const toMapView = () => {
     setShowMap(!showMap);
   };
-  // Default 5km for the placeholder
-  const [distance, setDistance] = useState('');
 
-  const DistanceEntryError = () => {
+  const handleApplyPress = () => {
     function isNormalInteger(str) {
       if (!str) return true;
       const trimStr = str.trim();
@@ -88,99 +119,185 @@ export default function ProductMainScreen({ navigation }) {
       const n = Math.floor(Number(input));
       return n !== Infinity && String(n) === input && n >= 0 && n < 500;
     }
+    // If it's an invalid distance entry
+    if (!isNormalInteger(searchRadius)) {
+      Alert.alert('Invalid Distance Entry', 'Please enter an integer between 0 and 200.', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    } else {
+      hideRefineDialog();
+    }
+  };
 
-    const errorVisibility = !isNormalInteger(searchRadius);
+  // eslint-disable-next-line no-shadow
+  const getStoresInfo = (posts) => {
+    const uniqueStores = posts.reduce((acc, curr) => {
+      // using storename and address as unique identifier; better to have a storeId (TODO)
+      if (!acc[`${curr.storename}--${curr.address}`]) {
+        acc[`${curr.storename}--${curr.address}`] = {
+          name: curr.storename,
+          distance: curr.distance,
+          address: curr.address,
+        };
+      }
+      return acc;
+    }, {});
+    const formattedStores = Object.values(uniqueStores)
+      .sort((a, b) => a.distance - b.distance)
+      .map((item) => ({ ...item, distance: formatDistance(item.distance) }));
 
+    return [{ name: 'All', address: '', distance: '' }, ...formattedStores];
+  };
+  // console.log('sample post', posts[0]);
+  // Object {
+  //   "address": "5762 Hwy 7, Markham, ON L3P 1A8, Canada",
+  //   "createdAt": "2020-06-30T15:53:46.733Z",
+  //   "discountPrice": 1.35,
+  //   "dislikes": 0,
+  //   "distance": 34770.10542051625,
+  //   "id": "5eead9d6d34bf31f58a86904",
+  //   "imageUrl": "https://thumbs.dreamstime.com/b/stacked-bread-packages-store-to-sell-sliced-bread-sealed-plastic-packaging-stacked-basket-store-selling-bakery-148749850.jpg",
+  //   "latitude": -79.266,
+  //   "likes": 2,
+  //   "longitude": 43.872,
+  //   "price": 2,
+  //   "storename": "No Frills",
+  //   "tags": Array [
+  //     "bread",
+  //     "sliced",
+  //     "grain",
+  //   ],
+  //   "userDislikedPost": false,
+  //   "userLikedPost": true,
+  //   "userSavedPost": true,
+  // }
+
+  const renderItem = ({ item }) => {
     return (
-      <HelperText type="error" visible={errorVisibility}>
-        Invalid Entry. Please enter an integer between 0 and 200.
-      </HelperText>
+      <View>
+        <ProductMainCard
+          price={{ regular: item.price, discounted: item.discountPrice }}
+          storeName={item.storename}
+          address={item.address}
+          distance={item.distance}
+          initialUserSavedPost={item.userSavedPost}
+          userLikedPost={item.userLikedPost}
+          userDislikedPost={item.userDislikedPost}
+          likes={item.likes}
+          postId={item.id}
+          key={item.id}
+          timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+          dislikes={item.dislikes}
+          posterName="Amy" // TODO: Add missing data from back-end
+          posterStatus="super" // TODO: Add missing data from back-end
+          tags={item.tags}
+          imageUrl={item.imageUrl}
+          cardStyle={[t.m1]}
+        />
+      </View>
     );
   };
 
   return (
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
-      <View style={[t.flexRow, t.itemsCenter]}>
-        {/* Account Button to open drawer navigator */}
-        <StyledButton
+      {/* Top Navigator --- Start */}
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.pX4]}>
+        <IconButton
           icon="account-circle-outline"
-          title="Account"
-          size="small"
+          color="#22543d"
+          size={30}
           onPress={() => navigation.openDrawer()}
         />
-        {/* Searchbar Placeholder */}
-
-        {/* Refine Modal */}
-        <Portal>
-          <Modal
-            contentContainerStyle={{ backgroundColor: 'white' }}
-            visible={refineModalVisible}
-            onDismiss={hideRefineModal}
-          >
-            <Title style={[t.textCenter]}>SORT BY</Title>
-            <SortByMenu setSort={setSort} />
-            <Title style={[t.textCenter]}>FILTER BY</Title>
-            <View style={[t.flexRow, t.itemsCenter]}>
-              <TextInput
-                label="Distance"
-                value={searchRadius}
-                mode="outline"
-                placeholder="5"
-                onChangeText={(text) => setSearchRadius(text)}
-                style={[t.w3_4, t.m2]}
-              />
-              <Text>km</Text>
-            </View>
-            <DistanceEntryError />
-            <StoresMenu />
-          </Modal>
-        </Portal>
-        <StyledButton icon="playlist-edit" title="Refine" size="small" onPress={showRefineModal} />
-        {/* MapView / ListView Toggle Button Placeholder */}
-        <StyledButton
-          size="small"
+        <Image source={logo} style={[t.w56, t.h24]} />
+        <IconButton
+          color="#22543d"
           icon={showMap ? 'view-list' : 'map-outline'}
+          size={30}
           onPress={toMapView}
         />
       </View>
-      <SearchBar
-        searcher={0}
-        latitude="43"
-        longitude="-79"
-        radius="100000000"
-        setActiveTags={setActiveTags}
-        activeTags={activeTags}
-      />
+      {/* Top Navigator --- End */}
+      <View style={[t.borderGray300, t.borderB, t.mX3, t._mT4]} />
+      {/* Search bar & Refine Menu --- Start */}
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.p4]}>
+        <SearchBar
+          searcher={0}
+          latitude="43"
+          longitude="-79"
+          radius="100000000"
+          setActiveTags={setActiveTags}
+          activeTags={activeTags}
+          style={[t.flex1]}
+        />
+        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineDialog} />
+      </View>
+      {/* Search bar & Refine Menu --- End */}
+      {/* Refine Dialog--- Start */}
+      <Portal>
+        <Dialog
+          style={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
+          visible={refineDialogVisible}
+          onDismiss={hideRefineDialog}
+        >
+          {/* If the select a store list expanded */}
+          {expanded ? (
+            <ScrollView>
+              <StoresMenu
+                expanded={expanded}
+                setExpanded={setExpanded}
+                selectedStore={selectedStore}
+                setStore={setStore}
+                stores={getStoresInfo(posts)}
+                setStoreFilter={setStoreFilter}
+              />
+            </ScrollView>
+          ) : (
+            <>
+              <View style={[t.bgGreen600]}>
+                <Title style={[t.textCenter, t.textWhite]}>SORT BY</Title>
+              </View>
+              <SortByMenu setSort={setSort} sortValue={sort} />
+              <View style={[t.bgGreen600]}>
+                <Title style={[t.textCenter, t.textWhite]}>FILTER BY</Title>
+              </View>
+              <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.bgGreen100]}>
+                <TextInput
+                  label="Distance"
+                  value={searchRadius}
+                  placeholder="5"
+                  onChangeText={(text) => setSearchRadius(text)}
+                  style={[t.w10_12]}
+                  keyboardType="numeric"
+                  mode="outlined"
+                />
+                <Text style={[t.pR4]}>km</Text>
+              </View>
+              <ScrollView style={[t.bgGreen100]}>
+                <StoresMenu
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  selectedStore={selectedStore}
+                  setStore={setStore}
+                  stores={getStoresInfo(posts)}
+                  setStoreFilter={setStoreFilter}
+                />
+              </ScrollView>
+              <StyledButton title="Apply" mode="outlined" size="small" onPress={handleApplyPress} />
+            </>
+          )}
+        </Dialog>
+      </Portal>
+      {/* Refine Dialog --- End */}
       {showMap ? (
         <Map posts={posts} />
       ) : (
-        <ScrollView contentContainerStyle={[t.p6]}>
-          {/* Product card for product main page */}
-          {posts.map((post) => (
-            <ProductMainCard
-              price={{ regular: post.price, discounted: post.discountPrice }}
-              // totalVotes={post.likes}
-              storeName={post.storename}
-              address={post.address}
-              // created={post.createdAt}
-              distance={post.distance}
-              initialUserSavedPost={post.userSavedPost}
-              userLikedPost={post.userLikedPost}
-              userDislikedPost={post.userDislikedPost}
-              likes={post.likes}
-              postId={post.id}
-              key={post.id}
-              timeFromNow="1 day ago"
-              dislikes={4}
-              posterName="Amy"
-              posterStatus="super"
-              tags={['bread', 'sliced']}
-              imageUrl={post.imageUrl}
-            />
-          ))}
-        </ScrollView>
+        <FlatList
+          data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
+          numColumns={numColumns}
+          renderItem={renderItem}
+        />
       )}
-      <SnackBar />
+      <SnackBar snackBarVisible={snackBarVisible} setSnackBarVisibility={setSnackBarVisibility} />
     </SafeAreaView>
   );
 }

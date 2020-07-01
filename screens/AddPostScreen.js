@@ -231,6 +231,7 @@ export default function AddPostScreen({ navigation }) {
                   style={[t.w40, t.m1]}
                   mode="outlined"
                   label="Discount Price"
+                  keyboardType="numeric"
                   dense
                 />
 
@@ -240,6 +241,7 @@ export default function AddPostScreen({ navigation }) {
                   style={[t.w40, t.m1]}
                   mode="outlined"
                   label="Regular Price"
+                  keyboardType="numeric"
                   dense
                 />
               </View>
