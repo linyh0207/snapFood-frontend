@@ -47,15 +47,15 @@ export default function ProductMainScreen({ navigation }) {
   const sortPosts = (currentPosts) => {
     if (!currentPosts) return null;
     switch (sort) {
-      case 'Sort: Rating':
+      case 'rating':
         return currentPosts.slice(0).sort((a, b) => b.likes - a.likes);
-      case 'Sort: Distance':
+      case 'distance':
         return currentPosts.slice(0).sort((a, b) => a.distance - b.distance);
-      case 'Sort: Best Deal':
+      case 'bestDeal':
         return currentPosts
           .slice(0)
           .sort((a, b) => a.price - a.discountPrice - (b.price - b.discountPrice));
-      case 'Sort: Most Recent':
+      case 'mostRecent':
         return currentPosts
           .slice(0)
           .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
