@@ -15,6 +15,7 @@ import Map from '../components/Map';
 import formatDistance from '../helpers/formatDistance';
 import logo from '../assets/images/logos/green-logo.png';
 import StyledButton from '../components/StyledButton';
+import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 
 export default function ProductMainScreen({ navigation }) {
   const [searchRadius, setSearchRadius] = React.useState('499');
@@ -37,12 +38,15 @@ export default function ProductMainScreen({ navigation }) {
   const numColumns = 2;
 
   const loadData = async () => {
-    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}000${activeTags.map(
+    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=${
+      FAKE_HOME_LOCATIONS.Markham.latitude
+    }&longitude=${FAKE_HOME_LOCATIONS.Markham.longitude}&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
+    console.log(loadedPosts);
     setPosts(sortPosts(loadedPosts) || []);
   };
 
