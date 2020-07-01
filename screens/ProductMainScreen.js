@@ -81,7 +81,7 @@ export default function ProductMainScreen({ navigation }) {
       case 'Sort: Most Recent':
         return currentPosts
           .slice(0)
-          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       default:
         return currentPosts;
     }
