@@ -126,6 +126,7 @@ export default function ProductMainScreen({ navigation }) {
       ]);
     } else {
       hideRefineDialog();
+      setSnackBarVisibility(true);
     }
   };
 

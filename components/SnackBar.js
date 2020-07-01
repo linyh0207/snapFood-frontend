@@ -16,6 +16,7 @@ export default function SnackBar({ snackBarVisible, setSnackBarVisibility }) {
         },
       }}
       duration={Snackbar.DURATION_SHORT}
+      style={[t.bgGreen600]}
     >
       <Text style={[t.textWhite]}>
         Average price for serach result is X. {'\n'}Average price for serach result is Y for Store
