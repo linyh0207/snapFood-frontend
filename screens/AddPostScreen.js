@@ -212,8 +212,8 @@ export default function AddPostScreen({ navigation }) {
             <Card style={t.m1}>
               <Card.Title title="Store Information" />
               <AddressSearchBar
-                latitude={48.4073}
-                longitude={-123.3298}
+                latitude={43.874527}
+                longitude={-79.285302}
                 radius={10000}
                 scrollRef={scrollRef}
                 selectedPlace={selectedPlace}
