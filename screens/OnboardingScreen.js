@@ -56,7 +56,7 @@ export default function OnboardingScreen({ navigation }) {
       {/* Login Modal */}
       <Portal>
         <Modal
-          contentContainerStyle={[t.bgWhite, t.p8, t.mX5]}
+          contentContainerStyle={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
           visible={loginModalVisible}
           onDismiss={hideLoginModal}
         >
@@ -83,7 +83,7 @@ export default function OnboardingScreen({ navigation }) {
       {/* Sign Up Modal */}
       <Portal>
         <Modal
-          contentContainerStyle={[t.bgWhite, t.p8, t.mX5]}
+          contentContainerStyle={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
           visible={signUpModalVisible}
           onDismiss={hideSignUpModal}
         >
