@@ -116,12 +116,18 @@ export default function ProductMainScreen({ navigation }) {
   // eslint-disable-next-line no-shadow
   const getStoresInfo = (posts) => {
     const uniqueStores = posts.reduce((acc, curr) => {
-      if (!acc[curr.address]) {
-        acc[curr.address] = { name: curr.storename, distance: formatDistance(curr.distance) };
+      // using storename and address as unique identifier; better to have a storeId (TODO)
+      if (!acc[`${curr.storename}--${curr.address}`]) {
+        acc[`${curr.storename}--${curr.address}`] = {
+          name: curr.storename,
+          distance: curr.distance,
+        };
       }
       return acc;
     }, {});
-    return Object.values(uniqueStores);
+    return Object.values(uniqueStores)
+      .sort((a, b) => a.distance - b.distance)
+      .map((item) => ({ ...item, distance: formatDistance(item.distance) }));
   };
   // console.log('sample post', posts[0]);
   // Object {
