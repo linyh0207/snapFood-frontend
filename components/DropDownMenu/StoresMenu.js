@@ -5,7 +5,7 @@ import { Menu, Divider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import StyledButton from '../StyledButton';
 
-export default function SortByMenu() {
+export default function SortByMenu({ stores }) {
   const [visible, setVisibility] = useState(false);
   const [title, setTitle] = useState('Select a store');
 
@@ -17,24 +17,24 @@ export default function SortByMenu() {
   };
 
   // Dummy data - sorted stores list
-  const stores = [
-    {
-      name: 'PriceSmart Foods',
-      distance: '850m',
-    },
-    {
-      name: 'T&T Supermarket',
-      distance: '1.1km',
-    },
-    {
-      name: 'Save-On-Foods',
-      distance: '900m',
-    },
-    {
-      name: 'Real Canadian Superstore',
-      distance: '950m',
-    },
-  ];
+  // const stores = [
+  //   {
+  //     name: 'PriceSmart Foods',
+  //     distance: '850m',
+  //   },
+  //   {
+  //     name: 'T&T Supermarket',
+  //     distance: '1.1km',
+  //   },
+  //   {
+  //     name: 'Save-On-Foods',
+  //     distance: '900m',
+  //   },
+  //   {
+  //     name: 'Real Canadian Superstore',
+  //     distance: '950m',
+  //   },
+  // ];
 
   return (
     <View style={[t.pT10, t.flexRow, t.justifyCenter]}>

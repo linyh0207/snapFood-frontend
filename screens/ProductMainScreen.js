@@ -14,6 +14,7 @@ import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 import Map from '../components/Map';
+import formatDistance from '../helpers/formatDistance';
 
 export default function ProductMainScreen({ navigation }) {
   // For account button to open drawer navigator
@@ -98,6 +99,16 @@ export default function ProductMainScreen({ navigation }) {
     );
   };
 
+  // eslint-disable-next-line no-shadow
+  const getStoresInfo = (posts) => {
+    const uniqueStores = posts.reduce((acc, curr) => {
+      if (!acc[curr.address]) {
+        acc[curr.address] = { name: curr.storename, distance: formatDistance(curr.distance) };
+      }
+      return acc;
+    }, {});
+    return Object.values(uniqueStores);
+  };
   // console.log('sample post', posts[0]);
   // Object {
   //   "address": "5762 Hwy 7, Markham, ON L3P 1A8, Canada",
@@ -182,7 +193,7 @@ export default function ProductMainScreen({ navigation }) {
               <Text>km</Text>
             </View>
             <DistanceEntryError />
-            <StoresMenu />
+            <StoresMenu stores={getStoresInfo(posts)} />
           </Modal>
         </Portal>
         <StyledButton icon="playlist-edit" title="Refine" size="small" onPress={showRefineModal} />

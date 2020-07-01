@@ -5,6 +5,7 @@ import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 import LikedCounter from './LikedCounter';
 import ProductDetailCard from './ProductDetailCard';
+import formatDistance from '../helpers/formatDistance';
 
 export default function ProductMainCard(props) {
   const {
@@ -32,12 +33,12 @@ export default function ProductMainCard(props) {
 
   const [userSavedPost, setUserSavedPost] = React.useState(initialUserSavedPost);
 
-  const formatDistance = (rawDistance) => {
-    if (distance < 1000) {
-      return `${Math.round(rawDistance / 100) * 100}m`;
-    }
-    return `${Math.round(rawDistance / 1000)}km`;
-  };
+  // const formatDistance = (rawDistance) => {
+  //   if (distance < 1000) {
+  //     return `${Math.round(rawDistance / 100) * 100}m`;
+  //   }
+  //   return `${Math.round(rawDistance / 1000)}km`;
+  // };
 
   const toggleSavePost = () => {
     setUserSavedPost((prev) => !prev);
