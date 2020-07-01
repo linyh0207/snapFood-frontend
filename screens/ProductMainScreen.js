@@ -61,7 +61,17 @@ export default function ProductMainScreen({ navigation }) {
     if (!currentPosts) return null;
     switch (sort) {
       case 'Sort: Rating':
-        return currentPosts.slice(0).sort((a, b) => b.likes - a.likes);
+        return currentPosts.slice(0).sort((a, b) => {
+          const netLikeA = a.likes - a.dislikes;
+          const netLikeB = b.likes - b.dislikes;
+          if (netLikeA > netLikeB) {
+            return -1;
+          }
+          if (netLikeA < netLikeB) {
+            return 1;
+          }
+          return 0;
+        });
       case 'Sort: Distance':
         return currentPosts.slice(0).sort((a, b) => a.distance - b.distance);
       case 'Sort: Best Deal':
