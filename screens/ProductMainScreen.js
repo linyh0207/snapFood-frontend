@@ -183,11 +183,11 @@ export default function ProductMainScreen({ navigation }) {
                   value={searchRadius}
                   placeholder="5"
                   onChangeText={(text) => setSearchRadius(text)}
-                  style={[t.w10_12, t.m2]}
+                  style={[t.w10_12]}
                   keyboardType="numeric"
                   mode="outlined"
                 />
-                <Text>km</Text>
+                <Text style={[t.pR4]}>km</Text>
               </View>
               <ScrollView style={[t.bgGreen100]}>
                 <StoresMenu
