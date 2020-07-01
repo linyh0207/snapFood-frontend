@@ -77,7 +77,7 @@ export default function ProductMainScreen({ navigation }) {
       case 'Sort: Best Deal':
         return currentPosts
           .slice(0)
-          .sort((a, b) => a.price - a.discountPrice - (b.price - b.discountPrice));
+          .sort((a, b) => b.price - b.discountPrice - (a.price - a.discountPrice));
       case 'Sort: Most Recent':
         return currentPosts
           .slice(0)
