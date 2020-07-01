@@ -25,8 +25,9 @@ export default function OnboardingScreen({ navigation }) {
     hideLoginModal();
     showSignUpModal();
   };
-  const hasErrors = (email) => {
-    return !email.includes('@');
+
+  const hasErrors = () => {
+    return !signUpEmail.includes('@');
   };
 
   // Trigger Authentication
@@ -102,9 +103,15 @@ export default function OnboardingScreen({ navigation }) {
             value={signUpEmail}
             onChangeText={(text) => setSignUpEmail(text)}
           />
-          <HelperText type="error" visible={hasErrors(signUpEmail)}>
-            Email address is invalid!
-          </HelperText>
+          {!signUpEmail ? (
+            <HelperText type="info" visible style={[t.textGreen900, t.fontSemibold]}>
+              Email address is empty!
+            </HelperText>
+          ) : (
+            <HelperText type="error" visible={hasErrors()}>
+              Email address is invalid!
+            </HelperText>
+          )}
           <StyledButton
             title="Sign Up Now"
             mode="outlined"
