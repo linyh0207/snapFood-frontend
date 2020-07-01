@@ -1,103 +1,53 @@
 import * as React from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, Text } from 'react-native';
 import { t } from 'react-native-tailwindcss';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { formatDistanceToNow } from 'date-fns';
 import StyledButton from '../components/StyledButton';
 import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
 import ProductMainCard from '../components/ProductMainCard';
 
-// const posts = [
-//   {
-//     id: '1',
-//     price: { discounted: 2.99, regular: 4.99 },
-//     storeName: 'T&T Supermarket',
-//     distance: '500m',
-//     timeFromNow: '1 day ago',
-//     likes: 10,
-//     dislikes: 4,
-//     posterName: 'Amy',
-//     posterStatus: 'super',
-//     tags: ['bread', 'sliced'],
-//   },
-//   {
-//     id: '2',
-//     price: { discounted: 2.99, regular: 4.99 },
-//     storeName: 'T&T Supermarket',
-//     distance: '500m',
-//     timeFromNow: '1 day ago',
-//     likes: 10,
-//     dislikes: 4,
-//     posterName: 'Amy',
-//     tags: ['bread', 'sliced'],
-//   },
-//   {
-//     id: '3',
-//     price: { discounted: 2.99, regular: 4.99 },
-//     storeName: 'T&T Supermarket',
-//     distance: '500m',
-//     timeFromNow: '1 day ago',
-//     likes: 10,
-//     dislikes: 4,
-//     posterName: 'Amy',
-//     posterStatus: 'super',
-//     tags: ['bread', 'sliced'],
-//   },
-//   {
-//     id: '4',
-//     price: { discounted: 2.99, regular: 4.99 },
-//     storeName: 'T&T Supermarket',
-//     distance: '500m',
-//     timeFromNow: '1 day ago',
-//     likes: 10,
-//     dislikes: 4,
-//     posterName: 'Amy',
-//     tags: ['bread', 'sliced'],
-//   },
-//   {
-//     price: { discounted: 2.99, regular: 4.99 },
-//     storeName: 'T&T Supermarket',
-//     distance: '500m',
-//     timeFromNow: '1 day ago',
-//     likes: 10,
-//     dislikes: 4,
-//     posterName: 'Amy',
-
-//     tags: ['bread', 'sliced'],
-//   },
-// ];
-
 const numColumns = 2;
 
-export default async function MyPostsScreen() {
-  let test = await fetch('https://glacial-cove-31720.herokuapp.com/posts?filter=saved');
-  let res = await test.json();
+export default function MyPostsScreen() {
+  const [posts, setPosts] = React.useState('');
 
-  let posts = [];
-
-  for (obj of res.posts) {
-    posts.push({
-      id: obj.id,
-      price: { discounted: obj.discountPrice, regular: obj.price },
-      storeName: obj.storename,
-      distance: obj.distance,
-      timeFromNow: obj.createdAt,
-      likes: '5',
-      dislikes: '4',
-      posterName: 'User',
-      tags: obj.tags,
-    });
-  }
-
-  console.log(posts);
+  React.useEffect(() => {
+    async function fetchData() {
+      const test = await fetch('https://glacial-cove-31720.herokuapp.com/posts?filter=created');
+      const load = await test.text();
+      const posted = await JSON.parse(load).posts;
+      setPosts(posted);
+    }
+    fetchData();
+  }, []);
 
   const navigation = useNavigation();
 
   const renderItem = ({ item }) => {
     return (
       <View>
-        <ProductMainCard key={item.id} {...item} cardStyle={[t.m1]} />
+        <ProductMainCard
+          price={{ regular: item.price, discounted: item.discountPrice }}
+          storeName={item.storename}
+          address={item.address}
+          distance={item.distance}
+          initialUserSavedPost={item.userSavedPost}
+          userLikedPost={item.userLikedPost}
+          userDislikedPost={item.userDislikedPost}
+          likes={item.likes}
+          postId={item.id}
+          key={item.id}
+          timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+          dislikes={item.dislikes}
+          posterName="Amy" // TODO: Add missing data from back-end
+          posterStatus="super" // TODO: Add missing data from back-end
+          tags={item.tags}
+          imageUrl={item.imageUrl}
+          cardStyle={[t.m1]}
+        />
       </View>
     );
   };
@@ -117,8 +67,12 @@ export default async function MyPostsScreen() {
           Amy
         </UserName>
       </View>
-      <AchievementStatement>I have posted 100 posts</AchievementStatement>
-      <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
+      <AchievementStatement>I have posted {posts.length} posts</AchievementStatement>
+      {posts.length >= 1 ? (
+        <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
+      ) : (
+        <Text>No Posts Have Been Made</Text>
+      )}
     </SafeAreaView>
   );
 }
