@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
-import { Portal, Modal } from 'react-native-paper';
+import { Portal, Modal, ActivityIndicator } from 'react-native-paper';
 import Carousel from 'react-native-snap-carousel';
 import { t } from 'react-native-tailwindcss';
 import ProductMainCard from './ProductMainCard';
@@ -21,33 +21,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Map() {
+export default function Map({ posts }) {
   // Products Swiper Modal --- start
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
-
-  // Dummy screen datas
-  const SCREENS = [
-    <ProductMainCard
-      price={{ regular: 2.99, discounted: 0.99 }}
-      totalVotes={10}
-      storeName="Save On Food"
-      distance="500m"
-    />,
-    <ProductMainCard
-      price={{ regular: 2.99, discounted: 0.99 }}
-      totalVotes={10}
-      storeName="Save On Food"
-      distance="500m"
-    />,
-    <ProductMainCard
-      price={{ regular: 2.99, discounted: 0.99 }}
-      totalVotes={10}
-      storeName="Save On Food"
-      distance="500m"
-    />,
-  ];
 
   const renderItem = ({ item }) => {
     return (
@@ -59,7 +37,25 @@ export default function Map() {
           justifyContent: 'center',
         }}
       >
-        {item}
+        <ProductMainCard
+          price={{ regular: item.price, discounted: item.discountPrice }}
+          // totalVotes={post.likes}
+          storeName={item.storename}
+          address={item.address}
+          // created={post.createdAt}
+          distance={item.distance}
+          initialUserSavedPost={item.userSavedPost}
+          userLikedPost={item.userLikedPost}
+          userDislikedPost={item.userDislikedPost}
+          likes={item.likes}
+          postId={item.id}
+          timeFromNow="1 day ago"
+          dislikes={item.dislikes}
+          posterName="Amy"
+          posterStatus="super"
+          tags={['bread', 'sliced']}
+          imageUrl={item.imageUrl}
+        />
       </View>
     );
   };
@@ -81,36 +77,6 @@ export default function Map() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const markers = [
-    {
-      id: '1',
-      latlng: { latitude: location?.latitude + 0.05, longitude: location?.longitude + 0.05 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '500m',
-    },
-    {
-      id: '2',
-      latlng: { latitude: location?.latitude - 0.5, longitude: location?.longitude - 0.5 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '1km',
-    },
-    {
-      id: '3',
-      latlng: { latitude: location?.latitude + 0.8, longitude: location?.longitude + 0.05 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '2.1km',
-    },
-    {
-      id: '4',
-      latlng: { latitude: location?.latitude - 0.8, longitude: location?.longitude - 0.8 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '4km',
-    },
-  ];
 
   useEffect(() => {
     (async () => {
@@ -123,9 +89,18 @@ export default function Map() {
       const locationRaw = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
-      setLocation(locationRaw.coords);
+      // Temp for testing in markham
+      setLocation({
+        accuracy: 30,
+        altitude: 21.54458999633789,
+        altitudeAccuracy: 4,
+        heading: -1,
+        latitude: 43.879,
+        longitude: -79.3,
+        speed: 0,
+      });
     })();
-  });
+  }, []);
 
   let text = 'Waiting..';
   if (errorMsg) {
@@ -134,11 +109,11 @@ export default function Map() {
     text = JSON.stringify({ longitude: location.longitude, latitude: location.latitude });
   }
   if (location && location?.latitude) {
-    const maxLatDiff = markers
-      .map((marker) => marker.latlng.latitude)
+    const maxLatDiff = posts
+      .map((post) => post.longitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.latitude), acc), 0);
-    const maxLongDiff = markers
-      .map((marker) => marker.latlng.longitude)
+    const maxLongDiff = posts
+      .map((post) => post.latitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.longitude), acc), 0);
 
     return (
@@ -150,38 +125,41 @@ export default function Map() {
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
-            latitudeDelta: maxLatDiff * 2 + 0.4,
-            longitudeDelta: maxLongDiff * 2 + 0.4,
+            latitudeDelta: maxLatDiff * 2 + 0.05,
+            longitudeDelta: maxLongDiff * 2 + 0.05,
 
             // latitudeDelta: 0.922,
             // longitudeDelta: 0.421,
           }}
           moveOnMarkerPress={false}
-          onPress={() => setCurrentMarker({})}
+          // onPress={() => setCurrentMarker({})}
         >
-          {markers.map((marker) => {
-            return (
-              <Marker
-                key={marker.id}
-                coordinate={marker.latlng}
-                title={marker.title}
-                onPress={() => {
-                  setCurrentMarker(marker);
-                  setProductsSwiperModalVisibility(true);
-                }}
-              />
-            );
-          })}
+          {posts.map((post) => (
+            <Marker
+              key={post.id}
+              coordinate={{ latitude: post.longitude, longitude: post.latitude }}
+              title={post.storename}
+              onPress={() => {
+                setCurrentMarker(post);
+                setProductsSwiperModalVisibility(true);
+              }}
+            />
+          ))}
         </MapView>
         {/* Products Swiper Modal --- start */}
         <Portal>
           <Modal visible={productsSwiperModalVisible} onDismiss={hideProductsSwiperModal}>
             <View>
+              <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
+                {currentMarker.storename}
+              </Text>
               <Carousel
-                data={SCREENS}
+                // data={posts}
+                data={posts.filter((post) => post.address === currentMarker.address)}
                 renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={ITEM_WIDTH}
+                itemHeight={ITEM_HEIGHT}
                 inactiveSlideShift={0}
                 onSnapToItem={(i) => setActiveTab(i)}
                 scrollInterpolator={scrollInterpolator}
@@ -189,7 +167,8 @@ export default function Map() {
                 useScrollView
               />
               <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
-                {activeTab + 1} / {SCREENS.length}
+                {activeTab + 1} /{' '}
+                {posts.filter((post) => post.address === currentMarker.address).length}
               </Text>
             </View>
           </Modal>
@@ -210,7 +189,7 @@ export default function Map() {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text>Loading</Text>
+        <ActivityIndicator size="large" />
       </View>
     );
   }

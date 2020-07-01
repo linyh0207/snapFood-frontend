@@ -289,7 +289,7 @@ export default function ProductMainScreen({ navigation }) {
       </Portal>
       {/* Refine Dialog --- End */}
       {showMap ? (
-        <Map />
+        <Map posts={posts} />
       ) : (
         <FlatList
           data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
