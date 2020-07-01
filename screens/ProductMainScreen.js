@@ -33,7 +33,7 @@ export default function ProductMainScreen({ navigation }) {
   const numColumns = 2;
 
   const loadData = async () => {
-    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}00000${activeTags.map(
+    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
