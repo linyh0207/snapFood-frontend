@@ -66,6 +66,9 @@ export default function Map() {
 
   const [activeTab, setActiveTab] = useState(0);
   const [productsSwiperModalVisible, setProductsSwiperModalVisibility] = useState(false);
+
+  const [currentMarker, setCurrentMarker] = useState({});
+
   const showProductsSwiperModal = () => setProductsSwiperModalVisibility(true);
   const hideProductsSwiperModal = () => {
     setActiveTab(0);
@@ -78,27 +81,34 @@ export default function Map() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-
   const markers = [
     {
       id: '1',
       latlng: { latitude: location?.latitude + 0.05, longitude: location?.longitude + 0.05 },
       title: 'T&T Supermarket',
+      address: '123 happy valley drive',
+      distance: '500m',
     },
     {
       id: '2',
       latlng: { latitude: location?.latitude - 0.5, longitude: location?.longitude - 0.5 },
       title: 'T&T Supermarket',
+      address: '123 happy valley drive',
+      distance: '1km',
     },
     {
       id: '3',
       latlng: { latitude: location?.latitude + 0.8, longitude: location?.longitude + 0.05 },
       title: 'T&T Supermarket',
+      address: '123 happy valley drive',
+      distance: '2.1km',
     },
     {
       id: '4',
       latlng: { latitude: location?.latitude - 0.8, longitude: location?.longitude - 0.8 },
       title: 'T&T Supermarket',
+      address: '123 happy valley drive',
+      distance: '4km',
     },
   ];
 
@@ -133,7 +143,6 @@ export default function Map() {
 
     return (
       <View>
-        <Text>{text}</Text>
         <MapView
           showsUserLocation
           style={styles.mapStyle}
@@ -148,6 +157,7 @@ export default function Map() {
             // longitudeDelta: 0.421,
           }}
           moveOnMarkerPress={false}
+          onPress={() => setCurrentMarker({})}
         >
           {markers.map((marker) => {
             return (
@@ -155,7 +165,10 @@ export default function Map() {
                 key={marker.id}
                 coordinate={marker.latlng}
                 title={marker.title}
-                onPress={showProductsSwiperModal}
+                onPress={() => {
+                  setCurrentMarker(marker);
+                  setProductsSwiperModalVisibility(true);
+                }}
               />
             );
           })}
@@ -182,6 +195,15 @@ export default function Map() {
           </Modal>
         </Portal>
         {/* Products Swiper Modal --- end */}
+        <View>
+          {Object.keys(currentMarker).length > 0 ? (
+            <Text>
+              {currentMarker.title} {currentMarker.address} {currentMarker.distance}{' '}
+            </Text>
+          ) : (
+            <Text>See more details by clicking on one of the markers</Text>
+          )}
+        </View>
       </View>
     );
   }

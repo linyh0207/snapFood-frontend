@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { Camera } from 'expo-camera';
 import { t } from 'react-native-tailwindcss';
-import { Headline, TextInput } from 'react-native-paper';
+import { Headline, TextInput, Card, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import StyledButton from '../components/StyledButton';
+import AddressSearchBar from '../components/AddressSearchBar';
+import SearchBar from '../components/SearchBar';
+import api from '../constants/Api';
 
 export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -14,6 +18,14 @@ export default function AddPostScreen({ navigation }) {
   const [searchBarVisible, setSearchBarVisibility] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(null);
   const [regularPrice, setRegularPrice] = useState(null);
+  const scrollRef = useRef(null);
+  const [activeTags, setActiveTags] = useState([]);
+  const [selectedPlace, setSelectedPlace] = useState({});
+  const [uploadData, setUploadData] = useState(null);
+  const [finalImageUri, setFinalImageUri] = useState('');
+
+  // Handles waiting for uploaded image url to come back. Posting will show spinner if not uploaded yet
+  const [showSpinner, setShowSpinner] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -21,6 +33,28 @@ export default function AddPostScreen({ navigation }) {
       setHasPermission(status === 'granted');
     })();
   }, []);
+
+  // useEffect(() => {
+  //   if (uploadData) {
+  //   //   setShowSpinner(true);
+  //   //   const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
+  //   //   fetch(Cloud, {
+  //   //     body: JSON.stringify(uploadData),
+  //   //     headers: {
+  //   //       'content-type': 'application/json',
+  //   //     },
+  //   //     method: 'POST',
+  //   //   })
+  //   //     .then(async (res) => {
+  //   //       console.log('Successfully uploaded image');
+  //   //       const pic = await res.json();
+  //   //       console.log('url:', pic.url);
+  //   //       setFinalImageUri(pic.url);
+  //   //       setShowSpinner(false)
+  //   //     })
+  //   //     .catch((err) => console.log(err));
+  //   }
+  // }, [uploadData]);
 
   if (hasPermission === null) {
     return <View />;
@@ -31,9 +65,15 @@ export default function AddPostScreen({ navigation }) {
 
   const takePicture = async () => {
     if (cameraRef) {
-      const photo = await cameraRef.takePictureAsync();
+      const photo = await cameraRef.takePictureAsync({ base64: true });
       // photo uri to store in the db
-      // console.log('photo', photo.uri);
+      // console.log(photo);
+      const base64Img = `data:image/jpg;base64,${photo.base64}`;
+      const data = {
+        file: base64Img,
+        upload_preset: 'oohwpvh9',
+      };
+      setUploadData(data);
       return setImageUri(photo.uri);
     }
     return setImageUri('');
@@ -41,13 +81,57 @@ export default function AddPostScreen({ navigation }) {
 
   function cancelPhoto() {
     setImageUri('');
+    setUploadData(null);
     setSearchBarVisibility(false);
   }
 
-  function post() {
-    // Backend - Need to save the post uri to db
-    setImageUri('');
-    navigation.navigate('ProductMain');
+  async function post() {
+    if (
+      !selectedPlace.address ||
+      !selectedPlace.storename ||
+      activeTags.length === 0 ||
+      !regularPrice ||
+      !discountPrice
+    ) {
+      // Can add an error message here
+      return console.log('missing information');
+    }
+    setShowSpinner(true);
+    const Cloud = 'https://api.cloudinary.com/v1_1/dsqhp8ugk/upload/';
+    try {
+      const res = await fetch(Cloud, {
+        body: JSON.stringify(uploadData),
+        headers: {
+          'content-type': 'application/json',
+        },
+        method: 'POST',
+      });
+      const pic = await res.json();
+      setFinalImageUri(pic.url);
+      setShowSpinner(false);
+      await fetch('https://glacial-cove-31720.herokuapp.com/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: selectedPlace.address,
+          storename: selectedPlace.name,
+          tags: activeTags,
+          latitude: -79,
+          longitude: 43,
+          price: regularPrice,
+          discountPrice,
+          imageUrl: pic.url,
+        }),
+      });
+
+      setImageUri('');
+      navigation.navigate('ProductMain');
+    } catch (e) {
+      console.error(e);
+    }
+    return '';
   }
 
   return (
@@ -113,73 +197,77 @@ export default function AddPostScreen({ navigation }) {
         </Camera>
       ) : (
         // Add Post Screen
+        <ScrollView ref={scrollRef} keyboardShouldPersistTaps="always">
+          <KeyboardAwareScrollView
+            resetScrollToCoords={{ x: 0, y: 0 }}
+            scrollEnabled={false}
+            keyboardShouldPersistTaps="always"
+          >
+            {/* Image  */}
+            <Card style={t.m1}>
+              <Image source={{ uri: imageUri }} style={[t.wFull, t.h56]} />
+            </Card>
 
-        <View style={[t.flex1]}>
-          {!searchBarVisible ? (
-            // User current location
-            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap, t.pB10]}>
-              <Headline>T&T Supermarket</Headline>
-              <StyledButton
-                title="edit"
-                icon="square-edit-outline"
-                size="small"
-                onPress={() => setSearchBarVisibility(true)}
+            {/* Location */}
+            <Card style={t.m1}>
+              <Card.Title title="Store Information" />
+              <AddressSearchBar
+                latitude={48.4073}
+                longitude={-123.3298}
+                radius={10000}
+                scrollRef={scrollRef}
+                selectedPlace={selectedPlace}
+                setSelectedPlace={setSelectedPlace}
               />
-              <Text style={[t.textCenter]}>{'\n'}123 Happy Street, Vancouver, BC VS5 3D6</Text>
-            </View>
-          ) : (
-            // User edit store location
-            <View style={[t.flex1, t.flexRow, t.itemsCenter, t.justifyCenter, t.flexWrap, t.pB10]}>
-              {/* Search store location bar placeholder */}
-              <Text>SEARCH BAR</Text>
-              <StyledButton
-                title="cancel"
-                icon="square-edit-outline"
-                size="small"
-                onPress={() => setSearchBarVisibility(false)}
-              />
-            </View>
-          )}
+            </Card>
 
-          <Image
-            source={{ uri: imageUri }}
-            style={{ flex: 3, height: undefined, width: undefined }}
-            resizeMode="contain"
-          />
+            {/* Pricing */}
+            <Card style={t.m1}>
+              <Card.Title title="Pricing" />
+              <View style={[t.flexRow, t.justifyAround]}>
+                <TextInput
+                  value={discountPrice}
+                  onChangeText={(text) => setDiscountPrice(text)}
+                  style={[t.w40, t.m1]}
+                  mode="outlined"
+                  label="Discount Price"
+                  keyboardType="numeric"
+                  dense
+                />
 
-          <View style={[t.flex1, t.flexRow, t.justifyBetween, t.mR4, t.mL4, t.mB5]}>
-            <View>
-              <Text>Discount Price</Text>
-              <TextInput
-                value={discountPrice}
-                onChangeText={(text) => setDiscountPrice(text)}
-                style={[t.h10, t.pX20]}
-              />
-            </View>
+                <TextInput
+                  value={regularPrice}
+                  onChangeText={(text) => setRegularPrice(text)}
+                  style={[t.w40, t.m1]}
+                  mode="outlined"
+                  label="Regular Price"
+                  keyboardType="numeric"
+                  dense
+                />
+              </View>
+            </Card>
 
-            <View>
-              <Text>Regular Price</Text>
-              <TextInput
-                value={regularPrice}
-                onChangeText={(text) => setRegularPrice(text)}
-                style={[t.h10, t.pX20]}
+            <Card style={t.m1}>
+              <Card.Title title="Add Tags" />
+              <SearchBar
+                latitude={43.4073}
+                longitude={-79.3298}
+                radius={10000}
+                activeTags={activeTags}
+                setActiveTags={setActiveTags}
               />
-            </View>
-          </View>
-          <View style={[t.flex1, t.pT6]}>
-            {/* Tag entry bar placeholder  */}
-            <Text style={[t.textCenter]}>TAG ENTRY BAR</Text>
-            <TouchableOpacity
-              style={[t.justifyEnd]}
-              onPress={() => {
-                cancelPhoto();
-              }}
-            >
-              <Text style={[t.textLg]}> Cancel </Text>
-            </TouchableOpacity>
-            <StyledButton title="Post" mode="outlined" size="small" onPress={post} />
-          </View>
-        </View>
+            </Card>
+            {showSpinner ? (
+              <ActivityIndicator />
+            ) : (
+              <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
+            )}
+
+            {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
+            <View style={t.h64} />
+            <View style={t.h64} />
+          </KeyboardAwareScrollView>
+        </ScrollView>
       )}
     </SafeAreaView>
   );

@@ -5,6 +5,7 @@ import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 import UserName from './TopBar/UserName';
 import LikedCounter from './LikedCounter';
+import formatDistance from '../helpers/formatDistance';
 // import Map from './Map'; //es-lint error
 
 export default function ProductDetailCard({
@@ -17,6 +18,7 @@ export default function ProductDetailCard({
   posterName,
   posterStatus = 'regular',
   tags = [],
+  imageUrl,
 }) {
   const [bookmarked, setBookmarked] = React.useState(false);
   const [showMapModal, setShowMapModal] = React.useState(false);
@@ -38,10 +40,15 @@ export default function ProductDetailCard({
             style={[t.mLAuto]}
           />
           <Text>
-            {storeName} ({distance})
+            {storeName} ({formatDistance(distance)})
           </Text>
         </Card.Content>
-        <Card.Cover source={{ uri: 'https://picsum.photos/200/300' }} style={t.mX2} />
+        <Card.Cover
+          source={{
+            uri: imageUrl,
+          }}
+          style={{ width: '80%', height: undefined, aspectRatio: 4 / 5, alignSelf: 'center' }}
+        />
 
         <Card.Actions>
           <LikedCounter likes={likes} dislikes={dislikes} variant="detail" />
@@ -57,8 +64,8 @@ export default function ProductDetailCard({
           <Text>By: </Text>
           <UserName status={posterStatus}>{posterName}</UserName>
 
-          <Text style={[t.textLg, t.mLAuto]}>${price.discounted}</Text>
-          <Text style={[t.lineThrough]}>${price.regular}</Text>
+          <Text style={[t.textLg, t.mLAuto]}>${price.discounted.toFixed(2)}</Text>
+          <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
         </Card.Content>
         <Card.Content style={[t.flex1, t.flexRow, t.flexWrap, t.justifyStart, t.mB12]}>
           {tags.map((tag) => (

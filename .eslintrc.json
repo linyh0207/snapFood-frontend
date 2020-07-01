@@ -8,6 +8,7 @@
   ],
   "parser": "babel-eslint",
   "rules": {
+    "no-underscore-dangle": "off",
     "no-shadow": [2, { "allow": ["route"] }],
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",
@@ -40,6 +41,7 @@
   },
   "plugins": ["prettier", "jest"],
   "globals": {
+    "fetch": false,
     "__CLIENT__": true,
     "__SERVER__": true,
     "__DEV__": true,

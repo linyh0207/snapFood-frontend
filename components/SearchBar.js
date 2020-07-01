@@ -5,7 +5,15 @@ import { t } from 'react-native-tailwindcss';
 
 const MAX_RESULTS_DISPLAYED = 5;
 
-function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiveTags }) {
+function SearchBar({
+  searcher,
+  latitude,
+  longitude,
+  radius,
+  activeTags,
+  setActiveTags,
+  style = [],
+}) {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -15,7 +23,7 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
 
   const loadData = async () => {
     const apiData = await fetch(
-      `http://10.0.2.2:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
+      `https://glacial-cove-31720.herokuapp.com/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
     );
     const responseText = await apiData.text();
     const { tags } = JSON.parse(responseText);
@@ -41,7 +49,11 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
   };
 
   const handleSearchPress = () => {
-    console.log('searched');
+    if (!searchTerm) {
+      return;
+    }
+    setActiveTags((prev) => [...prev, searchTerm]);
+    setSearchTerm('');
   };
 
   const searching = searchTerm.length > 0;
@@ -54,11 +66,13 @@ function SearchBar({ searcher, latitude, longitude, radius, activeTags, setActiv
         placeholder="Search"
         onChangeText={onChangeSearch}
         value={searchTerm}
-        style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '']}
+        style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '', ...style]}
         onIconPress={handleSearchPress}
+        icon="plus"
       />
       {searching &&
         (showNoSuggestions ? (
+          // We can display the snack bar here
           <List.Item title="No Matching Tags in your Area." />
         ) : (
           <Card style={[t.roundedTNone, t.z10]}>
