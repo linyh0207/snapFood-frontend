@@ -2,7 +2,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { Platform, StatusBar, View } from 'react-native';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
@@ -23,9 +23,16 @@ export default function App(props) {
     return null;
   }
 
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: '#22543d',
+    },
+  };
   return (
     <SafeAreaProvider>
-      <PaperProvider>
+      <PaperProvider theme={theme}>
         <View style={[t.flex1, t.bgWhite]}>
           {Platform.OS === 'ios' && <StatusBar barStyle="dark-content" />}
           <NavigationContainer>
