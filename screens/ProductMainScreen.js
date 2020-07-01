@@ -248,6 +248,7 @@ export default function ProductMainScreen({ navigation }) {
               placeholder="5"
               onChangeText={(text) => setSearchRadius(text)}
               style={[t.w3_4, t.m2]}
+              keyboardType="numeric"
             />
             <Text>km</Text>
           </View>
