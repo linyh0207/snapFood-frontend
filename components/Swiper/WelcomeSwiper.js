@@ -43,7 +43,7 @@ export default function WelcomeSwiper() {
 
   return (
     <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
-      <Image source={logo} style={[t.mT6]} />
+      <Image source={logo} style={[t.w64, t.h12, t.mT8]} />
       <Carousel
         data={SCREENS}
         renderItem={({ item }) => item}
