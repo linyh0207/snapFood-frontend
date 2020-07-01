@@ -15,7 +15,9 @@ export default function WelcomeSwiper() {
     <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.mT8]}>
       <Image source={icon} style={{ width: 159, height: 159 }} />
       <Text style={[t.textWhite, t.text3xl, t.fontBold, t.mY4, t.textCenter]}>{header}</Text>
-      <Text style={[t.textWhite, t.textLg, t.fontBold, t.mX8, t.textCenter]}>{description}</Text>
+      <Text style={[t.textWhite, t.textLg, t.fontBold, t.mX8, t.textCenter, t.pX8]}>
+        {description}
+      </Text>
     </View>
   );
 
@@ -23,7 +25,7 @@ export default function WelcomeSwiper() {
     <Screen
       header="Snap"
       icon={snap}
-      description="Snap a photo of the discounted food item from your local grocery store."
+      description="Snap a photo of the discounted food from local grocery store."
     />,
     <Screen
       header="Find"
@@ -33,7 +35,7 @@ export default function WelcomeSwiper() {
     <Screen
       header="Help"
       icon={help}
-      description="Help each other to reduce the food wastes and food costs."
+      description="Help each other reduce food wastes and food costs."
     />,
   ];
 
