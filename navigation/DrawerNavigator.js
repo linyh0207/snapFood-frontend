@@ -18,7 +18,7 @@ function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
       <View style={[t.flex1, t.flexRow, t.p8, t.itemsCenter, t.bgGreen600]}>
-        <UserName styles={[t.pX1]} textStyles={[t.textLg, t.textWhite]} status="super">
+        <UserName styles={[t.pX1]} textStyles={[t.text2xl, t.textWhite]} status="super">
           UserName
         </UserName>
       </View>
@@ -31,34 +31,37 @@ export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
       drawerContent={(items) => <CustomDrawerContent {...items} />}
-      drawerContentOptions={{ activeTintColor: '#22543d' }}
+      drawerContentOptions={{
+        activeTintColor: '#22543d',
+        labelStyle: { fontSize: 15 },
+      }}
     >
       <Drawer.Screen
         name="Home"
         component={BottomTabNavigator}
         options={{
-          drawerIcon: () => <Avatar.Icon size={24} icon="home" />,
+          drawerIcon: () => <Avatar.Icon size={30} icon="home" />,
         }}
       />
       <Drawer.Screen
         name="My Posts"
         component={BottomTabNavigator}
         options={{
-          drawerIcon: () => <Avatar.Icon size={24} icon="folder-multiple-image" />,
+          drawerIcon: () => <Avatar.Icon size={30} icon="folder-multiple-image" />,
         }}
       />
       <Drawer.Screen
         name="My Achievements"
         component={BottomTabNavigator}
         options={{
-          drawerIcon: () => <Avatar.Icon size={24} icon="trophy" />,
+          drawerIcon: () => <Avatar.Icon size={30} icon="trophy" />,
         }}
       />
       <Drawer.Screen
         name="Logout"
         component={OnboardingScreen}
         options={{
-          drawerIcon: () => <Avatar.Icon size={24} icon="logout" />,
+          drawerIcon: () => <Avatar.Icon size={30} icon="logout" />,
         }}
       />
     </Drawer.Navigator>
