@@ -88,7 +88,7 @@ export default function AddPostScreen({ navigation }) {
   async function post() {
     if (
       !selectedPlace.address ||
-      !selectedPlace.storename ||
+      !selectedPlace.name ||
       activeTags.length === 0 ||
       !regularPrice ||
       !discountPrice

@@ -22,13 +22,12 @@ const styles = StyleSheet.create({
 });
 
 export default function Map({ posts }) {
+  console.log('map loadedfsfsdf');
+  console.log('mapsadsdas loadedfsfsdf');
   // Products Swiper Modal --- start
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
-
-  // Dummy screen datas
-  // const SCREENS = posts.map((post) => {});
 
   const renderItem = ({ item }) => {
     return (
@@ -41,25 +40,6 @@ export default function Map({ posts }) {
         }}
       >
         <ProductMainCard
-          price={{ regular: 5.99, discounted: 1 }}
-          // totalVotes={post.likes}
-          storeName="name"
-          address="name"
-          // created={post.createdAt}
-          distance={22}
-          initialUserSavedPost
-          userLikedPost={false}
-          userDislikedPost={false}
-          likes={10}
-          postId={22}
-          timeFromNow="1 day ago"
-          dislikes={4}
-          posterName="Amy"
-          posterStatus="super"
-          tags={['bread', 'sliced']}
-          imageUrl="sfsaf"
-        />
-        {/* <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           // totalVotes={post.likes}
           storeName={item.storename}
@@ -72,12 +52,12 @@ export default function Map({ posts }) {
           likes={item.likes}
           postId={item.id}
           timeFromNow="1 day ago"
-          dislikes={4}
+          dislikes={item.dislikes}
           posterName="Amy"
           posterStatus="super"
           tags={['bread', 'sliced']}
           imageUrl={item.imageUrl}
-        /> */}
+        />
       </View>
     );
   };
@@ -132,7 +112,6 @@ export default function Map({ posts }) {
 
   useEffect(() => {
     (async () => {
-      console.log('effect ran');
       const { status } = await Location.requestPermissionsAsync();
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
@@ -143,15 +122,14 @@ export default function Map({ posts }) {
       const locationRaw = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
       });
-      console.log(locationRaw);
       // Temp for testing in markham
       setLocation({
         accuracy: 30,
         altitude: 21.54458999633789,
         altitudeAccuracy: 4,
         heading: -1,
-        latitude: 43.2,
-        longitude: -79,
+        latitude: 43.879,
+        longitude: -79.3,
         speed: 0,
       });
     })();
@@ -163,12 +141,12 @@ export default function Map({ posts }) {
   } else if (location) {
     text = JSON.stringify({ longitude: location.longitude, latitude: location.latitude });
   }
-  if (location && location?.latitude) {
-    const maxLatDiff = markers
-      .map((marker) => marker.latlng.latitude)
+  if (location && location.latitude) {
+    const maxLatDiff = posts
+      .map((post) => post.longitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.latitude), acc), 0);
-    const maxLongDiff = markers
-      .map((marker) => marker.latlng.longitude)
+    const maxLongDiff = posts
+      .map((post) => post.latitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.longitude), acc), 0);
 
     return (
@@ -180,8 +158,8 @@ export default function Map({ posts }) {
           initialRegion={{
             latitude: location.latitude,
             longitude: location.longitude,
-            latitudeDelta: maxLatDiff * 2 + 0.4,
-            longitudeDelta: maxLongDiff * 2 + 0.4,
+            latitudeDelta: maxLatDiff * 2 + 0.05,
+            longitudeDelta: maxLongDiff * 2 + 0.05,
 
             // latitudeDelta: 0.922,
             // longitudeDelta: 0.421,
@@ -189,19 +167,17 @@ export default function Map({ posts }) {
           moveOnMarkerPress={false}
           // onPress={() => setCurrentMarker({})}
         >
-          {posts.map((marker) => {
-            return (
-              <Marker
-                key={marker.id}
-                coordinate={{ latitude: marker.longitude, longitude: marker.latitude }}
-                title={marker.title}
-                onPress={() => {
-                  setCurrentMarker(marker);
-                  setProductsSwiperModalVisibility(true);
-                }}
-              />
-            );
-          })}
+          {posts.map((post) => (
+            <Marker
+              key={post.id}
+              coordinate={{ latitude: post.longitude, longitude: post.latitude }}
+              title={post.title}
+              onPress={() => {
+                setCurrentMarker(post);
+                setProductsSwiperModalVisibility(true);
+              }}
+            />
+          ))}
         </MapView>
         {/* Products Swiper Modal --- start */}
         <Portal>
@@ -209,8 +185,8 @@ export default function Map({ posts }) {
             <View>
               <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>HIHIHI</Text>
               <Carousel
-                data={posts}
-                // data={posts.filter(post => post.address === currentMarker.address)}
+                // data={posts}
+                data={posts.filter((post) => post.address === currentMarker.address)}
                 renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={ITEM_WIDTH}
@@ -222,7 +198,8 @@ export default function Map({ posts }) {
                 useScrollView
               />
               <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
-                {activeTab + 1} / {posts.length}
+                {activeTab + 1} /{' '}
+                {posts.filter((post) => post.address === currentMarker.address).length}
               </Text>
             </View>
           </Modal>
