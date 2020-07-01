@@ -5,6 +5,7 @@ import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 import UserName from './TopBar/UserName';
 import LikedCounter from './LikedCounter';
+import formatDistance from '../helpers/formatDistance';
 // import Map from './Map'; //es-lint error
 
 export default function ProductDetailCard({
@@ -39,7 +40,7 @@ export default function ProductDetailCard({
             style={[t.mLAuto]}
           />
           <Text>
-            {storeName} ({distance})
+            {storeName} ({formatDistance(distance)})
           </Text>
         </Card.Content>
         <Card.Cover
