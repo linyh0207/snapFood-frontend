@@ -41,6 +41,25 @@ export default function Map({ posts }) {
         }}
       >
         <ProductMainCard
+          price={{ regular: 5.99, discounted: 1 }}
+          // totalVotes={post.likes}
+          storeName="name"
+          address="name"
+          // created={post.createdAt}
+          distance={22}
+          initialUserSavedPost
+          userLikedPost={false}
+          userDislikedPost={false}
+          likes={10}
+          postId={22}
+          timeFromNow="1 day ago"
+          dislikes={4}
+          posterName="Amy"
+          posterStatus="super"
+          tags={['bread', 'sliced']}
+          imageUrl="sfsaf"
+        />
+        {/* <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           // totalVotes={post.likes}
           storeName={item.storename}
@@ -58,7 +77,7 @@ export default function Map({ posts }) {
           posterStatus="super"
           tags={['bread', 'sliced']}
           imageUrl={item.imageUrl}
-        />
+        /> */}
       </View>
     );
   };
@@ -170,11 +189,11 @@ export default function Map({ posts }) {
           moveOnMarkerPress={false}
           // onPress={() => setCurrentMarker({})}
         >
-          {markers.map((marker) => {
+          {posts.map((marker) => {
             return (
               <Marker
                 key={marker.id}
-                coordinate={marker.latlng}
+                coordinate={{ latitude: marker.longitude, longitude: marker.latitude }}
                 title={marker.title}
                 onPress={() => {
                   setCurrentMarker(marker);
@@ -191,6 +210,7 @@ export default function Map({ posts }) {
               <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>HIHIHI</Text>
               <Carousel
                 data={posts}
+                // data={posts.filter(post => post.address === currentMarker.address)}
                 renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={ITEM_WIDTH}
