@@ -29,6 +29,8 @@ export default function ProductMainScreen({ navigation }) {
   // Store list within refine menu
   const [expanded, setExpanded] = React.useState(false);
   const [selectedStore, setStore] = React.useState('Select a store');
+  // Snack bar
+  const [snackBarVisible, setSnackBarVisibility] = React.useState(false);
 
   const loadData = async () => {
     const searchUri = `http://10.0.2.2:8000/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
@@ -70,8 +72,6 @@ export default function ProductMainScreen({ navigation }) {
   const toMapView = () => {
     setShowMap(!showMap);
   };
-  // Default 5km for the placeholder
-  const [distance, setDistance] = useState('');
 
   const handleApplyPress = () => {
     function isNormalInteger(str) {
@@ -242,7 +242,7 @@ export default function ProductMainScreen({ navigation }) {
         posterStatus="super"
         tags={['bread', 'sliced']}
       /> */}
-      <SnackBar />
+      <SnackBar snackBarVisible={snackBarVisible} setSnackBarVisibility={setSnackBarVisibility} />
     </SafeAreaView>
   );
 }
