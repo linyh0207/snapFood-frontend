@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Dimensions, Image } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { t } from 'react-native-tailwindcss';
-import logo from '../../assets/images/Onboarding/logo.png';
+import logo from '../../assets/images/logos/white-logo.png';
 import find from '../../assets/images/Onboarding/find.png';
 import help from '../../assets/images/Onboarding/help.png';
 import snap from '../../assets/images/Onboarding/snap.png';
@@ -43,7 +43,7 @@ export default function WelcomeSwiper() {
 
   return (
     <View style={[t.flex1, t.justifyCenter, t.itemsCenter, t.bgGreen600]}>
-      <Image source={logo} style={[t.mT6]} />
+      <Image source={logo} style={[t.w64, t.h12, t.mT8]} />
       <Carousel
         data={SCREENS}
         renderItem={({ item }) => item}

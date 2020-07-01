@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View } from 'react-native';
-import { Portal, Modal, TextInput, Text, Title, HelperText } from 'react-native-paper';
+import { View, Image } from 'react-native';
+import { Portal, Modal, TextInput, Text, Title, HelperText, IconButton } from 'react-native-paper';
 import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import StyledButton from '../components/StyledButton';
 import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 import Map from '../components/Map';
+import logo from '../assets/images/logos/green-logo.png';
 import ProductDetailCard from '../components/ProductDetailCard';
 
 export default function ProductMainScreen({ navigation }) {
@@ -114,57 +114,65 @@ export default function ProductMainScreen({ navigation }) {
 
   return (
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
-      <View style={[t.flexRow, t.itemsCenter]}>
-        {/* Account Button to open drawer navigator */}
-        <StyledButton
+      {/* Top Navigator --- Start */}
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.pX4]}>
+        <IconButton
           icon="account-circle-outline"
-          title="Account"
-          size="small"
+          color="#22543d"
+          size={30}
           onPress={() => navigation.openDrawer()}
         />
-        {/* Searchbar Placeholder */}
-
-        {/* Refine Modal */}
-        <Portal>
-          <Modal
-            contentContainerStyle={{ backgroundColor: 'white' }}
-            visible={refineModalVisible}
-            onDismiss={hideRefineModal}
-          >
-            <Title style={[t.textCenter]}>SORT BY</Title>
-            <SortByMenu setSort={setSort} />
-            <Title style={[t.textCenter]}>FILTER BY</Title>
-            <View style={[t.flexRow, t.itemsCenter]}>
-              <TextInput
-                label="Distance"
-                value={searchRadius}
-                mode="outline"
-                placeholder="5"
-                onChangeText={(text) => setSearchRadius(text)}
-                style={[t.w3_4, t.m2]}
-              />
-              <Text>km</Text>
-            </View>
-            <DistanceEntryError />
-            <StoresMenu />
-          </Modal>
-        </Portal>
-        <StyledButton icon="playlist-edit" title="Refine" size="small" onPress={showRefineModal} />
-        {/* MapView / ListView Toggle Button Placeholder */}
-        <StyledButton
-          size="small"
+        <Image source={logo} style={[t.w56, t.h24]} />
+        <IconButton
+          color="#22543d"
           icon={showMap ? 'view-list' : 'map-outline'}
+          size={30}
           onPress={toMapView}
         />
       </View>
-      <SearchBar
-        searcher={1}
-        latitude="20"
-        longitude="10"
-        radius="10000000"
-        setActiveTags={setActiveTags}
-        activeTags={activeTags}
-      />
+      {/* Top Navigator --- End */}
+      <View style={[t.borderGray300, t.borderB, t.mX3, t._mT4]} />
+      {/* Search bar & Refine Menu --- Start */}
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.p4]}>
+        <SearchBar
+          searcher={1}
+          latitude="20"
+          longitude="10"
+          radius="10000000"
+          setActiveTags={setActiveTags}
+          activeTags={activeTags}
+          style={[t.flex1]}
+        />
+        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineModal} />
+      </View>
+      {/* Search bar & Refine Menu --- End */}
+      {/* Refine Modal --- Start */}
+      <Portal>
+        <Modal
+          contentContainerStyle={{ backgroundColor: 'white' }}
+          visible={refineModalVisible}
+          onDismiss={hideRefineModal}
+        >
+          <Title style={[t.textCenter]}>SORT BY</Title>
+          <SortByMenu setSort={setSort} />
+          <Title style={[t.textCenter]}>FILTER BY</Title>
+          <View style={[t.flexRow, t.itemsCenter]}>
+            <TextInput
+              label="Distance"
+              value={searchRadius}
+              mode="outline"
+              placeholder="5"
+              onChangeText={(text) => setSearchRadius(text)}
+              style={[t.w3_4, t.m2]}
+            />
+            <Text>km</Text>
+          </View>
+          <DistanceEntryError />
+          <StoresMenu />
+        </Modal>
+      </Portal>
+      {/* Refine Modal --- End */}
+
       {showMap ? (
         <Map />
       ) : (
