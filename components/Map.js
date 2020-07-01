@@ -22,8 +22,6 @@ const styles = StyleSheet.create({
 });
 
 export default function Map({ posts }) {
-  console.log('map loadedfsfsdf');
-  console.log('mapsadsdas loadedfsfsdf');
   // Products Swiper Modal --- start
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
@@ -79,36 +77,6 @@ export default function Map({ posts }) {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const markers = [
-    {
-      id: '1',
-      latlng: { latitude: location?.latitude + 0.05, longitude: location?.longitude + 0.05 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '500m',
-    },
-    {
-      id: '2',
-      latlng: { latitude: location?.latitude - 0.5, longitude: location?.longitude - 0.5 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '1km',
-    },
-    {
-      id: '3',
-      latlng: { latitude: location?.latitude + 0.8, longitude: location?.longitude + 0.05 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '2.1km',
-    },
-    {
-      id: '4',
-      latlng: { latitude: location?.latitude - 0.8, longitude: location?.longitude - 0.8 },
-      title: 'T&T Supermarket',
-      address: '123 happy valley drive',
-      distance: '4km',
-    },
-  ];
 
   useEffect(() => {
     (async () => {
@@ -116,7 +84,6 @@ export default function Map({ posts }) {
       if (status !== 'granted') {
         setErrorMsg('Permission to access location was denied');
         setIsLoading(false);
-        console.log('permission granted');
       }
       // contains object of timestamp: sec, mocked: boolean, coords: {altitude: int, heading: int, longitude: float, speed: float, latitude: float, accuracy: float}
       const locationRaw = await Location.getCurrentPositionAsync({
@@ -141,7 +108,7 @@ export default function Map({ posts }) {
   } else if (location) {
     text = JSON.stringify({ longitude: location.longitude, latitude: location.latitude });
   }
-  if (location && location.latitude) {
+  if (location && location?.latitude) {
     const maxLatDiff = posts
       .map((post) => post.longitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.latitude), acc), 0);
