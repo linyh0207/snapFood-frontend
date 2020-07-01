@@ -72,6 +72,7 @@ function SearchBar({
       />
       {searching &&
         (showNoSuggestions ? (
+          // We can display the snack bar here
           <List.Item title="No Matching Tags in your Area." />
         ) : (
           <Card style={[t.roundedTNone, t.z10]}>

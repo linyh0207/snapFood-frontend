@@ -1,34 +1,38 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { useFocusEffect } from '@react-navigation/native';
+import { View, Image, Alert } from 'react-native';
+import { Portal, TextInput, Text, Title, IconButton, Dialog } from 'react-native-paper';
 import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatDistanceToNow } from 'date-fns';
-import { View, Image } from 'react-native';
-import { Portal, Modal, TextInput, Text, Title, HelperText, IconButton } from 'react-native-paper';
-import StyledButton from '../components/StyledButton';
-import SortByMenu from '../components/DropDownMenu/SortByMenu';
-import StoresMenu from '../components/DropDownMenu/StoresMenu';
+import SortByMenu from '../components/RefineMenu/SortByMenu';
+import StoresMenu from '../components/RefineMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 import Map from '../components/Map';
 import formatDistance from '../helpers/formatDistance';
 import logo from '../assets/images/logos/green-logo.png';
+import StyledButton from '../components/StyledButton';
 
 export default function ProductMainScreen({ navigation }) {
-  // For account button to open drawer navigator
-  // const navigation = useNavigation();
-  const [searchRadius, setSearchRadius] = useState('499');
+  const [searchRadius, setSearchRadius] = React.useState('499');
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
-  const [sort, setSort] = React.useState('Sort: Rating');
+  const [sort, setSort] = React.useState('rating');
   const [storeFilter, setStoreFilter] = React.useState('All');
-  const [refineModalVisible, setRefineModalVisibility] = useState(false);
-  const [showMap, setShowMap] = useState(false);
-  const showRefineModal = () => setRefineModalVisibility(true);
-  const hideRefineModal = () => setRefineModalVisibility(false);
+  const [showMap, setShowMap] = React.useState(false);
+
+  // Refine menu dialog
+  const [refineDialogVisible, setRefineDialogVisibility] = React.useState(false);
+  const showRefineDialog = () => setRefineDialogVisibility(true);
+  const hideRefineDialog = () => setRefineDialogVisibility(false);
+  // Store list within refine menu
+  const [expanded, setExpanded] = React.useState(false);
+  const [selectedStore, setStore] = React.useState('Select a store');
+  // Snack bar
+  const [snackBarVisible, setSnackBarVisibility] = React.useState(false);
 
   const numColumns = 2;
 
@@ -74,7 +78,7 @@ export default function ProductMainScreen({ navigation }) {
   const sortPosts = (currentPosts) => {
     if (!currentPosts) return null;
     switch (sort) {
-      case 'Sort: Rating':
+      case 'rating':
         return currentPosts.slice(0).sort((a, b) => {
           const netLikeA = a.likes - a.dislikes;
           const netLikeB = b.likes - b.dislikes;
@@ -86,13 +90,13 @@ export default function ProductMainScreen({ navigation }) {
           }
           return 0;
         });
-      case 'Sort: Distance':
+      case 'distance':
         return currentPosts.slice(0).sort((a, b) => a.distance - b.distance);
-      case 'Sort: Best Deal':
+      case 'bestDeal':
         return currentPosts
           .slice(0)
           .sort((a, b) => b.price - b.discountPrice - (a.price - a.discountPrice));
-      case 'Sort: Most Recent':
+      case 'mostRecent':
         return currentPosts
           .slice(0)
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -103,10 +107,8 @@ export default function ProductMainScreen({ navigation }) {
   const toMapView = () => {
     setShowMap(!showMap);
   };
-  // Default 5km for the placeholder
-  const [distance, setDistance] = useState('');
 
-  const DistanceEntryError = () => {
+  const handleApplyPress = () => {
     function isNormalInteger(str) {
       if (!str) return true;
       const trimStr = str.trim();
@@ -117,14 +119,14 @@ export default function ProductMainScreen({ navigation }) {
       const n = Math.floor(Number(input));
       return n !== Infinity && String(n) === input && n >= 0 && n < 500;
     }
-
-    const errorVisibility = !isNormalInteger(searchRadius);
-
-    return (
-      <HelperText type="error" visible={errorVisibility}>
-        Invalid Entry. Please enter an integer between 0 and 200.
-      </HelperText>
-    );
+    // If it's an invalid distance entry
+    if (!isNormalInteger(searchRadius)) {
+      Alert.alert('Invalid Distance Entry', 'Please enter an integer between 0 and 200.', [
+        { text: 'OK', onPress: () => console.log('OK Pressed') },
+      ]);
+    } else {
+      hideRefineDialog();
+    }
   };
 
   // eslint-disable-next-line no-shadow
@@ -227,37 +229,65 @@ export default function ProductMainScreen({ navigation }) {
           activeTags={activeTags}
           style={[t.flex1]}
         />
-        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineModal} />
+        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineDialog} />
       </View>
       {/* Search bar & Refine Menu --- End */}
-      {/* Refine Modal --- Start */}
+      {/* Refine Dialog--- Start */}
       <Portal>
-        <Modal
-          contentContainerStyle={{ backgroundColor: 'white' }}
-          visible={refineModalVisible}
-          onDismiss={hideRefineModal}
+        <Dialog
+          style={[t.bgWhite, t.p8, t.mX5, t.roundedLg]}
+          visible={refineDialogVisible}
+          onDismiss={hideRefineDialog}
         >
-          <Title style={[t.textCenter]}>SORT BY</Title>
-          <SortByMenu setSort={setSort} />
-          <Title style={[t.textCenter]}>FILTER BY</Title>
-          <View style={[t.flexRow, t.itemsCenter]}>
-            <TextInput
-              label="Distance"
-              value={searchRadius}
-              mode="outline"
-              placeholder="5"
-              onChangeText={(text) => setSearchRadius(text)}
-              style={[t.w3_4, t.m2]}
-              keyboardType="numeric"
-            />
-            <Text>km</Text>
-          </View>
-          <DistanceEntryError />
-          <StoresMenu stores={getStoresInfo(posts)} setStoreFilter={setStoreFilter} />
-        </Modal>
+          {/* If the select a store list expanded */}
+          {expanded ? (
+            <ScrollView>
+              <StoresMenu
+                expanded={expanded}
+                setExpanded={setExpanded}
+                selectedStore={selectedStore}
+                setStore={setStore}
+                stores={getStoresInfo(posts)}
+                setStoreFilter={setStoreFilter}
+              />
+            </ScrollView>
+          ) : (
+            <>
+              <View style={[t.bgGreen600]}>
+                <Title style={[t.textCenter, t.textWhite]}>SORT BY</Title>
+              </View>
+              <SortByMenu setSort={setSort} sortValue={sort} />
+              <View style={[t.bgGreen600]}>
+                <Title style={[t.textCenter, t.textWhite]}>FILTER BY</Title>
+              </View>
+              <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.bgGreen100]}>
+                <TextInput
+                  label="Distance"
+                  value={searchRadius}
+                  placeholder="5"
+                  onChangeText={(text) => setSearchRadius(text)}
+                  style={[t.w10_12]}
+                  keyboardType="numeric"
+                  mode="outlined"
+                />
+                <Text style={[t.pR4]}>km</Text>
+              </View>
+              <ScrollView style={[t.bgGreen100]}>
+                <StoresMenu
+                  expanded={expanded}
+                  setExpanded={setExpanded}
+                  selectedStore={selectedStore}
+                  setStore={setStore}
+                  stores={getStoresInfo(posts)}
+                  setStoreFilter={setStoreFilter}
+                />
+              </ScrollView>
+              <StyledButton title="Apply" mode="outlined" size="small" onPress={handleApplyPress} />
+            </>
+          )}
+        </Dialog>
       </Portal>
-      {/* Refine Modal --- End */}
-
+      {/* Refine Dialog --- End */}
       {showMap ? (
         <Map />
       ) : (
@@ -267,8 +297,7 @@ export default function ProductMainScreen({ navigation }) {
           renderItem={renderItem}
         />
       )}
-
-      <SnackBar />
+      <SnackBar snackBarVisible={snackBarVisible} setSnackBarVisibility={setSnackBarVisibility} />
     </SafeAreaView>
   );
 }
