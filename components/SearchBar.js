@@ -23,7 +23,7 @@ function SearchBar({
 
   const loadData = async () => {
     const apiData = await fetch(
-      `http://10.0.2.2:8000/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
+      `https://glacial-cove-31720.herokuapp.com/tags?latitude=${latitude}&longitude=${longitude}&radius=${radius}&searcher=${searcher}`
     );
     const responseText = await apiData.text();
     const { tags } = JSON.parse(responseText);
@@ -49,7 +49,11 @@ function SearchBar({
   };
 
   const handleSearchPress = () => {
-    console.log('searched');
+    if (!searchTerm) {
+      return;
+    }
+    setActiveTags((prev) => [...prev, searchTerm]);
+    setSearchTerm('');
   };
 
   const searching = searchTerm.length > 0;
@@ -64,6 +68,7 @@ function SearchBar({
         value={searchTerm}
         style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '', ...style]}
         onIconPress={handleSearchPress}
+        icon="plus"
       />
       {searching &&
         (showNoSuggestions ? (

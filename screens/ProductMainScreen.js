@@ -1,18 +1,21 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { View, Image } from 'react-native';
-import { Portal, Modal, TextInput, Text, Title, HelperText, IconButton } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+import { ScrollView, FlatList } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { formatDistanceToNow } from 'date-fns';
+import { View, Image } from 'react-native';
+import { Portal, Modal, TextInput, Text, Title, HelperText, IconButton } from 'react-native-paper';
+import StyledButton from '../components/StyledButton';
 import SortByMenu from '../components/DropDownMenu/SortByMenu';
 import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
 import Map from '../components/Map';
+import formatDistance from '../helpers/formatDistance';
 import logo from '../assets/images/logos/green-logo.png';
-import ProductDetailCard from '../components/ProductDetailCard';
 
 export default function ProductMainScreen({ navigation }) {
   // For account button to open drawer navigator
@@ -21,13 +24,16 @@ export default function ProductMainScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('Sort: Rating');
+  const [storeFilter, setStoreFilter] = React.useState('All');
   const [refineModalVisible, setRefineModalVisibility] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const showRefineModal = () => setRefineModalVisibility(true);
   const hideRefineModal = () => setRefineModalVisibility(false);
 
+  const numColumns = 2;
+
   const loadData = async () => {
-    const searchUri = `http://10.0.2.2:8000/posts?latitude=5.2&longitude=4.3&radius=${searchRadius}000${activeTags.map(
+    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?latitude=-79&longitude=43&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
     const apiData = await fetch(searchUri);
@@ -37,28 +43,59 @@ export default function ProductMainScreen({ navigation }) {
   };
 
   React.useEffect(() => {
+    console.log('load posts ran');
     loadData();
   }, [activeTags, searchRadius]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('should run once only when onFirstLoad');
+      loadData();
+    }, [])
+  ); // run once when screen loads
 
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
   }, [sort]);
 
+  React.useEffect(() => {
+    console.log('enters store filter', storeFilter);
+    setPosts((oldPosts) => {
+      return oldPosts.map((oldPost) => {
+        if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
+        if (`${oldPost.storename}--${oldPost.address}` === storeFilter) {
+          return { ...oldPost, isFiltered: false };
+        }
+        return { ...oldPost, isFiltered: true };
+      });
+    });
+  }, [storeFilter]);
+
   const sortPosts = (currentPosts) => {
     if (!currentPosts) return null;
     switch (sort) {
       case 'Sort: Rating':
-        return currentPosts.slice(0).sort((a, b) => b.likes - a.likes);
+        return currentPosts.slice(0).sort((a, b) => {
+          const netLikeA = a.likes - a.dislikes;
+          const netLikeB = b.likes - b.dislikes;
+          if (netLikeA > netLikeB) {
+            return -1;
+          }
+          if (netLikeA < netLikeB) {
+            return 1;
+          }
+          return 0;
+        });
       case 'Sort: Distance':
         return currentPosts.slice(0).sort((a, b) => a.distance - b.distance);
       case 'Sort: Best Deal':
         return currentPosts
           .slice(0)
-          .sort((a, b) => a.price - a.discountPrice - (b.price - b.discountPrice));
+          .sort((a, b) => b.price - b.discountPrice - (a.price - a.discountPrice));
       case 'Sort: Most Recent':
         return currentPosts
           .slice(0)
-          .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       default:
         return currentPosts;
     }
@@ -90,27 +127,74 @@ export default function ProductMainScreen({ navigation }) {
     );
   };
 
-  // sample data from one post returned from db
-  // {
-  //   "address": "2 main st.",
-  //   "createdAt": "2020-06-19T23:16:53.582Z",
-  //   "discountPrice": 3.35,
-  //   "dislikes": 2,
-  //   "distance": 235547.53350062753,
-  //   "id": "5eead9d6d34bf31f58a86905",
-  //   "latitude": 3.2,
-  //   "likes": 1,
-  //   "longitude": 5,
-  //   "price": 5.1,
-  //   "storename": "walmart",
+  // eslint-disable-next-line no-shadow
+  const getStoresInfo = (posts) => {
+    const uniqueStores = posts.reduce((acc, curr) => {
+      // using storename and address as unique identifier; better to have a storeId (TODO)
+      if (!acc[`${curr.storename}--${curr.address}`]) {
+        acc[`${curr.storename}--${curr.address}`] = {
+          name: curr.storename,
+          distance: curr.distance,
+          address: curr.address,
+        };
+      }
+      return acc;
+    }, {});
+    const formattedStores = Object.values(uniqueStores)
+      .sort((a, b) => a.distance - b.distance)
+      .map((item) => ({ ...item, distance: formatDistance(item.distance) }));
+
+    return [{ name: 'All', address: '', distance: '' }, ...formattedStores];
+  };
+  // console.log('sample post', posts[0]);
+  // Object {
+  //   "address": "5762 Hwy 7, Markham, ON L3P 1A8, Canada",
+  //   "createdAt": "2020-06-30T15:53:46.733Z",
+  //   "discountPrice": 1.35,
+  //   "dislikes": 0,
+  //   "distance": 34770.10542051625,
+  //   "id": "5eead9d6d34bf31f58a86904",
+  //   "imageUrl": "https://thumbs.dreamstime.com/b/stacked-bread-packages-store-to-sell-sliced-bread-sealed-plastic-packaging-stacked-basket-store-selling-bakery-148749850.jpg",
+  //   "latitude": -79.266,
+  //   "likes": 2,
+  //   "longitude": 43.872,
+  //   "price": 2,
+  //   "storename": "No Frills",
   //   "tags": Array [
-  //     "chicken",
-  //     "meat",
+  //     "bread",
+  //     "sliced",
+  //     "grain",
   //   ],
   //   "userDislikedPost": false,
   //   "userLikedPost": true,
   //   "userSavedPost": true,
   // }
+
+  const renderItem = ({ item }) => {
+    return (
+      <View>
+        <ProductMainCard
+          price={{ regular: item.price, discounted: item.discountPrice }}
+          storeName={item.storename}
+          address={item.address}
+          distance={item.distance}
+          initialUserSavedPost={item.userSavedPost}
+          userLikedPost={item.userLikedPost}
+          userDislikedPost={item.userDislikedPost}
+          likes={item.likes}
+          postId={item.id}
+          key={item.id}
+          timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
+          dislikes={item.dislikes}
+          posterName="Amy" // TODO: Add missing data from back-end
+          posterStatus="super" // TODO: Add missing data from back-end
+          tags={item.tags}
+          imageUrl={item.imageUrl}
+          cardStyle={[t.m1]}
+        />
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={[t.flex1, t.bgWhite]}>
@@ -135,10 +219,10 @@ export default function ProductMainScreen({ navigation }) {
       {/* Search bar & Refine Menu --- Start */}
       <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.p4]}>
         <SearchBar
-          searcher={1}
-          latitude="20"
-          longitude="10"
-          radius="10000000"
+          searcher={0}
+          latitude="43"
+          longitude="-79"
+          radius="100000000"
           setActiveTags={setActiveTags}
           activeTags={activeTags}
           style={[t.flex1]}
@@ -164,11 +248,12 @@ export default function ProductMainScreen({ navigation }) {
               placeholder="5"
               onChangeText={(text) => setSearchRadius(text)}
               style={[t.w3_4, t.m2]}
+              keyboardType="numeric"
             />
             <Text>km</Text>
           </View>
           <DistanceEntryError />
-          <StoresMenu />
+          <StoresMenu stores={getStoresInfo(posts)} setStoreFilter={setStoreFilter} />
         </Modal>
       </Portal>
       {/* Refine Modal --- End */}
@@ -176,42 +261,13 @@ export default function ProductMainScreen({ navigation }) {
       {showMap ? (
         <Map />
       ) : (
-        <ScrollView contentContainerStyle={[t.p6]}>
-          {/* Product card for product main page */}
-          {posts.map((post) => (
-            <ProductMainCard
-              price={{ regular: post.price, discounted: post.discountPrice }}
-              // totalVotes={post.likes}
-              storeName={post.storename}
-              address={post.address}
-              // created={post.createdAt}
-              distance={post.distance}
-              initialUserSavedPost={post.userSavedPost}
-              userLikedPost={post.userLikedPost}
-              userDislikedPost={post.userDislikedPost}
-              likes={post.likes}
-              postId={post.id}
-              key={post.id}
-              timeFromNow="1 day ago"
-              dislikes={4}
-              posterName="Amy"
-              posterStatus="super"
-              tags={['bread', 'sliced']}
-            />
-          ))}
-        </ScrollView>
+        <FlatList
+          data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
+          numColumns={numColumns}
+          renderItem={renderItem}
+        />
       )}
-      {/* <ProductDetailCard
-        price={{ regular: 2.99, discounted: 0.99 }}
-        storeName="T&T Supermarket"
-        distance="500m"
-        timeFromNow="1 day ago"
-        likes={10}
-        dislikes={4}
-        posterName="Amy"
-        posterStatus="super"
-        tags={['bread', 'sliced']}
-      /> */}
+
       <SnackBar />
     </SafeAreaView>
   );

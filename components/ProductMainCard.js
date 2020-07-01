@@ -5,6 +5,7 @@ import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 import LikedCounter from './LikedCounter';
 import ProductDetailCard from './ProductDetailCard';
+import formatDistance from '../helpers/formatDistance';
 
 export default function ProductMainCard(props) {
   const {
@@ -24,6 +25,7 @@ export default function ProductMainCard(props) {
     userDislikedPost,
     postId,
     userId = '5eead9d6d34bf31f58a86904',
+    imageUrl,
     isExpired = false,
   } = props;
   const [bookmarked, setBookmarked] = React.useState(false);
@@ -31,16 +33,16 @@ export default function ProductMainCard(props) {
 
   const [userSavedPost, setUserSavedPost] = React.useState(initialUserSavedPost);
 
-  const formatDistance = (rawDistance) => {
-    if (distance < 1000) {
-      return `${Math.round(rawDistance / 100) * 100}m`;
-    }
-    return `${Math.round(rawDistance / 1000)}km`;
-  };
+  // const formatDistance = (rawDistance) => {
+  //   if (distance < 1000) {
+  //     return `${Math.round(rawDistance / 100) * 100}m`;
+  //   }
+  //   return `${Math.round(rawDistance / 1000)}km`;
+  // };
 
   const toggleSavePost = () => {
     setUserSavedPost((prev) => !prev);
-    fetch(`http://10.0.2.2:8000/users/${userId}`, {
+    fetch(`https://glacial-cove-31720.herokuapp.com/users/${userId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
@@ -72,11 +74,7 @@ export default function ProductMainCard(props) {
         <View style={[]}>
           <Text>{timeFromNow}</Text>
         </View>
-        <Card.Cover
-          source={{
-            uri: 'https://staceyrobinsmith.com/wp-content/uploads/2017/03/img_8024-768x1024.jpg',
-          }}
-        />
+        <Card.Cover source={{ uri: imageUrl }} resizeMethod="resize" resizeMode="center" />
         <Card.Content
           style={{
             flex: 1,
@@ -91,6 +89,7 @@ export default function ProductMainCard(props) {
               initialDisliked={userDislikedPost}
               postId={postId}
               likes={likes}
+              dislikes={dislikes}
             />
             <ToggleButton
               selected={bookmarked}
@@ -100,8 +99,8 @@ export default function ProductMainCard(props) {
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Text style={[t.textLg]}>${price.discounted}</Text>
-            <Text style={[t.lineThrough]}>${price.regular}</Text>
+            <Text style={[t.textLg]}>${price.discounted.toFixed(2)}</Text>
+            <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <Text>{storeName}</Text>

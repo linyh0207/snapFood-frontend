@@ -5,7 +5,7 @@ import { Menu, Divider } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import StyledButton from '../StyledButton';
 
-export default function SortByMenu() {
+export default function SortByMenu({ stores, setStoreFilter }) {
   const [visible, setVisibility] = useState(false);
   const [title, setTitle] = useState('Select a store');
 
@@ -13,28 +13,29 @@ export default function SortByMenu() {
   const closeMenu = () => setVisibility(false);
   const handleSelection = (e, selection) => {
     closeMenu();
-    setTitle(selection);
+    setTitle(selection.name);
+    setStoreFilter(selection.name === 'All' ? 'All' : `${selection.name}--${selection.address}`);
   };
 
   // Dummy data - sorted stores list
-  const stores = [
-    {
-      name: 'PriceSmart Foods',
-      distance: '850m',
-    },
-    {
-      name: 'T&T Supermarket',
-      distance: '1.1km',
-    },
-    {
-      name: 'Save-On-Foods',
-      distance: '900m',
-    },
-    {
-      name: 'Real Canadian Superstore',
-      distance: '950m',
-    },
-  ];
+  // const stores = [
+  //   {
+  //     name: 'PriceSmart Foods',
+  //     distance: '850m',
+  //   },
+  //   {
+  //     name: 'T&T Supermarket',
+  //     distance: '1.1km',
+  //   },
+  //   {
+  //     name: 'Save-On-Foods',
+  //     distance: '900m',
+  //   },
+  //   {
+  //     name: 'Real Canadian Superstore',
+  //     distance: '950m',
+  //   },
+  // ];
 
   return (
     <View style={[t.pT10, t.flexRow, t.justifyCenter]}>
@@ -48,8 +49,9 @@ export default function SortByMenu() {
         {stores.map((store) => {
           return (
             <Menu.Item
+              key={`${store.name}--${store.address}`}
               onPress={(e) => {
-                handleSelection(e, store.name);
+                handleSelection(e, store);
               }}
               title={`${store.name} ${store.distance}`}
             />
