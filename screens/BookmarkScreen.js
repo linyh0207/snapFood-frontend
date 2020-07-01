@@ -6,8 +6,6 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { t } from 'react-native-tailwindcss';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import StyledButton from '../components/StyledButton';
-import SortByMenu from '../components/DropDownMenu/SortByMenu';
-import StoresMenu from '../components/DropDownMenu/StoresMenu';
 import SnackBar from '../components/SnackBar';
 import ProductMainCard from '../components/ProductMainCard';
 import SearchBar from '../components/SearchBar';
