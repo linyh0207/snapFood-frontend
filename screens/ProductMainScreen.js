@@ -46,9 +46,12 @@ export default function ProductMainScreen({ navigation }) {
     loadData();
   }, [activeTags, searchRadius]);
 
-  useFocusEffect(() => {
-    loadData();
-  });
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log('should run once only when onFirstLoad');
+      loadData();
+    }, [])
+  ); // run once when screen loads
 
   React.useEffect(() => {
     setPosts(sortPosts(posts) || []);
