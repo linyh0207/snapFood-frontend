@@ -9,6 +9,7 @@ import StyledButton from '../components/StyledButton';
 import AddressSearchBar from '../components/AddressSearchBar';
 import SearchBar from '../components/SearchBar';
 import api from '../constants/Api';
+import { FAKE_HOME_LOCATIONS, FAKE_STORE_LOCATIONS, FAKE_USER } from '../utils/fakeData';
 
 export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -26,6 +27,8 @@ export default function AddPostScreen({ navigation }) {
 
   // Handles waiting for uploaded image url to come back. Posting will show spinner if not uploaded yet
   const [showSpinner, setShowSpinner] = useState(false);
+
+  const SEARCH_RADIUS = 10000;
 
   useEffect(() => {
     (async () => {
@@ -88,7 +91,7 @@ export default function AddPostScreen({ navigation }) {
   async function post() {
     if (
       !selectedPlace.address ||
-      !selectedPlace.storename ||
+      !selectedPlace.name ||
       activeTags.length === 0 ||
       !regularPrice ||
       !discountPrice
