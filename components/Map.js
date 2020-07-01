@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import * as Location from 'expo-location';
-import { Portal, Modal } from 'react-native-paper';
+import { Portal, Modal, ActivityIndicator } from 'react-native-paper';
 import Carousel from 'react-native-snap-carousel';
 import { t } from 'react-native-tailwindcss';
 import ProductMainCard from './ProductMainCard';
@@ -171,7 +171,7 @@ export default function Map({ posts }) {
             <Marker
               key={post.id}
               coordinate={{ latitude: post.longitude, longitude: post.latitude }}
-              title={post.title}
+              title={post.storename}
               onPress={() => {
                 setCurrentMarker(post);
                 setProductsSwiperModalVisibility(true);
@@ -183,7 +183,9 @@ export default function Map({ posts }) {
         <Portal>
           <Modal visible={productsSwiperModalVisible} onDismiss={hideProductsSwiperModal}>
             <View>
-              <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>HIHIHI</Text>
+              <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
+                {currentMarker.storename}
+              </Text>
               <Carousel
                 // data={posts}
                 data={posts.filter((post) => post.address === currentMarker.address)}
@@ -220,7 +222,7 @@ export default function Map({ posts }) {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <Text>Loading</Text>
+        <ActivityIndicator size="large" />
       </View>
     );
   }
