@@ -9,6 +9,7 @@ import StyledButton from '../components/StyledButton';
 import AddressSearchBar from '../components/AddressSearchBar';
 import SearchBar from '../components/SearchBar';
 import api from '../constants/Api';
+import { FAKE_HOME_LOCATIONS, FAKE_STORE_LOCATIONS, FAKE_USER } from '../utils/fakeData';
 
 export default function AddPostScreen({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -24,8 +25,11 @@ export default function AddPostScreen({ navigation }) {
   const [uploadData, setUploadData] = useState(null);
   const [finalImageUri, setFinalImageUri] = useState('');
 
+  const { latitude, longitude } = FAKE_STORE_LOCATIONS.Markham;
   // Handles waiting for uploaded image url to come back. Posting will show spinner if not uploaded yet
   const [showSpinner, setShowSpinner] = useState(false);
+
+  const SEARCH_RADIUS = 10000;
 
   useEffect(() => {
     (async () => {
@@ -118,8 +122,8 @@ export default function AddPostScreen({ navigation }) {
           address: selectedPlace.address,
           storename: selectedPlace.name,
           tags: activeTags,
-          latitude: -79,
-          longitude: 43,
+          latitude,
+          longitude,
           price: regularPrice,
           discountPrice,
           imageUrl: pic.url,
@@ -212,9 +216,9 @@ export default function AddPostScreen({ navigation }) {
             <Card style={t.m1}>
               <Card.Title title="Store Information" />
               <AddressSearchBar
-                latitude={48.4073}
-                longitude={-123.3298}
-                radius={10000}
+                latitude={latitude}
+                longitude={longitude}
+                radius={SEARCH_RADIUS}
                 scrollRef={scrollRef}
                 selectedPlace={selectedPlace}
                 setSelectedPlace={setSelectedPlace}
@@ -250,9 +254,11 @@ export default function AddPostScreen({ navigation }) {
             <Card style={t.m1}>
               <Card.Title title="Add Tags" />
               <SearchBar
-                latitude={43.4073}
-                longitude={-79.3298}
-                radius={10000}
+                // latitude={43.4073}
+                // longitude={-79.3298}
+                longitude={longitude}
+                latitude={latitude}
+                radius={SEARCH_RADIUS}
                 activeTags={activeTags}
                 setActiveTags={setActiveTags}
               />
@@ -262,6 +268,7 @@ export default function AddPostScreen({ navigation }) {
             ) : (
               <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
             )}
+            <StyledButton title="Cancel" mode="outlined" size="large" onPress={cancelPhoto} />
 
             {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
             <View style={t.h64} />

@@ -30,13 +30,14 @@ function AddressSearchBar({
     setSearchTerm(query);
     if (!apiRequestPaused) {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}&location=${latitude},${longitude}&radius=${radius}&types=establishment&strictbounds`
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}&location=${latitude},${longitude}&radius=${radius.toString()}&types=establishment&strictbounds`
       );
       const resString = await res.text();
       const { predictions } = JSON.parse(resString);
+      console.log('predictions', predictions);
       const formattedPredictions = predictions.map((prediction) => {
         const name = prediction.description.split(',')[0];
-        const address = prediction.description.split(',')[1];
+        const address = prediction.description.split(',').splice(1, 4).join(', ');
         return { id: prediction.place_id, name, address };
       });
       setSearchSuggestions(formattedPredictions);
