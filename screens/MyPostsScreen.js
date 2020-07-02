@@ -24,7 +24,7 @@ export default function MyPostsScreen() {
       );
       const load = await test.text();
       const posted = await JSON.parse(load).posts;
-      setPosts(posted);
+      setPosts(posted.reverse());
     }
     fetchData();
   }, []);
