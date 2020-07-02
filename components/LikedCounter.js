@@ -115,9 +115,21 @@ const LikedCounter = ({
               selectedIcon="thumb-up"
               unselectedIcon="thumb-up-outline"
               handleSelected={() => {
-                setLiked(!liked);
-                toggleLikePost(true);
-                loadData();
+                if (liked) {
+                  setLiked(false);
+                  toggleLikePost(true, true);
+                  setTotalLikes((prev) => prev - 1);
+                } else if (notLiked) {
+                  setNotLiked(false);
+                  setLiked(true);
+                  toggleLikePost(true, false);
+                  setTotalLikes((prev) => prev + 1);
+                  setTotalDislikes((prev) => prev - 1);
+                } else {
+                  setLiked(true);
+                  toggleLikePost(true, false);
+                  setTotalLikes((prev) => prev + 1);
+                }
               }}
               style={{ marginBottom: -10 }}
               color="#fd625e"
@@ -130,9 +142,21 @@ const LikedCounter = ({
               selectedIcon="thumb-down"
               unselectedIcon="thumb-down-outline"
               handleSelected={() => {
-                setNotLiked(!notLiked);
-                toggleLikePost(false);
-                loadData();
+                if (notLiked) {
+                  setNotLiked(false);
+                  toggleLikePost(false, true);
+                  setTotalDislikes((prev) => prev - 1);
+                } else if (liked) {
+                  setLiked(false);
+                  setNotLiked(true);
+                  toggleLikePost(false, false);
+                  setTotalLikes((prev) => prev - 1);
+                  setTotalDislikes((prev) => prev + 1);
+                } else {
+                  setNotLiked(true);
+                  toggleLikePost(false, false);
+                  setTotalDislikes((prev) => prev + 1);
+                }
               }}
               style={{ marginBottom: -10 }}
               color="grey"
