@@ -30,14 +30,15 @@ export default function ProductDetailCard({
     //     <Map />
     //   </Modal>
     // </Portal> */}
-      <Card>
+      <Card style={[t.mX3]}>
         <Card.Content style={[t.flex1, t.flexRow, t.justifyBetween, t.itemsCenter, t.p6]}>
-          <Text>{timeFromNow}</Text>
+          <Text style={[t.textGray600, t.italic]}>{timeFromNow}</Text>
           <IconButton
             icon="map-marker"
             onPress={() => setShowMapModal(!showMapModal)}
             compact
             style={[t.mLAuto]}
+            color="#22543d"
           />
           <Text>
             {storeName} ({formatDistance(distance)})
@@ -62,14 +63,27 @@ export default function ProductDetailCard({
         </Card.Actions>
         <Card.Content style={[t.flex1, t.flexRow, t.justifyBetween, t.itemsCenter, t.pY4]}>
           <Text>By: </Text>
-          <UserName status={posterStatus}>{posterName}</UserName>
-
-          <Text style={[t.textLg, t.mLAuto]}>${price.discounted.toFixed(2)}</Text>
-          <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
+          <UserName
+            textStyles={[t.fontBold, t.trackingWidest]}
+            iconColor="gold"
+            status={posterStatus}
+          >
+            {posterName}
+          </UserName>
+          <Text style={[t.textXl, t.mLAuto, t.textGreen900, t.pR1]}>
+            ${price.discounted.toFixed(2)}
+          </Text>
+          <Text style={[t.lineThrough, t.textGray800]}>${price.regular.toFixed(2)}</Text>
         </Card.Content>
-        <Card.Content style={[t.flex1, t.flexRow, t.flexWrap, t.justifyStart, t.mB12]}>
+        <Card.Content style={[t.flex1, t.flexRow, t.flexWrap, t.justifyStart, t.mT2, t.mB12]}>
           {tags.map((tag) => (
-            <Chip key={tag} height={30} textStyle={[t.textBlack, t.textSm]} mode="outlined">
+            <Chip
+              key={tag}
+              height={30}
+              textStyle={[t.textSm, t.textWhite]}
+              style={[t.bgGreen500, t.justifyCenter, t.mX1]}
+              mode="outlined"
+            >
               {tag}
             </Chip>
           ))}

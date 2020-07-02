@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-
 import { View, Text } from 'react-native';
+import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 
 const LikedCounter = ({
@@ -84,8 +84,9 @@ const LikedCounter = ({
                 setLiked(!liked);
               }}
               style={{ marginBottom: -10 }}
+              color="#fd625e"
             />
-            <Text style={{ textAlign: 'center' }}>{likes}</Text>
+            <Text style={{ textAlign: 'center', color: 'grey' }}>{likes}</Text>
           </View>
           <View style={{}}>
             <ToggleButton
@@ -96,8 +97,9 @@ const LikedCounter = ({
                 setNotLiked(!notLiked);
               }}
               style={{ marginBottom: -10 }}
+              color="#9bcdff"
             />
-            <Text style={{ textAlign: 'center' }}>{dislikes}</Text>
+            <Text style={{ textAlign: 'center', color: 'grey' }}>{dislikes}</Text>
           </View>
         </View>
       )}
