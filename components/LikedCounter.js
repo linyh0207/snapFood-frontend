@@ -13,21 +13,12 @@ const LikedCounter = ({
   postId,
   userId = '5eead9d6d34bf31f58a86904',
   loadData,
+  dispatch,
 }) => {
-  const [liked, setLiked] = useState(initialLiked);
-  const [notLiked, setNotLiked] = useState(initialDisliked);
-
-  useEffect(() => {
-    if (liked) {
-      setNotLiked(false);
-    }
-  }, [liked]);
-
-  useEffect(() => {
-    if (notLiked) {
-      setLiked(false);
-    }
-  }, [notLiked]);
+  // const [liked, setLiked] = useState(initialLiked);
+  // const [notLiked, setNotLiked] = useState(initialDisliked);
+  const liked = initialLiked;
+  const notLiked = initialDisliked;
 
   const toggleLikePost = (upvote) => {
     const remove = (upvote && liked) || (!upvote && notLiked);
@@ -60,7 +51,8 @@ const LikedCounter = ({
             selectedIcon="thumb-up"
             unselectedIcon="thumb-up-outline"
             handleSelected={() => {
-              setLiked(!liked);
+              dispatch({ type: 'UPDATE_LIKE', id: postId, liked: !liked });
+              // setLiked(!liked);
               toggleLikePost(true);
               // loadData();
             }}
@@ -72,7 +64,8 @@ const LikedCounter = ({
             selectedIcon="thumb-down"
             unselectedIcon="thumb-down-outline"
             handleSelected={() => {
-              setNotLiked(!notLiked);
+              dispatch({ type: 'UPDATE_DISLIKE', id: postId, disliked: !notLiked });
+              // setNotLiked(!notLiked);
               toggleLikePost(false);
               // loadData();
             }}
@@ -88,7 +81,9 @@ const LikedCounter = ({
               selectedIcon="thumb-up"
               unselectedIcon="thumb-up-outline"
               handleSelected={() => {
-                setLiked(!liked);
+                dispatch({ type: 'UPDATE_LIKE', id: postId, liked: !liked });
+
+                // setLiked(!liked);
                 toggleLikePost(true);
                 // loadData();
               }}
@@ -103,7 +98,9 @@ const LikedCounter = ({
               selectedIcon="thumb-down"
               unselectedIcon="thumb-down-outline"
               handleSelected={() => {
-                setNotLiked(!notLiked);
+                dispatch({ type: 'UPDATE_DISLIKE', id: postId, disliked: !notLiked });
+
+                // setNotLiked(!notLiked);
                 toggleLikePost(false);
                 // loadData();
               }}

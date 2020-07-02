@@ -46,15 +46,15 @@ export default function ProductMainScreen({ navigation }) {
     }&longitude=${FAKE_HOME_LOCATIONS.Markham.longitude}&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
-    console.log(searchUri, 'is search uri');
+    // console.log(searchUri, 'is search uri');
     const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
-    console.log('loadedPosts', loadedPosts);
+    // console.log('loadedPosts', loadedPosts);
     dispatch({ type: 'SET_POSTS', posts: loadedPosts });
     // setPosts(sortPosts(loadedPosts) || []);
   };
-  console.log('posts', posts);
+  console.log('posts', posts[0]);
   React.useEffect(() => {
     console.log('load posts ran');
     loadData();
@@ -214,6 +214,7 @@ export default function ProductMainScreen({ navigation }) {
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
           loadData={loadData}
+          dispatch={dispatch}
         />
       </View>
     );

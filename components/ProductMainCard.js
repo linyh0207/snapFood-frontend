@@ -28,6 +28,7 @@ export default function ProductMainCard(props) {
     imageUrl,
     isExpired = false,
     loadData,
+    dispatch,
   } = props;
   const [bookmarked, setBookmarked] = React.useState(initialUserSavedPost);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
@@ -101,6 +102,7 @@ export default function ProductMainCard(props) {
               likes={likes}
               dislikes={dislikes}
               loadData={loadData}
+              dispatch={dispatch}
             />
             <ToggleButton
               selected={bookmarked}
