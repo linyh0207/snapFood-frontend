@@ -10,6 +10,10 @@ import AchievementStatement from '../components/AchievementStatement';
 import logo from '../assets/images/logos/green-logo.png';
 import ProductMainCard from '../components/ProductMainCard';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
+
+YellowBox.ignoreWarnings([
+  'VirtualizedLists should never be nested', // TODO: Remove when fixed
+]);
 /* eslint-disable */
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
@@ -99,6 +103,7 @@ export default function AchievementScreen() {
           data={[sortedPosts[sortedPosts.length - 1], sortedPosts[0]]}
           numColumns={numColumns}
           renderItem={renderItem}
+          scrollEnabled={false}
         />
       </ScrollView>
     </SafeAreaView>
