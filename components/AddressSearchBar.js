@@ -3,6 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { Searchbar, List, Card, TextInput, Button } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { API_KEY } from 'react-native-dotenv';
+import { FAKE_STORE_LOCATIONS } from '../utils/fakeData';
 
 const DEBOUNCE = 500;
 
@@ -26,11 +27,23 @@ function AddressSearchBar({
     }
   }, [searchSuggestions]);
 
+  useEffect(async () => {
+    const res = await fetch(
+      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=${API_KEY}&input=grocery&inputtype=textquery&locationbias=point:${FAKE_STORE_LOCATIONS.Markham.latitude},${FAKE_STORE_LOCATIONS.Markham.longitude}&fields=formatted_address,name`
+    );
+    const resString = await res.text();
+    const result = JSON.parse(resString).candidates[0];
+    setSelectedPlace({ name: result.name, address: result.formatted_address });
+    // searchBarRef.current.blur();
+    // setSearchTerm(result.name);
+    // setSearchSuggestions([]);
+  }, []);
+
   const onChangeSearch = async (query) => {
     setSearchTerm(query);
     if (!apiRequestPaused) {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}&location=${latitude},${longitude}&radius=${radius.toString()}&types=establishment&strictbounds`
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}+grocery&location=${latitude},${longitude}&radius=${radius.toString()}&types=establishment&strictbounds`
       );
       const resString = await res.text();
       const { predictions } = JSON.parse(resString);
@@ -72,7 +85,7 @@ function AddressSearchBar({
   return (
     <>
       <Searchbar
-        placeholder="Search for Location"
+        placeholder="Search for Different Store"
         onChangeText={onChangeSearch}
         value={searchTerm}
         style={[searchTerm.length > 0 ? t.roundedBNone : '', t.shadowNone, t.border, t.mL4, t.mR4]}
