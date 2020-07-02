@@ -296,7 +296,7 @@ export default function ProductMainScreen({ navigation }) {
       ) : (
         <FlatList
           data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
-          numColumns={numColumns}
+          numColumns={1}
           renderItem={renderItem}
         />
       )}

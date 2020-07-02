@@ -15,7 +15,7 @@ export default function BookmarkScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [showMap, setShowMap] = React.useState(false);
 
-  const numColumns = 2;
+  const numColumns = 1;
 
   // May need to update the URL with lng and lat
   const loadData = async () => {

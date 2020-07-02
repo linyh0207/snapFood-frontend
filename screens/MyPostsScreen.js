@@ -11,7 +11,7 @@ import logo from '../assets/images/logos/green-logo.png';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 import Map from '../components/Map';
 
-const numColumns = 2;
+const numColumns = 1;
 
 export default function MyPostsScreen() {
   const [posts, setPosts] = React.useState('');
