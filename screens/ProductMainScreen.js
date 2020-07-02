@@ -16,10 +16,11 @@ import formatDistance from '../helpers/formatDistance';
 import logo from '../assets/images/logos/green-logo.png';
 import StyledButton from '../components/StyledButton';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
+import reducer from '../reducers/posts';
 
 export default function ProductMainScreen({ navigation }) {
   const [searchRadius, setSearchRadius] = React.useState('20');
-  const [posts, setPosts] = React.useState([]);
+  // const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('rating');
   const [storeFilter, setStoreFilter] = React.useState('All');
@@ -35,6 +36,8 @@ export default function ProductMainScreen({ navigation }) {
   // Snack bar
   const [snackBarVisible, setSnackBarVisibility] = React.useState(false);
 
+  const [posts, dispatch] = React.useReducer(reducer, []);
+
   const numColumns = 2;
 
   const loadData = async () => {
@@ -47,9 +50,11 @@ export default function ProductMainScreen({ navigation }) {
     const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
-    setPosts(sortPosts(loadedPosts) || []);
+    console.log('loadedPosts', loadedPosts);
+    dispatch({ type: 'SET_POSTS', posts: loadedPosts });
+    // setPosts(sortPosts(loadedPosts) || []);
   };
-
+  console.log('posts', posts);
   React.useEffect(() => {
     console.log('load posts ran');
     loadData();
@@ -63,21 +68,32 @@ export default function ProductMainScreen({ navigation }) {
   ); // run once when screen loads
 
   React.useEffect(() => {
-    setPosts(sortPosts(posts) || []);
+    // setPosts(sortPosts(posts) || []);
+    dispatch({ type: 'SET_POSTS', posts: sortPosts(posts) });
   }, [sort]);
 
   React.useEffect(() => {
-    setPosts((oldPosts) => {
-      return oldPosts.map((oldPost) => {
-        if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
-        if (`${oldPost.storename}--${oldPost.address}` === storeFilter) {
-          return { ...oldPost, isFiltered: false };
-        }
-        return { ...oldPost, isFiltered: true };
-      });
-    });
+    dispatch({ type: 'SET_POSTS', posts: filterPostsByStore(posts) });
+    // setPosts((oldPosts) => {
+    //   return oldPosts.map((oldPost) => {
+    //     if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
+    //     if (`${oldPost.storename}--${oldPost.address}` === storeFilter) {
+    //       return { ...oldPost, isFiltered: false };
+    //     }
+    //     return { ...oldPost, isFiltered: true };
+    //   });
+    // });
   }, [storeFilter]);
 
+  const filterPostsByStore = (oldPosts) => {
+    return oldPosts.map((oldPost) => {
+      if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
+      if (`${oldPost.storename}--${oldPost.address}` === storeFilter) {
+        return { ...oldPost, isFiltered: false };
+      }
+      return { ...oldPost, isFiltered: true };
+    });
+  };
   const sortPosts = (currentPosts) => {
     if (!currentPosts) return null;
     switch (sort) {

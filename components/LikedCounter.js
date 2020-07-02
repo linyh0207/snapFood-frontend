@@ -62,7 +62,7 @@ const LikedCounter = ({
             handleSelected={() => {
               setLiked(!liked);
               toggleLikePost(true);
-              loadData();
+              // loadData();
             }}
             color="#fd625e"
           />
@@ -74,7 +74,7 @@ const LikedCounter = ({
             handleSelected={() => {
               setNotLiked(!notLiked);
               toggleLikePost(false);
-              loadData();
+              // loadData();
             }}
             color="grey"
           />
@@ -90,7 +90,7 @@ const LikedCounter = ({
               handleSelected={() => {
                 setLiked(!liked);
                 toggleLikePost(true);
-                loadData();
+                // loadData();
               }}
               style={{ marginBottom: -10 }}
               color="#fd625e"
@@ -105,7 +105,7 @@ const LikedCounter = ({
               handleSelected={() => {
                 setNotLiked(!notLiked);
                 toggleLikePost(false);
-                loadData();
+                // loadData();
               }}
               style={{ marginBottom: -10 }}
               color="grey"
