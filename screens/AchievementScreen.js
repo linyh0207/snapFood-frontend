@@ -43,7 +43,7 @@ export default function AchievementScreen() {
 
   const renderItem = ({ item }) => {
     return (
-      <View>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           storeName={item.storename}
@@ -57,8 +57,8 @@ export default function AchievementScreen() {
           key={item.id}
           timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
           dislikes={item.dislikes}
-          posterName="Amy" // TODO: Add missing data from back-end
-          posterStatus="super" // TODO: Add missing data from back-end
+          posterName={item.posterName} // TODO: Add missing data from back-end
+          posterStatus={item.posterStatus} // TODO: Add missing data from back-end
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
