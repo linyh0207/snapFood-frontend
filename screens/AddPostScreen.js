@@ -261,6 +261,7 @@ export default function AddPostScreen({ navigation }) {
                 radius={SEARCH_RADIUS}
                 activeTags={activeTags}
                 setActiveTags={setActiveTags}
+                type="AddPost"
               />
             </Card>
             {showSpinner ? (
