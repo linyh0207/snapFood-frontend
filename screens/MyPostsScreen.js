@@ -11,7 +11,7 @@ import logo from '../assets/images/logos/green-logo.png';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 import Map from '../components/Map';
 
-const numColumns = 1;
+const numColumns = 2;
 
 export default function MyPostsScreen() {
   const [posts, setPosts] = React.useState('');
@@ -37,7 +37,7 @@ export default function MyPostsScreen() {
 
   const renderItem = ({ item }) => {
     return (
-      <View>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           storeName={item.storename}

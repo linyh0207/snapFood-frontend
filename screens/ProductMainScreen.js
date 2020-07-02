@@ -178,7 +178,7 @@ export default function ProductMainScreen({ navigation }) {
 
   const renderItem = ({ item }) => {
     return (
-      <View>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           storeName={item.storename}
@@ -297,8 +297,9 @@ export default function ProductMainScreen({ navigation }) {
       ) : (
         <FlatList
           data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
-          numColumns={1}
+          numColumns={2}
           renderItem={renderItem}
+          style={{ flexGrow: 0 }}
         />
       )}
       <SnackBar snackBarVisible={snackBarVisible} setSnackBarVisibility={setSnackBarVisibility} />

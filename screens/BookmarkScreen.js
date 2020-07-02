@@ -15,7 +15,7 @@ export default function BookmarkScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
   const [showMap, setShowMap] = React.useState(false);
 
-  const numColumns = 1;
+  const numColumns = 2;
 
   // May need to update the URL with lng and lat
   const loadData = async () => {
@@ -40,7 +40,7 @@ export default function BookmarkScreen({ navigation }) {
   // eslint-disable-next-line no-shadow
   const renderItem = ({ item }) => {
     return (
-      <View>
+      <View style={{ flex: 1, justifyContent: 'center' }}>
         <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           storeName={item.storename}
