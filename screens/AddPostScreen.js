@@ -265,8 +265,8 @@ export default function AddPostScreen({ navigation }) {
                 activeTags={activeTags}
                 setActiveTags={setActiveTags}
                 style={[t.m2]}
-
                 type="AddPost"
+                errMsg="No matching tags found"
               />
 
               {/* Add Tags */}

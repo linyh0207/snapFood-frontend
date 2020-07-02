@@ -12,9 +12,12 @@ const LikedCounter = ({
   initialDisliked,
   postId,
   userId = '5eead9d6d34bf31f58a86904',
+  loadData,
 }) => {
-  const [liked, setLiked] = useState(false);
-  const [notLiked, setNotLiked] = useState(false);
+  const [liked, setLiked] = useState(initialLiked);
+  const [notLiked, setNotLiked] = useState(initialDisliked);
+  const [totalLikes, setTotalLikes] = useState(likes);
+  const [totalDislikes, setTotalDislikes] = useState(dislikes);
 
   useEffect(() => {
     if (liked) {
@@ -28,8 +31,7 @@ const LikedCounter = ({
     }
   }, [notLiked]);
 
-  const toggleLikePost = (upvote) => {
-    const remove = (upvote && liked) || (!upvote && notLiked);
+  const toggleLikePost = (upvote, remove) => {
     fetch(`https://glacial-cove-31720.herokuapp.com/posts/${postId}`, {
       method: 'put',
       headers: {
@@ -59,17 +61,47 @@ const LikedCounter = ({
             selectedIcon="thumb-up"
             unselectedIcon="thumb-up-outline"
             handleSelected={() => {
-              setLiked(!liked);
+              if (liked) {
+                setLiked(false);
+                toggleLikePost(true, true);
+                setTotalLikes((prev) => prev - 1);
+              } else if (notLiked) {
+                setNotLiked(false);
+                setLiked(true);
+                toggleLikePost(true, false);
+                setTotalLikes((prev) => prev + 1);
+                setTotalDislikes((prev) => prev - 1);
+              } else {
+                setLiked(true);
+                toggleLikePost(true, false);
+                setTotalLikes((prev) => prev + 1);
+              }
             }}
             color="#fd625e"
           />
-          <Text style={{ textAlign: 'center', color: '#484848' }}>{likes - dislikes}</Text>
+          <Text style={{ textAlign: 'center', color: '#484848' }}>
+            {totalLikes - totalDislikes}
+          </Text>
           <ToggleButton
             selected={notLiked}
             selectedIcon="thumb-down"
             unselectedIcon="thumb-down-outline"
             handleSelected={() => {
-              setNotLiked(!notLiked);
+              if (notLiked) {
+                setNotLiked(false);
+                toggleLikePost(false, true);
+                setTotalDislikes((prev) => prev - 1);
+              } else if (liked) {
+                setLiked(false);
+                setNotLiked(true);
+                toggleLikePost(false, false);
+                setTotalLikes((prev) => prev - 1);
+                setTotalDislikes((prev) => prev + 1);
+              } else {
+                setNotLiked(true);
+                toggleLikePost(false, false);
+                setTotalDislikes((prev) => prev + 1);
+              }
             }}
             color="grey"
           />
@@ -83,12 +115,26 @@ const LikedCounter = ({
               selectedIcon="thumb-up"
               unselectedIcon="thumb-up-outline"
               handleSelected={() => {
-                setLiked(!liked);
+                if (liked) {
+                  setLiked(false);
+                  toggleLikePost(true, true);
+                  setTotalLikes((prev) => prev - 1);
+                } else if (notLiked) {
+                  setNotLiked(false);
+                  setLiked(true);
+                  toggleLikePost(true, false);
+                  setTotalLikes((prev) => prev + 1);
+                  setTotalDislikes((prev) => prev - 1);
+                } else {
+                  setLiked(true);
+                  toggleLikePost(true, false);
+                  setTotalLikes((prev) => prev + 1);
+                }
               }}
               style={{ marginBottom: -10 }}
               color="#fd625e"
             />
-            <Text style={{ textAlign: 'center', color: 'grey' }}>{likes}</Text>
+            <Text style={{ textAlign: 'center', color: 'grey' }}>{totalLikes}</Text>
           </View>
           <View style={{}}>
             <ToggleButton
@@ -96,12 +142,26 @@ const LikedCounter = ({
               selectedIcon="thumb-down"
               unselectedIcon="thumb-down-outline"
               handleSelected={() => {
-                setNotLiked(!notLiked);
+                if (notLiked) {
+                  setNotLiked(false);
+                  toggleLikePost(false, true);
+                  setTotalDislikes((prev) => prev - 1);
+                } else if (liked) {
+                  setLiked(false);
+                  setNotLiked(true);
+                  toggleLikePost(false, false);
+                  setTotalLikes((prev) => prev - 1);
+                  setTotalDislikes((prev) => prev + 1);
+                } else {
+                  setNotLiked(true);
+                  toggleLikePost(false, false);
+                  setTotalDislikes((prev) => prev + 1);
+                }
               }}
               style={{ marginBottom: -10 }}
               color="grey"
             />
-            <Text style={{ textAlign: 'center', color: 'grey' }}>{dislikes}</Text>
+            <Text style={{ textAlign: 'center', color: 'grey' }}>{totalDislikes}</Text>
           </View>
         </View>
       )}

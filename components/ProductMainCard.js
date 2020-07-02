@@ -70,7 +70,6 @@ export default function ProductMainCard(props) {
           marginVertical: 5,
           borderColor: posterStatus === 'super' ? '#48bb78' : 'transparent',
           borderWidth: posterStatus === 'super' ? 2 : 0,
-          height: 'auto',
         }}
         onLongPress={() => setShowDetailModal(!showDetailModal)}
       >
@@ -81,19 +80,13 @@ export default function ProductMainCard(props) {
         <Card.Content
           style={{
             flex: 1,
+            flexGrow: 0,
             flexDirection: 'column',
             justifyContent: 'space-between',
             width: '100%',
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
             <LikedCounter
               initialLiked={userLikedPost}
               initialDisliked={userDislikedPost}
@@ -108,29 +101,12 @@ export default function ProductMainCard(props) {
               handleSelected={toggleSavePost}
             />
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
-              alignItems: 'center',
-            }}
-          >
-            <Text style={[t.textXl, t.mLAuto, t.textGreen900, t.pR1]}>
-              ${price.discounted.toFixed(2)}
-            </Text>
-            <Text style={[t.lineThrough, t.textGray800]}>${price.regular.toFixed(2)}</Text>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <Text style={[t.textLg]}>${price.discounted.toFixed(2)}</Text>
+            <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
           </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingTop: 8,
-              alignItems: 'center',
-            }}
-          >
-            <Text style={[t.textXs]}>{storeName}</Text>
+          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <Text>{storeName}</Text>
             <Text>{formatDistance(distance)}</Text>
           </View>
         </Card.Content>

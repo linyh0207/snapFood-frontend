@@ -18,7 +18,7 @@ import StyledButton from '../components/StyledButton';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 
 export default function ProductMainScreen({ navigation }) {
-  const [searchRadius, setSearchRadius] = React.useState('499');
+  const [searchRadius, setSearchRadius] = React.useState('20');
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('rating');
@@ -178,7 +178,7 @@ export default function ProductMainScreen({ navigation }) {
 
   const renderItem = ({ item }) => {
     return (
-      <View>
+      <View style={{ flexShrink: 1, justifyContent: 'center' }}>
         <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           storeName={item.storename}
@@ -197,6 +197,7 @@ export default function ProductMainScreen({ navigation }) {
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
+          loadData={loadData}
         />
       </View>
     );
@@ -232,6 +233,7 @@ export default function ProductMainScreen({ navigation }) {
         activeTags={activeTags}
         showRefineDialog={showRefineDialog}
         style={[t.m2]}
+        errMsg="No matching tags in your area."
       />
       {/* Search bar & Refine Menu --- End */}
       {/* Refine Dialog--- Start */}
@@ -296,8 +298,9 @@ export default function ProductMainScreen({ navigation }) {
         // <Map posts={posts} />
         <FlatList
           data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
-          numColumns={numColumns}
+          numColumns={2}
           renderItem={renderItem}
+          style={{ flexGrow: 0 }}
         />
       )}
       <SnackBar snackBarVisible={snackBarVisible} setSnackBarVisibility={setSnackBarVisibility} />

@@ -3,6 +3,7 @@ import { View, ScrollView } from 'react-native';
 import { Searchbar, List, Card, TextInput, Button } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { API_KEY } from 'react-native-dotenv';
+import StyledButton from './StyledButton';
 import { FAKE_STORE_LOCATIONS } from '../utils/fakeData';
 
 const DEBOUNCE = 100;
@@ -20,6 +21,7 @@ function AddressSearchBar({
   const [apiRequestPaused, setApiRequestPaused] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const searchBarRef = useRef(null);
+  const [editing, setEditing] = useState(false);
 
   useEffect(() => {
     if (searchSuggestions.length > 0) {
@@ -61,6 +63,11 @@ function AddressSearchBar({
     }
   };
 
+  const editLocation = () => {
+    setEditing(true);
+    setSelectedPlace({});
+  };
+
   const handleItemPress = async (id) => {
     try {
       const res = await fetch(
@@ -72,6 +79,7 @@ function AddressSearchBar({
       searchBarRef.current.blur();
       setSearchTerm(result.name);
       setSearchSuggestions([]);
+      setEditing(false);
     } catch (e) {
       console.log(e);
     }
@@ -83,16 +91,26 @@ function AddressSearchBar({
 
   return (
     <>
-      <Searchbar
-        placeholder="Search for Different Store"
-        onChangeText={onChangeSearch}
-        value={searchTerm}
-        style={[searchTerm.length > 0 ? t.roundedBNone : '', t.shadowNone, t.border, t.mL4, t.mR4]}
-        onIconPress={handleSearchPress}
-        onBlur={() => setShowSearch(false)}
-        onFocus={() => setShowSearch(true)}
-        ref={searchBarRef}
-      />
+      {editing ? (
+        <Searchbar
+          placeholder="Search for Location"
+          onChangeText={onChangeSearch}
+          value={searchTerm}
+          style={[
+            searchTerm.length > 0 ? t.roundedBNone : '',
+            t.shadowNone,
+            t.border,
+            t.mL4,
+            t.mR4,
+          ]}
+          onIconPress={handleSearchPress}
+          onBlur={() => setShowSearch(false)}
+          onFocus={() => setShowSearch(true)}
+          ref={searchBarRef}
+        />
+      ) : (
+        <StyledButton title="Change location" onPress={editLocation} />
+      )}
 
       {/* Search Results Dropdown */}
       {showSearch && searchSuggestions.length > 0 && (
@@ -120,6 +138,7 @@ function AddressSearchBar({
           style={[t.mL4, t.mR4]}
           value={selectedPlace.name}
           onChangeText={(text) => setSelectedPlace((prev) => ({ ...prev, name: text }))}
+          disabled={!editing}
         />
         <TextInput
           dense
@@ -128,6 +147,7 @@ function AddressSearchBar({
           style={[t.mL4, t.mR4]}
           value={selectedPlace.address}
           onChangeText={(text) => setSelectedPlace((prev) => ({ ...prev, address: text }))}
+          disabled={!editing}
         />
       </View>
     </>

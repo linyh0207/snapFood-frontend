@@ -15,6 +15,7 @@ function SearchBar({
   style = [],
   showRefineDialog,
   type,
+  errMsg,
 }) {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -86,7 +87,7 @@ function SearchBar({
       )}
       {searching &&
         (showNoSuggestions ? (
-          <List.Item title="No Matching Tags in your Area." />
+          <List.Item title={errMsg} />
         ) : (
           <Card style={[t.roundedTNone, t.z10]}>
             <List.Section>
