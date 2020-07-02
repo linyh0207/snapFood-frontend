@@ -12,9 +12,10 @@ const LikedCounter = ({
   initialDisliked,
   postId,
   userId = '5eead9d6d34bf31f58a86904',
+  loadData,
 }) => {
-  const [liked, setLiked] = useState(false);
-  const [notLiked, setNotLiked] = useState(false);
+  const [liked, setLiked] = useState(initialLiked);
+  const [notLiked, setNotLiked] = useState(initialDisliked);
 
   useEffect(() => {
     if (liked) {
@@ -60,6 +61,8 @@ const LikedCounter = ({
             unselectedIcon="thumb-up-outline"
             handleSelected={() => {
               setLiked(!liked);
+              toggleLikePost(true);
+              loadData();
             }}
             color="#fd625e"
           />
@@ -70,6 +73,8 @@ const LikedCounter = ({
             unselectedIcon="thumb-down-outline"
             handleSelected={() => {
               setNotLiked(!notLiked);
+              toggleLikePost(false);
+              loadData();
             }}
             color="grey"
           />
@@ -84,6 +89,8 @@ const LikedCounter = ({
               unselectedIcon="thumb-up-outline"
               handleSelected={() => {
                 setLiked(!liked);
+                toggleLikePost(true);
+                loadData();
               }}
               style={{ marginBottom: -10 }}
               color="#fd625e"
@@ -97,6 +104,8 @@ const LikedCounter = ({
               unselectedIcon="thumb-down-outline"
               handleSelected={() => {
                 setNotLiked(!notLiked);
+                toggleLikePost(false);
+                loadData();
               }}
               style={{ marginBottom: -10 }}
               color="grey"
