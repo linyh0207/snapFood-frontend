@@ -43,10 +43,10 @@ export default function ProductMainScreen({ navigation }) {
     }&longitude=${FAKE_HOME_LOCATIONS.Markham.longitude}&radius=${searchRadius}000${activeTags.map(
       (tag) => `&tag=${tag}`
     )}`;
+    console.log(searchUri, 'is search uri');
     const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
-    console.log(loadedPosts);
     setPosts(sortPosts(loadedPosts) || []);
   };
 
@@ -67,7 +67,6 @@ export default function ProductMainScreen({ navigation }) {
   }, [sort]);
 
   React.useEffect(() => {
-    console.log('enters store filter', storeFilter);
     setPosts((oldPosts) => {
       return oldPosts.map((oldPost) => {
         if (storeFilter === 'All') return { ...oldPost, isFiltered: false };
