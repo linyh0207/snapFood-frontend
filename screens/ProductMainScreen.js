@@ -284,7 +284,7 @@ export default function ProductMainScreen({ navigation }) {
                   setStoreFilter={setStoreFilter}
                 />
               </ScrollView>
-              <StyledButton title="Apply" mode="outlined" size="small" onPress={handleApplyPress} />
+              <StyledButton title="Close" mode="outlined" size="small" onPress={hideRefineDialog} />
             </>
           )}
         </Dialog>
