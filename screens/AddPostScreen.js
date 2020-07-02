@@ -29,7 +29,7 @@ export default function AddPostScreen({ navigation }) {
   // Handles waiting for uploaded image url to come back. Posting will show spinner if not uploaded yet
   const [showSpinner, setShowSpinner] = useState(false);
 
-  const SEARCH_RADIUS = 10000;
+  const SEARCH_RADIUS = 40000;
 
   useEffect(() => {
     (async () => {
@@ -129,7 +129,6 @@ export default function AddPostScreen({ navigation }) {
           imageUrl: pic.url,
         }),
       });
-
       setImageUri('');
       navigation.navigate('ProductMain');
     } catch (e) {
@@ -160,7 +159,7 @@ export default function AddPostScreen({ navigation }) {
                 );
               }}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+              <Text style={{ fontSize: 18, marginBottom: -36, color: 'white' }}> Flip </Text>
             </TouchableOpacity>
             <TouchableOpacity style={[t.selfCenter]} onPress={takePicture}>
               <View
@@ -194,8 +193,8 @@ export default function AddPostScreen({ navigation }) {
                 />
               </View>
             </TouchableOpacity>
-            <Text style={[t.textWhite, t.textCenter]}>
-              Post includes price tag and label get upvoted the most!
+            <Text style={[t.textWhite, t.textCenter, t.italic, t.trackingWidest, t.mB2]}>
+              Try to take picture in portrait mode. {'\n'} Every Post will last for 72 hours!
             </Text>
           </View>
         </Camera>
@@ -208,12 +207,19 @@ export default function AddPostScreen({ navigation }) {
             keyboardShouldPersistTaps="always"
           >
             {/* Image  */}
-            <Card style={t.m1}>
-              <Image source={{ uri: imageUri }} style={[t.wFull, t.h56]} />
-            </Card>
+            <Card style={[t.m1, t.mY2]}>
+              <Image
+                source={{ uri: imageUri }}
+                style={{
+                  width: '80%',
+                  height: undefined,
+                  aspectRatio: 4 / 5,
+                  alignSelf: 'center',
+                  marginVertical: 8,
+                }}
+              />
 
-            {/* Location */}
-            <Card style={t.m1}>
+              {/* Location */}
               <Card.Title title="Store Information" />
               <AddressSearchBar
                 latitude={latitude}
@@ -223,10 +229,8 @@ export default function AddPostScreen({ navigation }) {
                 selectedPlace={selectedPlace}
                 setSelectedPlace={setSelectedPlace}
               />
-            </Card>
 
-            {/* Pricing */}
-            <Card style={t.m1}>
+              {/* Pricing */}
               <Card.Title title="Pricing" />
               <View style={[t.flexRow, t.justifyAround]}>
                 <TextInput
@@ -249,9 +253,8 @@ export default function AddPostScreen({ navigation }) {
                   dense
                 />
               </View>
-            </Card>
 
-            <Card style={t.m1}>
+              {/* Add Tags */}
               <Card.Title title="Add Tags" />
               <SearchBar
                 // latitude={43.4073}
@@ -261,18 +264,18 @@ export default function AddPostScreen({ navigation }) {
                 radius={SEARCH_RADIUS}
                 activeTags={activeTags}
                 setActiveTags={setActiveTags}
+                style={[t.m2]}
+                type="AddPost"
               />
-            </Card>
-            {showSpinner ? (
-              <ActivityIndicator />
-            ) : (
-              <StyledButton title="Post" mode="outlined" size="large" onPress={post} />
-            )}
-            <StyledButton title="Cancel" mode="outlined" size="large" onPress={cancelPhoto} />
 
-            {/* Adds space to make scroll down work. Without, rendering/scrolling order doesnt work out right */}
-            <View style={t.h64} />
-            <View style={t.h64} />
+              {/* Add Tags */}
+              {showSpinner ? (
+                <ActivityIndicator />
+              ) : (
+                <StyledButton title="Post" mode="contained" bordered onPress={post} />
+              )}
+              <StyledButton title="Cancel" mode="outlined" bordered onPress={cancelPhoto} />
+            </Card>
           </KeyboardAwareScrollView>
         </ScrollView>
       )}

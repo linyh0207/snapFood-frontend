@@ -129,6 +129,7 @@ export default function ProductMainScreen({ navigation }) {
       ]);
     } else {
       hideRefineDialog();
+      setSnackBarVisibility(true);
     }
   };
 
@@ -222,18 +223,16 @@ export default function ProductMainScreen({ navigation }) {
       {/* Top Navigator --- End */}
       <View style={[t.borderGray300, t.borderB, t.mX3, t._mT4]} />
       {/* Search bar & Refine Menu --- Start */}
-      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.p4]}>
-        <SearchBar
-          searcher={0}
-          latitude="43"
-          longitude="-79"
-          radius="100000000"
-          setActiveTags={setActiveTags}
-          activeTags={activeTags}
-          style={[t.flex1]}
-        />
-        <IconButton color="#22543d" icon="playlist-edit" size={30} onPress={showRefineDialog} />
-      </View>
+      <SearchBar
+        searcher={0}
+        latitude="43"
+        longitude="-79"
+        radius="100000000"
+        setActiveTags={setActiveTags}
+        activeTags={activeTags}
+        showRefineDialog={showRefineDialog}
+        style={[t.m2]}
+      />
       {/* Search bar & Refine Menu --- End */}
       {/* Refine Dialog--- Start */}
       <Portal>

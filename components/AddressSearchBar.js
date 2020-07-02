@@ -4,8 +4,9 @@ import { Searchbar, List, Card, TextInput, Button } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { API_KEY } from 'react-native-dotenv';
 import StyledButton from './StyledButton';
+import { FAKE_STORE_LOCATIONS } from '../utils/fakeData';
 
-const DEBOUNCE = 500;
+const DEBOUNCE = 100;
 
 function AddressSearchBar({
   latitude,
@@ -27,6 +28,17 @@ function AddressSearchBar({
       scrollRef.current.scrollTo({ animated: true, y: 280 });
     }
   }, [searchSuggestions]);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=${API_KEY}&input=grocery&inputtype=textquery&locationbias=point:${FAKE_STORE_LOCATIONS.Markham.latitude},${FAKE_STORE_LOCATIONS.Markham.longitude}&fields=formatted_address,name`
+      );
+      const resString = await res.text();
+      const result = JSON.parse(resString).candidates[0];
+      setSelectedPlace({ name: result.name, address: result.formatted_address });
+    })();
+  }, []);
 
   const onChangeSearch = async (query) => {
     setSearchTerm(query);
