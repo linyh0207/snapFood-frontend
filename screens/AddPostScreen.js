@@ -29,7 +29,7 @@ export default function AddPostScreen({ navigation }) {
   // Handles waiting for uploaded image url to come back. Posting will show spinner if not uploaded yet
   const [showSpinner, setShowSpinner] = useState(false);
 
-  const SEARCH_RADIUS = 10000;
+  const SEARCH_RADIUS = 40000;
 
   useEffect(() => {
     (async () => {
