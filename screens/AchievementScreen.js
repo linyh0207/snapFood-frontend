@@ -11,6 +11,7 @@ import logo from '../assets/images/logos/green-logo.png';
 import ProductMainCard from '../components/ProductMainCard';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 /* eslint-disable */
+
 const numColumns = 2;
 export default function AchievementScreen() {
   // For account button to open drawer navigator
