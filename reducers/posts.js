@@ -41,7 +41,7 @@ const updatePostWhenLiked = (posts, id, liked) => {
   console.log('after update like post', post);
 
   posts.splice(postIndex, 1, post);
-  return posts;
+  return [...posts];
 };
 
 const updatePostWhenDisliked = (posts, id, disliked) => {
@@ -74,7 +74,7 @@ const updatePostWhenDisliked = (posts, id, disliked) => {
   console.log('after update dislike post', post);
 
   posts.splice(postIndex, 1, post);
-  return posts;
+  return [...posts];
 };
 const reducer = (state, action) => {
   switch (action.type) {
