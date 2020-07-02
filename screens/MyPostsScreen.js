@@ -1,23 +1,26 @@
 import * as React from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Image } from 'react-native';
+import { Text, IconButton } from 'react-native-paper';
 import { t } from 'react-native-tailwindcss';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { formatDistanceToNow } from 'date-fns';
-import StyledButton from '../components/StyledButton';
-import UserName from '../components/TopBar/UserName';
 import AchievementStatement from '../components/AchievementStatement';
 import ProductMainCard from '../components/ProductMainCard';
+import logo from '../assets/images/logos/green-logo.png';
+import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
+import Map from '../components/Map';
 
 const numColumns = 2;
 
 export default function MyPostsScreen() {
   const [posts, setPosts] = React.useState('');
+  const [showMap, setShowMap] = React.useState(false);
 
   React.useEffect(() => {
     async function fetchData() {
       const test = await fetch(
-        'https://glacial-cove-31720.herokuapp.com/posts?filter=created&latitude=-79&longitude=43'
+        `https://glacial-cove-31720.herokuapp.com/posts?filter=created&latitude=${FAKE_HOME_LOCATIONS.Markham.latitude}&longitude=${FAKE_HOME_LOCATIONS.Markham.longitude}`
       );
       const load = await test.text();
       const posted = await JSON.parse(load).posts;
@@ -25,6 +28,10 @@ export default function MyPostsScreen() {
     }
     fetchData();
   }, []);
+
+  const toMapView = () => {
+    setShowMap(!showMap);
+  };
 
   const navigation = useNavigation();
 
@@ -54,27 +61,34 @@ export default function MyPostsScreen() {
     );
   };
 
+  const listPost =
+    posts.length >= 1 ? (
+      <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
+    ) : (
+      <Text>No Posts Have Been Made</Text>
+    );
+
   return (
-    <SafeAreaView style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-      <View
-        style={{
-          flex: 0,
-          flexDirection: 'row',
-          justifyContent: 'flex-start',
-          alignItems: 'flex-start',
-        }}
-      >
-        <StyledButton icon="account" size="small" onPress={() => navigation.openDrawer()} />
-        <UserName styles={[t.pX1]} textStyles={[t.textLg]} status="super">
-          Amy
-        </UserName>
+    <SafeAreaView style={[t.flex1, t.bgWhite]}>
+      {/* Top Navigator --- Start */}
+      <View style={[t.flexRow, t.itemsCenter, t.justifyBetween, t.pX4]}>
+        <IconButton
+          icon="account-circle-outline"
+          color="#22543d"
+          size={30}
+          onPress={() => navigation.openDrawer()}
+        />
+        <Image source={logo} style={[t.w56, t.h24]} />
+        <IconButton
+          color="#22543d"
+          icon={showMap ? 'view-list' : 'map-outline'}
+          size={30}
+          onPress={toMapView}
+        />
       </View>
+      {/* Top Navigator --- End */}
       <AchievementStatement>I have posted {posts.length} posts</AchievementStatement>
-      {posts.length >= 1 ? (
-        <FlatList data={posts} numColumns={numColumns} renderItem={renderItem} />
-      ) : (
-        <Text>No Posts Have Been Made</Text>
-      )}
+      {showMap ? <Map posts={posts} /> : listPost}
     </SafeAreaView>
   );
 }
