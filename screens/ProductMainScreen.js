@@ -232,6 +232,7 @@ export default function ProductMainScreen({ navigation }) {
         activeTags={activeTags}
         showRefineDialog={showRefineDialog}
         style={[t.m2]}
+        errMsg="No matching tags in your area."
       />
       {/* Search bar & Refine Menu --- End */}
       {/* Refine Dialog--- Start */}
