@@ -27,11 +27,10 @@ export default function ProductMainCard(props) {
     userId = '5eead9d6d34bf31f58a86904',
     imageUrl,
     isExpired = false,
+    loadData,
   } = props;
-  const [bookmarked, setBookmarked] = React.useState(false);
+  const [bookmarked, setBookmarked] = React.useState(initialUserSavedPost);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
-
-  const [userSavedPost, setUserSavedPost] = React.useState(initialUserSavedPost);
 
   // const formatDistance = (rawDistance) => {
   //   if (distance < 1000) {
@@ -40,18 +39,21 @@ export default function ProductMainCard(props) {
   //   return `${Math.round(rawDistance / 1000)}km`;
   // };
 
-  const toggleSavePost = () => {
-    setUserSavedPost((prev) => !prev);
-    fetch(`https://glacial-cove-31720.herokuapp.com/users/${userId}`, {
+  const toggleSavePost = async () => {
+    setBookmarked((prev) => !prev);
+    await fetch(`https://glacial-cove-31720.herokuapp.com/users/${userId}`, {
       method: 'put',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         postId,
-        saving: !userSavedPost,
+        saving: !bookmarked,
       }),
     });
+    if (loadData) {
+      loadData();
+    }
   };
 
   return (
@@ -95,7 +97,7 @@ export default function ProductMainCard(props) {
               selected={bookmarked}
               selectedIcon="bookmark"
               unselectedIcon="bookmark-outline"
-              handleSelected={() => setBookmarked(!bookmarked)}
+              handleSelected={toggleSavePost}
             />
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>

@@ -59,6 +59,7 @@ export default function BookmarkScreen({ navigation }) {
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
+          loadData={loadData}
         />
       </View>
     );
