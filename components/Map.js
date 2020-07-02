@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { Portal, Modal, ActivityIndicator } from 'react-native-paper';
 import Carousel from 'react-native-snap-carousel';
 import { t } from 'react-native-tailwindcss';
+import { formatDistanceToNow } from 'date-fns';
 import ProductMainCard from './ProductMainCard';
 import { scrollInterpolator, animatedStyles } from '../utils/animations';
 
@@ -49,11 +50,11 @@ export default function Map({ posts, height = 180 }) {
           userDislikedPost={item.userDislikedPost}
           likes={item.likes}
           postId={item.id}
-          timeFromNow="1 day ago"
+          timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
           dislikes={item.dislikes}
-          posterName="Amy"
-          posterStatus="super"
-          tags={['bread', 'sliced']}
+          posterName={item.posterName}
+          posterStatus={item.posterStatus}
+          tags={item.tags}
           imageUrl={item.imageUrl}
         />
       </View>
