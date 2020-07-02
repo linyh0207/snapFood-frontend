@@ -73,7 +73,12 @@ export default function ProductMainCard(props) {
         <View style={[]}>
           <Text style={[t.textGray600, t.italic, t.pX1]}>{timeFromNow}</Text>
         </View>
-        <Card.Cover source={{ uri: imageUrl }} resizeMethod="resize" resizeMode="center" />
+        <Card.Cover
+          source={{ uri: imageUrl }}
+          resizeMethod="resize"
+          resizeMode="center"
+          // style={{ width: '80%', height: undefined, aspectRatio: 4 / 5, alignSelf: 'center' }}
+        />
         <Card.Content
           style={{
             flex: 1,

@@ -20,14 +20,14 @@ const updatePostWhenLiked = (posts, id, liked) => {
 
   // user cannot like and dislike at the same time, and adjustment needed if that's the case
   if (post.userLikedPost) {
-    const prevUserDislikedPost = post.userDislikedPost;
+    //   const prevUserDislikedPost = post.userDislikedPost;
     post.userDislikedPost = false;
-    if (prevUserDislikedPost && !post.userDislikedPost) {
-      post.dislikes--;
-    }
-    if (!prevUserDislikedPost && post.userDislikedPost) {
-      post.dislikes++;
-    }
+    //   if (prevUserDislikedPost && !post.userDislikedPost) {
+    //     post.dislikes--;
+    //   }
+    //   if (!prevUserDislikedPost && post.userDislikedPost) {
+    //     post.dislikes++;
+    //   }
   }
   // to keep the counter accurate, need to account for previous action from user
   // case 1: user liked (true) then to neutral (false), then need to decrease likes by 1 to match neutral status
@@ -53,14 +53,14 @@ const updatePostWhenDisliked = (posts, id, disliked) => {
 
   // user cannot like and dislike at the same time, and adjustment needed if that's the case
   if (post.userDislikedPost) {
-    const prevUserLikedPost = post.userLikedPost;
+    //   const prevUserLikedPost = post.userLikedPost;
     post.userLikedPost = false;
-    if (prevUserLikedPost && !post.userLikedPost) {
-      post.likes--;
-    }
-    if (!prevUserLikedPost && post.userLikedPost) {
-      post.likes++;
-    }
+    //   if (prevUserLikedPost && !post.userLikedPost) {
+    //     post.likes--;
+    //   }
+    //   if (!prevUserLikedPost && post.userLikedPost) {
+    //     post.likes++;
+    //   }
   }
   // to keep the counter accurate, need to account for previous action from user
   // case 1: user disliked (true) then to neutral (false), then need to decrease dislikes by 1 to match neutral status (prev +1, now -1)
