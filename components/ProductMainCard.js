@@ -80,7 +80,6 @@ export default function ProductMainCard(props) {
         <Card.Content
           style={{
             flex: 1,
-            flexGrow: 0,
             flexDirection: 'column',
             justifyContent: 'space-between',
             width: '100%',
