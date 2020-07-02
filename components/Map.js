@@ -5,27 +5,28 @@ import * as Location from 'expo-location';
 import { Portal, Modal, ActivityIndicator } from 'react-native-paper';
 import Carousel from 'react-native-snap-carousel';
 import { t } from 'react-native-tailwindcss';
+import { formatDistanceToNow } from 'date-fns';
 import ProductMainCard from './ProductMainCard';
 import { scrollInterpolator, animatedStyles } from '../utils/animations';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  mapStyle: {
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height - 200,
-  },
-});
-
-export default function Map({ posts }) {
+export default function Map({ posts, height = 180 }) {
   // Products Swiper Modal --- start
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.7);
   const ITEM_HEIGHT = Math.round((ITEM_WIDTH * 5) / 4);
+
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    mapStyle: {
+      width: Dimensions.get('window').width,
+      height: Dimensions.get('window').height - height,
+    },
+  });
 
   const renderItem = ({ item }) => {
     return (
@@ -49,11 +50,11 @@ export default function Map({ posts }) {
           userDislikedPost={item.userDislikedPost}
           likes={item.likes}
           postId={item.id}
-          timeFromNow="1 day ago"
+          timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
           dislikes={item.dislikes}
-          posterName="Amy"
-          posterStatus="super"
-          tags={['bread', 'sliced']}
+          posterName={item.posterName}
+          posterStatus={item.posterStatus}
+          tags={item.tags}
           imageUrl={item.imageUrl}
         />
       </View>
@@ -176,11 +177,11 @@ export default function Map({ posts }) {
         {/* Products Swiper Modal --- end */}
         <View>
           {Object.keys(currentMarker).length > 0 ? (
-            <Text>
-              {currentMarker.title} {currentMarker.address} {currentMarker.distance}{' '}
+            <Text style={[t.p1]}>
+              {currentMarker.title} {currentMarker.address}
             </Text>
           ) : (
-            <Text>See more details by clicking on one of the markers</Text>
+            <Text style={[t.p1]}>See more details by clicking on one of the markers!</Text>
           )}
         </View>
       </View>

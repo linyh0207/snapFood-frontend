@@ -88,7 +88,7 @@ export default function MyPostsScreen() {
       </View>
       {/* Top Navigator --- End */}
       <AchievementStatement>I have posted {posts.length} posts</AchievementStatement>
-      {showMap ? <Map posts={posts} /> : listPost}
+      {showMap ? <Map height="270" posts={posts} /> : listPost}
     </SafeAreaView>
   );
 }
