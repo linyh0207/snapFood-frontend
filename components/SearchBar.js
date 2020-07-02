@@ -84,7 +84,6 @@ function SearchBar({
           icon="playlist-edit"
         />
       )}
-
       {searching &&
         (showNoSuggestions ? (
           <List.Item title="No Matching Tags in your Area." />
