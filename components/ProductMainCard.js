@@ -84,7 +84,14 @@ export default function ProductMainCard(props) {
             width: '100%',
           }}
         >
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
             <LikedCounter
               initialLiked={userLikedPost}
               initialDisliked={userDislikedPost}
