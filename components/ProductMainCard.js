@@ -74,7 +74,7 @@ export default function ProductMainCard(props) {
         onLongPress={() => setShowDetailModal(!showDetailModal)}
       >
         <View style={[]}>
-          <Text>{timeFromNow}</Text>
+          <Text style={[t.textGray600, t.italic, t.pX1]}>{timeFromNow}</Text>
         </View>
         <Card.Cover source={{ uri: imageUrl }} resizeMethod="resize" resizeMode="center" />
         <Card.Content
