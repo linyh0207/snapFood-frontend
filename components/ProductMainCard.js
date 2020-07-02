@@ -103,7 +103,7 @@ export default function ProductMainCard(props) {
             <Text style={[t.lineThrough]}>${price.regular.toFixed(2)}</Text>
           </View>
           <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-            <Text>{storeName}</Text>
+            <Text style={{ flex: 1, flexWrap: 'wrap' }}>{storeName}</Text>
             <Text>{formatDistance(distance)}</Text>
           </View>
         </Card.Content>
