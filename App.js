@@ -28,6 +28,7 @@ export default function App(props) {
     colors: {
       ...DefaultTheme.colors,
       primary: '#22543d',
+      accent: '#22543d',
     },
   };
   return (

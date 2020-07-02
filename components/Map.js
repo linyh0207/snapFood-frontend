@@ -166,7 +166,7 @@ export default function Map({ posts }) {
                 slideInterpolatedStyle={animatedStyles}
                 useScrollView
               />
-              <Text style={[t.mT6, t.text3xl, t.fontBold, t.textCenter, t.textWhite]}>
+              <Text style={[t.mT6, t.text2xl, t.fontBold, t.textCenter, t.textWhite]}>
                 {activeTab + 1} /{' '}
                 {posts.filter((post) => post.address === currentMarker.address).length}
               </Text>

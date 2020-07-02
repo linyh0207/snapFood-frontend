@@ -4,13 +4,13 @@ import { t } from 'react-native-tailwindcss';
 import { Text, IconButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { FlatList } from 'react-native-gesture-handler';
+import { formatDistanceToNow } from 'date-fns';
 import AchievementStatement from '../components/AchievementStatement';
 import logo from '../assets/images/logos/green-logo.png';
 import ProductMainCard from '../components/ProductMainCard';
-import { FlatList } from 'react-native-gesture-handler';
-import { formatDistanceToNow } from 'date-fns';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
-
+/* eslint-disable */
 const numColumns = 2;
 export default function AchievementScreen() {
   // For account button to open drawer navigator
