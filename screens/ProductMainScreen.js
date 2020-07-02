@@ -291,8 +291,9 @@ export default function ProductMainScreen({ navigation }) {
       </Portal>
       {/* Refine Dialog --- End */}
       {showMap ? (
-        <Map posts={posts} />
+        <Map posts={posts} height="250" />
       ) : (
+        // <Map posts={posts} />
         <FlatList
           data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
           numColumns={numColumns}

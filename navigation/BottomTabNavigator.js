@@ -51,7 +51,7 @@ export default function BottomTabNavigator({ route }) {
         name="My Posts"
         component={MyPostsScreen}
         options={{
-          title: 'Search',
+          title: 'My Posts',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-search" />,
         }}
       />
@@ -59,7 +59,7 @@ export default function BottomTabNavigator({ route }) {
         name="My Achievements"
         component={AchievementScreen}
         options={{
-          title: 'Search',
+          title: 'My Achievements',
           tabBarIcon: ({ focused }) => <TabBarIcon focused={focused} name="ios-search" />,
         }}
       />
