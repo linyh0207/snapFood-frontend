@@ -9,6 +9,7 @@ import { formatDistanceToNow } from 'date-fns';
 import ProductMainCard from '../components/ProductMainCard';
 import Map from '../components/Map';
 import logo from '../assets/images/logos/green-logo.png';
+import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 
 export default function BookmarkScreen({ navigation }) {
   const [posts, setPosts] = React.useState([]);
@@ -18,7 +19,7 @@ export default function BookmarkScreen({ navigation }) {
 
   // May need to update the URL with lng and lat
   const loadData = async () => {
-    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?filter=saved`;
+    const searchUri = `https://glacial-cove-31720.herokuapp.com/posts?filter=saved&latitude=${FAKE_HOME_LOCATIONS.Markham.latitude}&longitude=${FAKE_HOME_LOCATIONS.Markham.longitude}`;
     const apiData = await fetch(searchUri);
     const responseText = await apiData.text();
     const loadedPosts = JSON.parse(responseText).posts;
@@ -58,6 +59,7 @@ export default function BookmarkScreen({ navigation }) {
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
+          loadData={loadData}
         />
       </View>
     );
