@@ -37,7 +37,7 @@ export default function MyPostsScreen() {
 
   const renderItem = ({ item }) => {
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
+      <View style={{ flexShrink: 1, justifyContent: 'center' }}>
         <ProductMainCard
           price={{ regular: item.price, discounted: item.discountPrice }}
           storeName={item.storename}
