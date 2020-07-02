@@ -10,6 +10,7 @@ import {
 import BottomTabNavigator from './BottomTabNavigator';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import UserName from '../components/TopBar/UserName';
+import { FAKE_USER } from '../utils/fakeData';
 
 const Drawer = createDrawerNavigator();
 
@@ -22,9 +23,9 @@ function CustomDrawerContent(props) {
           styles={[t.pX1]}
           textStyles={[t.text2xl, t.textWhite]}
           status="super"
-          iconColor="white"
+          iconColor="gold"
         >
-          UserName
+          {FAKE_USER.name}
         </UserName>
       </View>
       <DrawerItemList {...props} />

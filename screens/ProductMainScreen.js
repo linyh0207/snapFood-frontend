@@ -177,7 +177,6 @@ export default function ProductMainScreen({ navigation }) {
   // }
 
   const renderItem = ({ item }) => {
-    console.log(item);
     return (
       <View>
         <ProductMainCard
