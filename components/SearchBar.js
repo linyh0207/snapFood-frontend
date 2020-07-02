@@ -14,6 +14,7 @@ function SearchBar({
   setActiveTags,
   style = [],
   showRefineDialog,
+  type,
 }) {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -63,15 +64,27 @@ function SearchBar({
 
   return (
     <>
-      <Searchbar
-        placeholder="Search"
-        onChangeText={onChangeSearch}
-        value={searchTerm}
-        style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '', ...style]}
-        onSubmitEditing={handleSearchPress}
-        onIconPress={showRefineDialog}
-        icon="playlist-edit"
-      />
+      {type ? (
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchTerm}
+          style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '', ...style]}
+          onIconPress={handleSearchPress}
+          icon="plus"
+        />
+      ) : (
+        <Searchbar
+          placeholder="Search"
+          onChangeText={onChangeSearch}
+          value={searchTerm}
+          style={[t.z10, searchTerm.length > 0 ? t.roundedBNone : '', ...style]}
+          onSubmitEditing={handleSearchPress}
+          onIconPress={showRefineDialog}
+          icon="playlist-edit"
+        />
+      )}
+
       {searching &&
         (showNoSuggestions ? (
           <List.Item title="No Matching Tags in your Area." />
