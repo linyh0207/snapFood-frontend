@@ -18,7 +18,7 @@ import StyledButton from '../components/StyledButton';
 import { FAKE_HOME_LOCATIONS } from '../utils/fakeData';
 
 export default function ProductMainScreen({ navigation }) {
-  const [searchRadius, setSearchRadius] = React.useState('499');
+  const [searchRadius, setSearchRadius] = React.useState('20');
   const [posts, setPosts] = React.useState([]);
   const [activeTags, setActiveTags] = React.useState([]);
   const [sort, setSort] = React.useState('rating');
@@ -197,6 +197,7 @@ export default function ProductMainScreen({ navigation }) {
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
+          loadData={loadData}
         />
       </View>
     );
