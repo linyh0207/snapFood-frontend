@@ -15,7 +15,9 @@ YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested', // TODO: Remove when fixed
 ]);
 /* eslint-disable */
-
+YellowBox.ignoreWarnings([
+  'VirtualizedLists should never be nested', // TODO: Remove when fixed
+]);
 const numColumns = 2;
 export default function AchievementScreen() {
   // For account button to open drawer navigator
