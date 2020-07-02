@@ -12,5 +12,5 @@ export const FAKE_STORE_LOCATIONS = {
 export const FAKE_USER = {
   id: '5eead9d6d34bf31f58a86904',
   name: 'Alice',
-  status: 'regular',
+  status: 'super',
 };

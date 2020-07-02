@@ -192,8 +192,8 @@ export default function ProductMainScreen({ navigation }) {
           key={item.id}
           timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
           dislikes={item.dislikes}
-          posterName="Amy" // TODO: Add missing data from back-end
-          posterStatus="super" // TODO: Add missing data from back-end
+          posterName={item.posterName} // TODO: Add missing data from back-end
+          posterStatus={item.posterStatus} // TODO: Add missing data from back-end
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
@@ -286,15 +286,16 @@ export default function ProductMainScreen({ navigation }) {
                   setStoreFilter={setStoreFilter}
                 />
               </ScrollView>
-              <StyledButton title="Apply" mode="outlined" size="small" onPress={handleApplyPress} />
+              <StyledButton title="Close" mode="outlined" size="small" onPress={hideRefineDialog} />
             </>
           )}
         </Dialog>
       </Portal>
       {/* Refine Dialog --- End */}
       {showMap ? (
-        <Map posts={posts} />
+        <Map posts={posts} height="250" />
       ) : (
+        // <Map posts={posts} />
         <FlatList
           data={posts.filter((post) => post.isFiltered === false || storeFilter === 'All')}
           numColumns={2}

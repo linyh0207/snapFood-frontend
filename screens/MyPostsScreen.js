@@ -24,7 +24,7 @@ export default function MyPostsScreen() {
       );
       const load = await test.text();
       const posted = await JSON.parse(load).posts;
-      setPosts(posted);
+      setPosts(posted.reverse());
     }
     fetchData();
   }, []);
@@ -88,7 +88,7 @@ export default function MyPostsScreen() {
       </View>
       {/* Top Navigator --- End */}
       <AchievementStatement>I have posted {posts.length} posts</AchievementStatement>
-      {showMap ? <Map posts={posts} /> : listPost}
+      {showMap ? <Map height="270" posts={posts} /> : listPost}
     </SafeAreaView>
   );
 }
