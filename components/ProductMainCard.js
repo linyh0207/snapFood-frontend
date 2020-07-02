@@ -32,13 +32,8 @@ export default function ProductMainCard(props) {
   } = props;
   const [bookmarked, setBookmarked] = React.useState(initialUserSavedPost);
   const [showDetailModal, setShowDetailModal] = React.useState(false);
-
-  // const formatDistance = (rawDistance) => {
-  //   if (distance < 1000) {
-  //     return `${Math.round(rawDistance / 100) * 100}m`;
-  //   }
-  //   return `${Math.round(rawDistance / 1000)}km`;
-  // };
+  const [upvote, setUpvote] = React.useState(likes);
+  const [downvote, setDownvote] = React.useState(dislikes);
 
   const toggleSavePost = async () => {
     setBookmarked((prev) => !prev);

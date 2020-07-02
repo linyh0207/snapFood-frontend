@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
+
 import { View, Text } from 'react-native';
-import { t } from 'react-native-tailwindcss';
 import ToggleButton from './ToggleButton';
 
 const LikedCounter = ({
@@ -35,6 +35,44 @@ const LikedCounter = ({
     });
   };
 
+  // useEffect(() => {
+  //   const payload = {};
+  //   payload.userId = userId;
+  //   payload.upvote = true;
+
+  //   if (liked) {
+  //     payload.remove = false;
+  //   } else {
+  //     payload.remove = true;
+  //   }
+  //   // fetch(`https://glacial-cove-31720.herokuapp.com/posts/${postId}`, {
+  //   //   method: 'put',
+  //   //   headers: {
+  //   //     'Content-Type': 'application/json',
+  //   //   },
+  //   //   body: JSON.stringify(payload),
+  //   // }).then((res) => console.log('success updating liked'));
+  // }, [liked]);
+
+  // useEffect(() => {
+  //   const payload = {};
+  //   payload.userId = userId;
+  //   payload.upvote = false;
+
+  //   if (notLiked) {
+  //     payload.remove = false;
+  //   } else {
+  //     payload.remove = true;
+  //   }
+  //   fetch(`https://glacial-cove-31720.herokuapp.com/posts/${postId}`, {
+  //     method: 'put',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(payload),
+  //   }).then((res) => console.log('success updating notLiked'));
+  // }, [notLiked]);
+
   return (
     <View>
       {variant === 'general' && (
@@ -56,9 +94,8 @@ const LikedCounter = ({
               toggleLikePost(true);
               // loadData();
             }}
-            color="#fd625e"
           />
-          <Text style={{ textAlign: 'center', color: '#484848' }}>{likes - dislikes}</Text>
+          <Text>{likes - dislikes}</Text>
           <ToggleButton
             selected={notLiked}
             selectedIcon="thumb-down"
@@ -69,7 +106,6 @@ const LikedCounter = ({
               toggleLikePost(false);
               // loadData();
             }}
-            color="grey"
           />
         </View>
       )}
@@ -88,9 +124,8 @@ const LikedCounter = ({
                 // loadData();
               }}
               style={{ marginBottom: -10 }}
-              color="#fd625e"
             />
-            <Text style={{ textAlign: 'center', color: 'grey' }}>{likes}</Text>
+            <Text style={{ textAlign: 'center' }}>{likes}</Text>
           </View>
           <View style={{}}>
             <ToggleButton
@@ -105,9 +140,8 @@ const LikedCounter = ({
                 // loadData();
               }}
               style={{ marginBottom: -10 }}
-              color="grey"
             />
-            <Text style={{ textAlign: 'center', color: 'grey' }}>{dislikes}</Text>
+            <Text style={{ textAlign: 'center' }}>{dislikes}</Text>
           </View>
         </View>
       )}
