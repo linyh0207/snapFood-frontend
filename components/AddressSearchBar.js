@@ -5,7 +5,7 @@ import { t } from 'react-native-tailwindcss';
 import { API_KEY } from 'react-native-dotenv';
 import { FAKE_STORE_LOCATIONS } from '../utils/fakeData';
 
-const DEBOUNCE = 500;
+const DEBOUNCE = 100;
 
 function AddressSearchBar({
   latitude,
@@ -27,23 +27,22 @@ function AddressSearchBar({
     }
   }, [searchSuggestions]);
 
-  useEffect(async () => {
-    const res = await fetch(
-      `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=${API_KEY}&input=grocery&inputtype=textquery&locationbias=point:${FAKE_STORE_LOCATIONS.Markham.latitude},${FAKE_STORE_LOCATIONS.Markham.longitude}&fields=formatted_address,name`
-    );
-    const resString = await res.text();
-    const result = JSON.parse(resString).candidates[0];
-    setSelectedPlace({ name: result.name, address: result.formatted_address });
-    // searchBarRef.current.blur();
-    // setSearchTerm(result.name);
-    // setSearchSuggestions([]);
+  useEffect(() => {
+    (async () => {
+      const res = await fetch(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?key=${API_KEY}&input=grocery&inputtype=textquery&locationbias=point:${FAKE_STORE_LOCATIONS.Markham.latitude},${FAKE_STORE_LOCATIONS.Markham.longitude}&fields=formatted_address,name`
+      );
+      const resString = await res.text();
+      const result = JSON.parse(resString).candidates[0];
+      setSelectedPlace({ name: result.name, address: result.formatted_address });
+    })();
   }, []);
 
   const onChangeSearch = async (query) => {
     setSearchTerm(query);
     if (!apiRequestPaused) {
       const res = await fetch(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}+grocery&location=${latitude},${longitude}&radius=${radius.toString()}&types=establishment&strictbounds`
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${API_KEY}&input=${query}&location=${latitude},${longitude}&radius=${radius.toString()}&types=establishment&strictbounds`
       );
       const resString = await res.text();
       const { predictions } = JSON.parse(resString);

@@ -110,10 +110,10 @@ export default function Map({ posts }) {
   }
   if (location && location?.latitude) {
     const maxLatDiff = posts
-      .map((post) => post.longitude)
+      .map((post) => post.latitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.latitude), acc), 0);
     const maxLongDiff = posts
-      .map((post) => post.latitude)
+      .map((post) => post.longitude)
       .reduce((acc, curr) => Math.max(Math.abs(curr - location.longitude), acc), 0);
 
     return (
@@ -137,7 +137,7 @@ export default function Map({ posts }) {
           {posts.map((post) => (
             <Marker
               key={post.id}
-              coordinate={{ latitude: post.longitude, longitude: post.latitude }}
+              coordinate={{ latitude: post.latitude, longitude: post.longitude }}
               title={post.storename}
               onPress={() => {
                 setCurrentMarker(post);
