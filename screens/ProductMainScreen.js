@@ -177,6 +177,7 @@ export default function ProductMainScreen({ navigation }) {
   // }
 
   const renderItem = ({ item }) => {
+    console.log(item);
     return (
       <View>
         <ProductMainCard
@@ -192,8 +193,8 @@ export default function ProductMainScreen({ navigation }) {
           key={item.id}
           timeFromNow={formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
           dislikes={item.dislikes}
-          posterName="Amy" // TODO: Add missing data from back-end
-          posterStatus="super" // TODO: Add missing data from back-end
+          posterName={item.posterName} // TODO: Add missing data from back-end
+          posterStatus={item.posterStatus} // TODO: Add missing data from back-end
           tags={item.tags}
           imageUrl={item.imageUrl}
           cardStyle={[t.m1]}
