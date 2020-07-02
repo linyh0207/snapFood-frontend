@@ -16,7 +16,7 @@ export default function ToggleButton({
       {selected ? (
         <IconButton icon={selectedIcon} onPress={handleSelected} compact color={color} />
       ) : (
-        <IconButton icon={unselectedIcon} onPress={handleSelected} compact color={color} />
+        <IconButton icon={unselectedIcon} onPress={handleSelected} compact />
       )}
     </View>
   );

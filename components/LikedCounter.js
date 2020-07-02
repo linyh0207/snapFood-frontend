@@ -61,8 +61,9 @@ const LikedCounter = ({
             handleSelected={() => {
               setLiked(!liked);
             }}
+            color="#fd625e"
           />
-          <Text>{likes - dislikes}</Text>
+          <Text style={{ textAlign: 'center', color: '#484848' }}>{likes - dislikes}</Text>
           <ToggleButton
             selected={notLiked}
             selectedIcon="thumb-down"
@@ -70,6 +71,7 @@ const LikedCounter = ({
             handleSelected={() => {
               setNotLiked(!notLiked);
             }}
+            color="grey"
           />
         </View>
       )}
@@ -97,7 +99,7 @@ const LikedCounter = ({
                 setNotLiked(!notLiked);
               }}
               style={{ marginBottom: -10 }}
-              color="#9bcdff"
+              color="grey"
             />
             <Text style={{ textAlign: 'center', color: 'grey' }}>{dislikes}</Text>
           </View>

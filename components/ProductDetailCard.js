@@ -31,16 +31,16 @@ export default function ProductDetailCard({
     //   </Modal>
     // </Portal> */}
       <Card style={[t.mX3]}>
-        <Card.Content style={[t.flex1, t.flexRow, t.itemsCenter, t.p8]}>
+        <Card.Content style={[t.flex1, t.flexRow, t.itemsCenter, t.p6]}>
           <Text style={[t.textGray600, t.italic]}>{timeFromNow}</Text>
           <IconButton
             icon="map-marker"
             onPress={() => setShowMapModal(!showMapModal)}
             compact
-            style={[t.mL10, t.mT3]}
+            style={[t.mLAuto]}
             color="#22543d"
           />
-          <Text style={{ flex: 1, flexWrap: 'wrap', marginTop: 14 }}>
+          <Text>
             {storeName} ({formatDistance(distance)})
           </Text>
         </Card.Content>
